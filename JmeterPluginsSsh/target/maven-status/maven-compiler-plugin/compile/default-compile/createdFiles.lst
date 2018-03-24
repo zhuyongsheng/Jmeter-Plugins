@@ -1,0 +1,4 @@
+com\zys\jmeter\protocol\ssh\sampler\SshSampler.class
+com\zys\jmeter\protocol\ssh\config\SshConfigBeanInfo.class
+com\zys\jmeter\protocol\ssh\sampler\SshSamplerBeanInfo.class
+com\zys\jmeter\protocol\ssh\config\SshConfig.class

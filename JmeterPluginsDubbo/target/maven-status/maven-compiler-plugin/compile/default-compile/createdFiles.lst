@@ -1,0 +1,4 @@
+org\zys\jmeter\protocol\rpc\sampler\RpcSampler.class
+org\zys\jmeter\protocol\rpc\sampler\RpcSampler$ReferenceConfigSinglet.class
+org\zys\jmeter\protocol\rpc\sampler\util\ObjectMapperUtil.class
+org\zys\jmeter\protocol\rpc\sampler\gui\RpcSamplerGui.class
