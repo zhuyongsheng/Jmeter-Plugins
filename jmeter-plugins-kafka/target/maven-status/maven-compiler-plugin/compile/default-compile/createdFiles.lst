@@ -1,7 +1,0 @@
-org\zys\jmeter\protocol\kafka\config\KafkaConfig.class
-org\zys\jmeter\protocol\kafka\sampler\KafkaConsumer.class
-org\zys\jmeter\protocol\kafka\config\KafkaConfigBeanInfo.class
-org\zys\jmeter\protocol\kafka\sampler\KafkaProducerBeanInfo.class
-org\zys\jmeter\protocol\kafka\sampler\KafkaConsumer$1.class
-org\zys\jmeter\protocol\kafka\sampler\KafkaProducer.class
-org\zys\jmeter\protocol\kafka\sampler\KafkaConsumerBeanInfo.class

@@ -2,40 +2,60 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="34d97e20-edd3-4040-8514-1ddc07e6e75a" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__Cpda_fvp_interface_0_0_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__Cpda_slf4j_api_1_6_6.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_101tec_zkclient_0_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_4_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_9_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_4_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_guava_guava_18_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_sf_kafka_sf_kafka_2_10_1_6_1_0_0_8_2_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_sf_kafka_sf_kafka_api_check_valid_1_12.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_sf_kafka_sf_kafka_api_core_1_12.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__net_jpountz_lz4_lz4_1_2_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__net_sf_jopt_simple_jopt_simple_3_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_kafka_kafka_clients_0_8_2_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_scala_lang_scala_library_2_10_4.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_log4j12_1_7_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_xerial_snappy_snappy_java_1_1_1_6.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__redis_clients_jedis_2_2_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-hbase/target/classes/com/zys/jmeter/protocol/hbase/sampler/HbaseSamplerResources.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-hbase/target/classes/log4j.properties" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/Jmeter-Plugins.iml" afterPath="$PROJECT_DIR$/.idea/Jmeter-Plugins.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-dubbo/jmeter-plugins-dubbo.iml" afterPath="$PROJECT_DIR$/jmeter-plugins-dubbo/jmeter-plugins-dubbo.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-dubbo/pom.xml" afterPath="$PROJECT_DIR$/jmeter-plugins-dubbo/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-hbase/jmeter-plugins-hbase.iml" afterPath="$PROJECT_DIR$/jmeter-plugins-hbase/jmeter-plugins-hbase.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-hbase/pom.xml" afterPath="$PROJECT_DIR$/jmeter-plugins-hbase/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/jmeter-plugins-kafka.iml" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/jmeter-plugins-kafka.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/pom.xml" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-redis/jmeter-plugins-redis.iml" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/jmeter-plugins-redis.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-redis/pom.xml" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-ssh/jmeter-plugins-ssh.iml" afterPath="$PROJECT_DIR$/jmeter-plugins-ssh/jmeter-plugins-ssh.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-ssh/pom.xml" afterPath="$PROJECT_DIR$/jmeter-plugins-ssh/pom.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/RpcSampler-1.0-SNAPSHOT.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/classes/org/zys/jmeter/protocol/rpc/sampler/RpcSampler$ReferenceConfigSinglet.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/classes/org/zys/jmeter/protocol/rpc/sampler/RpcSampler.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/classes/org/zys/jmeter/protocol/rpc/sampler/gui/RpcSamplerGui.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/classes/org/zys/jmeter/protocol/rpc/sampler/util/ObjectMapperUtil.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/maven-archiver/pom.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/surefire-reports/RpcSamplerTest.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/surefire-reports/TEST-RpcSamplerTest.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/test-classes/RpcSamplerTest$ReferenceConfigSinglet.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/test-classes/RpcSamplerTest.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/target/classes/org/zys/jmeter/protocol/kafka/config/KafkaConfig.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/target/classes/org/zys/jmeter/protocol/kafka/config/KafkaConfigBeanInfo.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/target/classes/org/zys/jmeter/protocol/kafka/config/KafkaConfigResources.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/target/classes/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumer$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/target/classes/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumer.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/target/classes/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumerBeanInfo.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/target/classes/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumerResources.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/target/classes/org/zys/jmeter/protocol/kafka/sampler/KafkaProducer.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/target/classes/org/zys/jmeter/protocol/kafka/sampler/KafkaProducerBeanInfo.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/target/classes/org/zys/jmeter/protocol/kafka/sampler/KafkaProducerResources.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/target/jmeter-plugins-kafka-1.0-SNAPSHOT.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/target/maven-archiver/pom.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-redis/target/classes/com/zys/jmeter/protocol/redis/config/RedisConfig.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-redis/target/classes/com/zys/jmeter/protocol/redis/config/RedisConfigBeanInfo.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-redis/target/classes/com/zys/jmeter/protocol/redis/config/RedisConfigResources.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-redis/target/classes/com/zys/jmeter/protocol/redis/sampler/ObjectReader.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-redis/target/classes/com/zys/jmeter/protocol/redis/sampler/RedisQuerier.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-redis/target/classes/com/zys/jmeter/protocol/redis/sampler/RedisQuerierBeanInfo.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-redis/target/classes/com/zys/jmeter/protocol/redis/sampler/RedisQuerierResources.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-redis/target/maven-archiver/pom.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-redis/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-redis/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-redis/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-redis/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-redis/target/redisQuerier-1.0-SNAPSHOT.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-redis/target/test-classes/test.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-ssh/target/classes/com/zys/jmeter/protocol/ssh/config/SshConfig.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-ssh/target/classes/com/zys/jmeter/protocol/ssh/config/SshConfigBeanInfo.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-ssh/target/classes/com/zys/jmeter/protocol/ssh/config/SshConfigResources.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-ssh/target/classes/com/zys/jmeter/protocol/ssh/sampler/SshSampler.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-ssh/target/classes/com/zys/jmeter/protocol/ssh/sampler/SshSamplerBeanInfo.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-ssh/target/classes/com/zys/jmeter/protocol/ssh/sampler/SshSamplerResources.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-ssh/target/jmeter-plugins-ssh-1.0-SNAPSHOT.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-ssh/target/maven-archiver/pom.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-ssh/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-ssh/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jmeter-plugins-ssh/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterPath="" />
     </list>
     <ignored path="$PROJECT_DIR$/JmeterPluginsDubbo/target/" />
     <ignored path="$PROJECT_DIR$/JmeterPluginsHbase/target/" />
@@ -148,7 +168,32 @@
     </option>
   </component>
   <component name="MavenProjectNavigator">
-    <treeState />
+    <treeState>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Jmeter-Plugins" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Jmeter-Plugins" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Lifecycle" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$LifecycleNode" />
+        </PATH_ELEMENT>
+      </PATH>
+    </treeState>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
@@ -185,76 +230,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="Jmeter-Plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Jmeter-Plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Jmeter-Plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jmeter-plugins-ssh" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Jmeter-Plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Jmeter-Plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jmeter-plugins-redis" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Jmeter-Plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Jmeter-Plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jmeter-plugins-kafka" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Jmeter-Plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Jmeter-Plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jmeter-plugins-hbase" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Jmeter-Plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Jmeter-Plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jmeter-plugins-dubbo" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -610,9 +585,9 @@
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290461" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3290461" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3290461" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290461" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
