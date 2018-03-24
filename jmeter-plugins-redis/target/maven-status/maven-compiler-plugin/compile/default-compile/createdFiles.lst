@@ -1,5 +1,0 @@
-com\zys\jmeter\protocol\redis\config\RedisConfig.class
-com\zys\jmeter\protocol\redis\sampler\RedisQuerierBeanInfo.class
-com\zys\jmeter\protocol\redis\sampler\RedisQuerier.class
-com\zys\jmeter\protocol\redis\sampler\ObjectReader.class
-com\zys\jmeter\protocol\redis\config\RedisConfigBeanInfo.class
