@@ -168,16 +168,9 @@
     <orderEntry type="library" name="Maven: org.apache.curator:curator-framework:2.5.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.curator:curator-client:2.5.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:16.0.1" level="project" />
-    <orderEntry type="library" name="Maven: com.sf.sgs:sgs-framework-boot-common:1.1.4" level="project" />
-    <orderEntry type="library" name="Maven: com.sf.sgs:sgs-locale:1.0.0" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.7.11" level="project" />
-    <orderEntry type="library" name="Maven: dom4j:dom4j:1.6.1" level="project" />
-    <orderEntry type="library" name="Maven: net.sf.oval:oval:1.85" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-aspects:3.2.8.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.aspectj:aspectjweaver:1.7.4" level="project" />
-    <orderEntry type="library" name="Maven: com.sf.o2o.dds.pms:o2o-dds-pms-client:1.1.6-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.101tec:zkclient:0.10" level="project" />
     <orderEntry type="library" name="Maven: org.apache.zookeeper:zookeeper:3.4.8" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.6.1" level="project" />
     <orderEntry type="library" name="Maven: jline:jline:0.9.94" level="project" />
     <orderEntry type="library" name="Maven: Cpda:slf4j-api:1.6.6" level="project" />
   </component>
