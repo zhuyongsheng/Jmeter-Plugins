@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="jmeter-plugins-dubbo" />
+        <module name="jmeter-plugins-hbase" />
+        <module name="jmeter-plugins-kafka" />
+        <module name="jmeter-plugins-redis" />
+        <module name="jmeter-plugins-ssh" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Jmeter-Plugins" target="1.8" />
+      <module name="jmeter-plugins-dubbo" target="1.8" />
+      <module name="jmeter-plugins-hbase" target="1.8" />
+      <module name="jmeter-plugins-kafka" target="1.8" />
+      <module name="jmeter-plugins-redis" target="1.8" />
+      <module name="jmeter-plugins-ssh" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
