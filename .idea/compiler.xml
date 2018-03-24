@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="jmeter-plugins-hbase" />
+      </profile>
+      <profile name="Annotation profile for jmeter-plugins-dubbo" enabled="true">
+        <sourceOutputDir name="../JmeterPluginsDubbo/target/generated-sources/annotations" />
+        <sourceTestOutputDir name="../JmeterPluginsDubbo/target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="jmeter-plugins-dubbo" />
+      </profile>
+      <profile name="Annotation profile for jmeter-plugins-kafka" enabled="true">
+        <sourceOutputDir name="../JmeterPluginsKafka/target/generated-sources/annotations" />
+        <sourceTestOutputDir name="../JmeterPluginsKafka/target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="jmeter-plugins-kafka" />
+      </profile>
+      <profile name="Annotation profile for jmeter-plugins-ssh" enabled="true">
+        <sourceOutputDir name="../JmeterPluginsSsh/target/generated-sources/annotations" />
+        <sourceTestOutputDir name="../JmeterPluginsSsh/target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="jmeter-plugins-ssh" />
+      </profile>
+      <profile name="Annotation profile for jmeter-plugins-redis" enabled="true">
+        <sourceOutputDir name="../JmeterPluginsRedis/target/generated-sources/annotations" />
+        <sourceTestOutputDir name="../JmeterPluginsRedis/target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="jmeter-plugins-redis" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="jmeter-plugins-dubbo" target="1.5" />
+      <module name="jmeter-plugins-hbase" target="1.5" />
+      <module name="jmeter-plugins-kafka" target="1.5" />
+      <module name="jmeter-plugins-redis" target="1.5" />
+      <module name="jmeter-plugins-ssh" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

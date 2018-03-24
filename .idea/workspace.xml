@@ -1,0 +1,680 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="34d97e20-edd3-4040-8514-1ddc07e6e75a" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/JmeterPluginsDubbo/JmeterPluginsDubbo.iml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/JmeterPluginsHbase/JmeterPluginsHbase.iml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/JmeterPluginsKafka.iml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/JmeterPluginsRedis.iml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/JmeterPluginsSsh/JmeterPluginsSsh.iml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/V1.0说明.txt" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsDubbo/pom.xml" afterPath="$PROJECT_DIR$/jmeter-plugins-dubbo/pom.xml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsDubbo/src/main/java/org/zys/jmeter/protocol/rpc/sampler/RpcSampler.java" afterPath="$PROJECT_DIR$/jmeter-plugins-dubbo/src/main/java/org/zys/jmeter/protocol/rpc/sampler/RpcSampler.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsDubbo/src/main/java/org/zys/jmeter/protocol/rpc/sampler/gui/RpcSamplerGui.java" afterPath="$PROJECT_DIR$/jmeter-plugins-dubbo/src/main/java/org/zys/jmeter/protocol/rpc/sampler/gui/RpcSamplerGui.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsDubbo/src/main/java/org/zys/jmeter/protocol/rpc/sampler/util/ObjectMapperUtil.java" afterPath="$PROJECT_DIR$/jmeter-plugins-dubbo/src/main/java/org/zys/jmeter/protocol/rpc/sampler/util/ObjectMapperUtil.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsDubbo/src/test/java/RpcSamplerTest.java" afterPath="$PROJECT_DIR$/jmeter-plugins-dubbo/src/test/java/RpcSamplerTest.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsDubbo/target/RpcSampler-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/RpcSampler-1.0-SNAPSHOT.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsDubbo/target/classes/org/zys/jmeter/protocol/rpc/sampler/RpcSampler$ReferenceConfigSinglet.class" afterPath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/classes/org/zys/jmeter/protocol/rpc/sampler/RpcSampler$ReferenceConfigSinglet.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsDubbo/target/classes/org/zys/jmeter/protocol/rpc/sampler/RpcSampler.class" afterPath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/classes/org/zys/jmeter/protocol/rpc/sampler/RpcSampler.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsDubbo/target/classes/org/zys/jmeter/protocol/rpc/sampler/gui/RpcSamplerGui.class" afterPath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/classes/org/zys/jmeter/protocol/rpc/sampler/gui/RpcSamplerGui.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsDubbo/target/classes/org/zys/jmeter/protocol/rpc/sampler/util/ObjectMapperUtil.class" afterPath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/classes/org/zys/jmeter/protocol/rpc/sampler/util/ObjectMapperUtil.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsDubbo/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/maven-archiver/pom.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsDubbo/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsDubbo/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsDubbo/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterPath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsDubbo/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterPath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsDubbo/target/surefire-reports/RpcSamplerTest.txt" afterPath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/surefire-reports/RpcSamplerTest.txt" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsDubbo/target/surefire-reports/TEST-RpcSamplerTest.xml" afterPath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/surefire-reports/TEST-RpcSamplerTest.xml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsDubbo/target/test-classes/RpcSamplerTest$ReferenceConfigSinglet.class" afterPath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/test-classes/RpcSamplerTest$ReferenceConfigSinglet.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsDubbo/target/test-classes/RpcSamplerTest.class" afterPath="$PROJECT_DIR$/jmeter-plugins-dubbo/target/test-classes/RpcSamplerTest.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsHbase/pom.xml" afterPath="$PROJECT_DIR$/jmeter-plugins-hbase/pom.xml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsHbase/src/main/java/com/zys/jmeter/protocol/hbase/sampler/HbaseSampler.java" afterPath="$PROJECT_DIR$/jmeter-plugins-hbase/src/main/java/com/zys/jmeter/protocol/hbase/sampler/HbaseSampler.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsHbase/src/main/java/com/zys/jmeter/protocol/hbase/sampler/HbaseSamplerBeanInfo.java" afterPath="$PROJECT_DIR$/jmeter-plugins-hbase/src/main/java/com/zys/jmeter/protocol/hbase/sampler/HbaseSamplerBeanInfo.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsHbase/src/main/java/com/zys/jmeter/protocol/hbase/sampler/HbaseSamplerResources.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-hbase/target/classes/com/zys/jmeter/protocol/hbase/sampler/HbaseSamplerResources.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsHbase/src/main/resources/log4j.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-hbase/target/classes/log4j.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsHbase/src/test/java/test.java" afterPath="$PROJECT_DIR$/jmeter-plugins-hbase/src/test/java/test.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsHbase/target/classes/com/zys/jmeter/protocol/hbase/sampler/HbaseSamplerResources.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-hbase/src/main/java/com/zys/jmeter/protocol/hbase/sampler/HbaseSamplerResources.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsHbase/target/classes/log4j.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-hbase/src/main/resources/log4j.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/pom.xml" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/pom.xml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/src/main/java/org/zys/jmeter/protocol/kafka/config/KafkaConfig.java" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/config/KafkaConfig.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/src/main/java/org/zys/jmeter/protocol/kafka/config/KafkaConfigBeanInfo.java" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/config/KafkaConfigBeanInfo.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/src/main/java/org/zys/jmeter/protocol/kafka/config/KafkaConfigResources.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/target/classes/org/zys/jmeter/protocol/kafka/config/KafkaConfigResources.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumer.java" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumer.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumerBeanInfo.java" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumerBeanInfo.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumerResources.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/target/classes/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumerResources.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaProducer.java" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaProducer.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaProducerBeanInfo.java" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaProducerBeanInfo.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaProducerResources.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/target/classes/org/zys/jmeter/protocol/kafka/sampler/KafkaProducerResources.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/target/classes/org/zys/jmeter/protocol/kafka/config/KafkaConfig.class" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/target/classes/org/zys/jmeter/protocol/kafka/config/KafkaConfig.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/target/classes/org/zys/jmeter/protocol/kafka/config/KafkaConfigBeanInfo.class" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/target/classes/org/zys/jmeter/protocol/kafka/config/KafkaConfigBeanInfo.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/target/classes/org/zys/jmeter/protocol/kafka/config/KafkaConfigResources.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/config/KafkaConfigResources.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/target/classes/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumer$1.class" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/target/classes/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumer$1.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/target/classes/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumer.class" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/target/classes/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumer.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/target/classes/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumerBeanInfo.class" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/target/classes/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumerBeanInfo.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/target/classes/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumerResources.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumerResources.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/target/classes/org/zys/jmeter/protocol/kafka/sampler/KafkaProducer.class" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/target/classes/org/zys/jmeter/protocol/kafka/sampler/KafkaProducer.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/target/classes/org/zys/jmeter/protocol/kafka/sampler/KafkaProducerBeanInfo.class" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/target/classes/org/zys/jmeter/protocol/kafka/sampler/KafkaProducerBeanInfo.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/target/classes/org/zys/jmeter/protocol/kafka/sampler/KafkaProducerResources.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaProducerResources.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/target/jmeter-plugins-kafka-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/target/jmeter-plugins-kafka-1.0-SNAPSHOT.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/target/maven-archiver/pom.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsKafka/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterPath="$PROJECT_DIR$/jmeter-plugins-ssh/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/pom.xml" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/pom.xml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/src/main/java/com/zys/jmeter/protocol/redis/config/RedisConfig.java" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/src/main/java/com/zys/jmeter/protocol/redis/config/RedisConfig.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/src/main/java/com/zys/jmeter/protocol/redis/config/RedisConfigBeanInfo.java" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/src/main/java/com/zys/jmeter/protocol/redis/config/RedisConfigBeanInfo.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/src/main/java/com/zys/jmeter/protocol/redis/config/RedisConfigResources.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/target/classes/com/zys/jmeter/protocol/redis/config/RedisConfigResources.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/src/main/java/com/zys/jmeter/protocol/redis/sampler/ObjectReader.java" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/src/main/java/com/zys/jmeter/protocol/redis/sampler/ObjectReader.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/src/main/java/com/zys/jmeter/protocol/redis/sampler/RedisQuerier.java" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/src/main/java/com/zys/jmeter/protocol/redis/sampler/RedisQuerier.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/src/main/java/com/zys/jmeter/protocol/redis/sampler/RedisQuerierBeanInfo.java" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/src/main/java/com/zys/jmeter/protocol/redis/sampler/RedisQuerierBeanInfo.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/src/main/java/com/zys/jmeter/protocol/redis/sampler/RedisQuerierResources.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/target/classes/com/zys/jmeter/protocol/redis/sampler/RedisQuerierResources.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/src/test/java/test.java" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/src/test/java/test.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/target/classes/com/zys/jmeter/protocol/redis/config/RedisConfig.class" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/target/classes/com/zys/jmeter/protocol/redis/config/RedisConfig.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/target/classes/com/zys/jmeter/protocol/redis/config/RedisConfigBeanInfo.class" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/target/classes/com/zys/jmeter/protocol/redis/config/RedisConfigBeanInfo.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/target/classes/com/zys/jmeter/protocol/redis/config/RedisConfigResources.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/src/main/java/com/zys/jmeter/protocol/redis/config/RedisConfigResources.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/target/classes/com/zys/jmeter/protocol/redis/sampler/ObjectReader.class" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/target/classes/com/zys/jmeter/protocol/redis/sampler/ObjectReader.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/target/classes/com/zys/jmeter/protocol/redis/sampler/RedisQuerier.class" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/target/classes/com/zys/jmeter/protocol/redis/sampler/RedisQuerier.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/target/classes/com/zys/jmeter/protocol/redis/sampler/RedisQuerierBeanInfo.class" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/target/classes/com/zys/jmeter/protocol/redis/sampler/RedisQuerierBeanInfo.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/target/classes/com/zys/jmeter/protocol/redis/sampler/RedisQuerierResources.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/src/main/java/com/zys/jmeter/protocol/redis/sampler/RedisQuerierResources.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/target/maven-archiver/pom.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/target/redisQuerier-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/target/redisQuerier-1.0-SNAPSHOT.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsRedis/target/test-classes/test.class" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/target/test-classes/test.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsSsh/pom.xml" afterPath="$PROJECT_DIR$/jmeter-plugins-ssh/pom.xml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsSsh/src/main/java/com/zys/jmeter/protocol/ssh/config/SshConfig.java" afterPath="$PROJECT_DIR$/jmeter-plugins-ssh/src/main/java/com/zys/jmeter/protocol/ssh/config/SshConfig.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsSsh/src/main/java/com/zys/jmeter/protocol/ssh/config/SshConfigBeanInfo.java" afterPath="$PROJECT_DIR$/jmeter-plugins-ssh/src/main/java/com/zys/jmeter/protocol/ssh/config/SshConfigBeanInfo.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsSsh/src/main/java/com/zys/jmeter/protocol/ssh/config/SshConfigResources.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-ssh/target/classes/com/zys/jmeter/protocol/ssh/config/SshConfigResources.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsSsh/src/main/java/com/zys/jmeter/protocol/ssh/sampler/SshSampler.java" afterPath="$PROJECT_DIR$/jmeter-plugins-ssh/src/main/java/com/zys/jmeter/protocol/ssh/sampler/SshSampler.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsSsh/src/main/java/com/zys/jmeter/protocol/ssh/sampler/SshSamplerBeanInfo.java" afterPath="$PROJECT_DIR$/jmeter-plugins-ssh/src/main/java/com/zys/jmeter/protocol/ssh/sampler/SshSamplerBeanInfo.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsSsh/src/main/java/com/zys/jmeter/protocol/ssh/sampler/SshSamplerResources.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-ssh/target/classes/com/zys/jmeter/protocol/ssh/sampler/SshSamplerResources.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsSsh/target/classes/com/zys/jmeter/protocol/ssh/config/SshConfig.class" afterPath="$PROJECT_DIR$/jmeter-plugins-ssh/target/classes/com/zys/jmeter/protocol/ssh/config/SshConfig.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsSsh/target/classes/com/zys/jmeter/protocol/ssh/config/SshConfigBeanInfo.class" afterPath="$PROJECT_DIR$/jmeter-plugins-ssh/target/classes/com/zys/jmeter/protocol/ssh/config/SshConfigBeanInfo.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsSsh/target/classes/com/zys/jmeter/protocol/ssh/config/SshConfigResources.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-ssh/src/main/java/com/zys/jmeter/protocol/ssh/config/SshConfigResources.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsSsh/target/classes/com/zys/jmeter/protocol/ssh/sampler/SshSampler.class" afterPath="$PROJECT_DIR$/jmeter-plugins-ssh/target/classes/com/zys/jmeter/protocol/ssh/sampler/SshSampler.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsSsh/target/classes/com/zys/jmeter/protocol/ssh/sampler/SshSamplerBeanInfo.class" afterPath="$PROJECT_DIR$/jmeter-plugins-ssh/target/classes/com/zys/jmeter/protocol/ssh/sampler/SshSamplerBeanInfo.class" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsSsh/target/classes/com/zys/jmeter/protocol/ssh/sampler/SshSamplerResources.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-ssh/src/main/java/com/zys/jmeter/protocol/ssh/sampler/SshSamplerResources.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsSsh/target/jmeter-plugins-ssh-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/jmeter-plugins-ssh/target/jmeter-plugins-ssh-1.0-SNAPSHOT.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsSsh/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/jmeter-plugins-ssh/target/maven-archiver/pom.properties" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsSsh/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="$PROJECT_DIR$/jmeter-plugins-ssh/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsSsh/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="$PROJECT_DIR$/jmeter-plugins-ssh/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/JmeterPluginsSsh/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" />
+    </list>
+    <ignored path="$PROJECT_DIR$/JmeterPluginsDubbo/target/" />
+    <ignored path="$PROJECT_DIR$/JmeterPluginsHbase/target/" />
+    <ignored path="$PROJECT_DIR$/JmeterPluginsKafka/target/" />
+    <ignored path="$PROJECT_DIR$/JmeterPluginsRedis/target/" />
+    <ignored path="$PROJECT_DIR$/JmeterPluginsSsh/target/" />
+    <ignored path="$PROJECT_DIR$/jmeter-plugins-hbase/target/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jmeter-plugins-hbase/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="126">
+              <caret line="7" column="29" lean-forward="false" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jmeter-plugins-dubbo/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jmeter-plugins-kafka/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jmeter-plugins-redis/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/jmeter-plugins-ssh/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GradleLocalSettings">
+    <option name="externalProjectsViewState">
+      <projects_view />
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/jmeter-plugins-hbase/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1066" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Jmeter-Plugins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Jmeter-Plugins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Jmeter-Plugins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Jmeter-Plugins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jmeter-plugins-ssh" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Jmeter-Plugins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Jmeter-Plugins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jmeter-plugins-redis" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Jmeter-Plugins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Jmeter-Plugins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jmeter-plugins-kafka" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Jmeter-Plugins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Jmeter-Plugins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jmeter-plugins-hbase" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Jmeter-Plugins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Jmeter-Plugins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jmeter-plugins-dubbo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="D:/Project" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <predefined_log_file id="idea.log" enabled="true" />
+      <method />
+    </configuration>
+    <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android App">
+      <module name="" />
+      <option name="DEPLOY" value="true" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="DEBUGGER_TYPE" value="Java" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <Java />
+      <Profilers>
+        <option name="ENABLE_ADVANCED_PROFILING" value="true" />
+        <option name="GAPID_ENABLED" value="false" />
+        <option name="GAPID_DISABLE_PCS" value="false" />
+        <option name="SUPPORT_LIB_ENABLED" value="true" />
+        <option name="INSTRUMENTATION_ENABLED" value="true" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
+      <module name="" />
+      <option name="TESTING_TYPE" value="0" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="EXTRA_OPTIONS" value="" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="DEBUGGER_TYPE" value="Java" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <Java />
+      <Profilers>
+        <option name="ENABLE_ADVANCED_PROFILING" value="true" />
+        <option name="GAPID_ENABLED" value="false" />
+        <option name="GAPID_DISABLE_PCS" value="false" />
+        <option name="SUPPORT_LIB_ENABLED" value="true" />
+        <option name="INSTRUMENTATION_ENABLED" value="true" />
+      </Profilers>
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <module />
+      <method />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="GradleRunConfiguration" factoryName="Gradle">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list />
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <method />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="true" type="JarApplication" factoryName="JAR Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="Java Scratch" factoryName="Java Scratch">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="SCRATCH_FILE_ID" value="0" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="Jmeter-Plugins" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType" factoryName="Kotlin script">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="filePath" />
+      <option name="vmParameters" />
+      <option name="alternativeJrePath" />
+      <option name="programParameters" />
+      <option name="passParentEnvs" value="true" />
+      <option name="workingDirectory" />
+      <option name="isAlternativeJrePathEnabled" value="false" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Jmeter-Plugins" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+      <method />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+      <method />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Jmeter-Plugins" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Jmeter-Plugins" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Unittests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Jmeter-Plugins" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;.&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method />
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="34d97e20-edd3-4040-8514-1ddc07e6e75a" name="Default" comment="" />
+      <created>1521856626381</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1521856626381</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
+    <layout>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/jmeter-plugins-hbase/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="7" column="29" lean-forward="false" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmeter-plugins-dubbo/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmeter-plugins-kafka/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmeter-plugins-redis/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmeter-plugins-ssh/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
