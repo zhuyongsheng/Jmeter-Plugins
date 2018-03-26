@@ -25,6 +25,6 @@ public class DubboConfigBeanInfo extends BeanInfoSupport {
         p.setValue(DEFAULT, "");
         p = property("version");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.TRUE);
+        p.setValue(DEFAULT, "");
     }
 }

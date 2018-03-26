@@ -9,6 +9,7 @@ import org.apache.jmeter.testelement.TestStateListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -27,9 +28,14 @@ public class DubboConfig  extends ConfigTestElement implements TestBean, TestSta
 
     public static ConcurrentHashMap<String, ReferenceConfig> consumerMap = new ConcurrentHashMap<>();
 
+    public static ConcurrentHashMap<String, Method[]> methodMap = new ConcurrentHashMap<>();
+
+    public static ConcurrentHashMap<String, String[]> methodNameMap = new ConcurrentHashMap<>();
+
     @Override
     public void testStarted() {
         initReference();
+        loadMethod();
     }
 
     @Override
@@ -40,6 +46,7 @@ public class DubboConfig  extends ConfigTestElement implements TestBean, TestSta
     @Override
     public void testEnded() {
         closeReference();
+        unloadMethod();
     }
 
     @Override
@@ -60,6 +67,25 @@ public class DubboConfig  extends ConfigTestElement implements TestBean, TestSta
     private void closeReference(){
         consumerMap.get(serviceName).destroy();
         consumerMap.remove(serviceName);
+    }
+
+    private void loadMethod(){
+        try {
+            Method[] methods = Class.forName(interfaceName).getDeclaredMethods();
+            methodMap.put(serviceName, methods);
+            String[] methodName = new String[methods.length];
+            for (int i = 0; i < methods.length; i++){
+                methodName[i] = methods[i].getName();
+            }
+            methodNameMap.put(serviceName, methodName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void unloadMethod(){
+        methodMap.remove(serviceName);
+        methodNameMap.remove(serviceName);
     }
 
 
