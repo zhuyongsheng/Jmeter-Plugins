@@ -189,9 +189,7 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
                     port = zk.substring(index + 1);
                 }
                 Configuration conf = HBaseConfiguration.create();
-                log.info(host);
                 conf.set("hbase.zookeeper.quorum", host);
-                log.info(port);
                 conf.set("hbase.zookeeper.property.clientPort",port);
                 Connection connection = ConnectionFactory.createConnection(conf);
                 clients.put(zk, connection);
