@@ -19,14 +19,25 @@ import java.io.IOException;
 /**
  * Created by 01369755 on 2018/3/22.
  */
-public class KafkaProducer extends AbstractSampler implements TestBean{
+public class KafkaProducer extends AbstractSampler{
 
     private static final Logger log = LoggerFactory.getLogger(KafkaProducer.class);
     private static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+    public static String[] SERIALIZE = {"STRING", "FVP(PROTOSTUFF)"};
+
+    public static String TOPIC = "topic";
+    public static String SERIALIZER = "serializer";
+    public static String MESSAGE = "message";
 
     private String topic;
-    private String message;
     private String serializer;
+    private String message;
+
+    private void init(){
+        topic = getPropertyAsString(TOPIC);
+        serializer = getPropertyAsString(SERIALIZER);
+        message = getPropertyAsString(MESSAGE).trim().replace("\n", "").replace("\t", "");
+    }
 
     @Override
     public SampleResult sample(Entry entry) {
@@ -36,6 +47,7 @@ public class KafkaProducer extends AbstractSampler implements TestBean{
         result.setDataType("text");
         result.sampleStart();
         try {
+            init();
             run();
             result.setResponseData("message sent successfully.", "utf8");
             result.setSuccessful(true);
@@ -52,7 +64,7 @@ public class KafkaProducer extends AbstractSampler implements TestBean{
         return result;
     }
 
-    private void run() throws IOException {
+    private void run() throws Exception {
         KeyedMessage<String, byte[]> msg;
         switch (serializer) {
             case "STRING":
@@ -62,32 +74,8 @@ public class KafkaProducer extends AbstractSampler implements TestBean{
                 msg = new KeyedMessage(topic, ConvertUtil.toByte(gson.fromJson(message, FactRouteDto.class)));
                 break;
             default:
-                throw new UnsupportedOperationException("不支持的序列化类型");
+                throw new Exception("unsupported serializer.");
         }
         KafkaConfig.producerMap.get(topic).send(msg);
     }
-    public String getSerializer() {
-        return serializer;
-    }
-
-    public void setSerializer(String serializer) {
-        this.serializer = serializer;
-    }
-
-    public String getTopic() {
-        return topic;
-    }
-
-    public void setTopic(String topic) {
-        this.topic = topic;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message.trim().replace("\n", "").replace("\t", "");
-    }
-
 }
