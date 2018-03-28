@@ -26,12 +26,5 @@
             <artifactId>dubbo</artifactId>
             <version>sf.2.0.4</version>
         </dependency>
-        <dependency>
-            <groupId>com.101tec</groupId>
-            <artifactId>zkclient</artifactId>
-            <version>RELEASE</version>
-        </dependency>
     </dependencies>
-
-
 </project>
