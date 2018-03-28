@@ -12,7 +12,7 @@
         <module>jmeter-plugins-redis</module>
         <module>jmeter-plugins-kafka</module>
         <module>jmeter-plugins-ssh</module>
-        <module>jmeter-plugins-dubbo</module>
+        <module>jmeter-plugins-rpc</module>
         <module>jmeter-plugins-hbase</module>
     </modules>
     <dependencies>
