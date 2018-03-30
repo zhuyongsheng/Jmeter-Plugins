@@ -2,7 +2,6 @@ package com.zys.jmeter.protocol.ssh.config;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.gui.TypeEditor;
-
 import java.beans.PropertyDescriptor;
 
 /**

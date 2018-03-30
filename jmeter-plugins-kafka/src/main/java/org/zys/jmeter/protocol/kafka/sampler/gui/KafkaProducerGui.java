@@ -5,7 +5,6 @@ import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +21,7 @@ public class KafkaProducerGui extends AbstractSamplerGui {
     private static final Logger log = LoggerFactory.getLogger(KafkaProducerGui.class);
 
     private JLabeledTextField topic = new JLabeledTextField("主题信息：");
-    private JComboBox serializer = new JComboBox(KafkaProducer.SERIALIZE);
+    private JComboBox serializer = new JComboBox(KafkaProducer.SERIALIZE_TYPE);
     private JSyntaxTextArea message;
 
     public KafkaProducerGui() {
@@ -55,7 +54,7 @@ public class KafkaProducerGui extends AbstractSamplerGui {
         messagePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 "消息信息"));
         messagePanel.add(topic);
-        messagePanel.add(createLabelPanel("序列化类：", serializer));
+        messagePanel.add(createLabelPanel("消息类型：", serializer));
         messagePanel.add(createArgsPanel(),BorderLayout.CENTER);
         return messagePanel;
     }
