@@ -130,8 +130,8 @@ public class KafkaConfig  extends ConfigTestElement implements TestBean, TestSta
         try{
             for (int partition = 0; partition < partitionNum; partition++) {
                 consumerMap.get(topic)[partition].close();
-                consumerMap.remove(topic);
             }
+            consumerMap.remove(topic);
         }catch (Exception e){
             e.printStackTrace();
         }
