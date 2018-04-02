@@ -26,5 +26,6 @@ public class KafkaConfigBeanInfo extends BeanInfoSupport {
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "PRODUCER");
         p.setValue(TAGS, new String[]{"PRODUCER", "CONSUMER", "BOTH"});
+        p.setValue(NOT_OTHER, Boolean.TRUE);
     }
 }

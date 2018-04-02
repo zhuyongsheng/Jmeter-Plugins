@@ -58,7 +58,8 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
         }
         return res;
     }
-    private static Boolean isMatch(String msg, String[] wants){
+    private static Boolean isMatch(String msg, String wantd){
+        String[] wants = wantd.split(",");
         for (String w : wants){
             if (!msg.contains(w)){
                 return false;
@@ -100,7 +101,7 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
                                 byte[] bytes = new byte[payload.limit()];
                                 payload.get(bytes);
                                 String msg = new String(bytes, "UTF-8");
-                                if (isMatch(msg,wanted.split(","))) {
+                                if (isMatch(msg,wanted)) {
                                     isCaught.set(true);
                                     sb.append(a_partition + "_" + String.valueOf(currentOffset) + ": \n" + msg);
                                 }
