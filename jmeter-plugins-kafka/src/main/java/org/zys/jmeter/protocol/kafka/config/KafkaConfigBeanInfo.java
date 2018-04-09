@@ -1,6 +1,7 @@
 package org.zys.jmeter.protocol.kafka.config;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
+
 import java.beans.PropertyDescriptor;
 
 /**
@@ -22,10 +23,15 @@ public class KafkaConfigBeanInfo extends BeanInfoSupport {
         p = property("partitionNum");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, 4);
+        p = property("role", KafkaConfig.ROLES.class);
+        p.setValue(DEFAULT, KafkaConfig.ROLES.PRODUCER);
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+
+        /*
         p = property("role");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "PRODUCER");
-        p.setValue(TAGS, new String[]{"PRODUCER", "CONSUMER", "BOTH"});
-        p.setValue(NOT_OTHER, Boolean.TRUE);
+        p.setValue(TAGS, KafkaConfig.roles);
+        p.setValue(NOT_OTHER, Boolean.TRUE);*/
     }
 }

@@ -2,8 +2,6 @@ package org.zys.jmeter.protocol.kafka.sampler;
 
 import kafka.api.FetchRequest;
 import kafka.api.FetchRequestBuilder;
-import kafka.api.PartitionOffsetRequestInfo;
-import kafka.common.TopicAndPartition;
 import kafka.javaapi.*;
 import kafka.javaapi.consumer.SimpleConsumer;
 import kafka.message.MessageAndOffset;
@@ -11,18 +9,14 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
-import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zys.jmeter.protocol.kafka.config.KafkaConfig;
 
 import java.nio.ByteBuffer;
-import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static kafka.api.OffsetRequest.CurrentVersion;
-import static kafka.api.OffsetRequest.EarliestTime;
 /**
  * Created by 01369755 on 2018/3/22.
  */
@@ -58,8 +52,9 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
         }
         return res;
     }
-    private static Boolean isMatch(String msg, String wantd){
-        String[] wants = wantd.split(",");
+
+    private static Boolean isMatch(String msg, String wanted){
+        String[] wants = wanted.split(",");
         for (String w : wants){
             if (!msg.contains(w)){
                 return false;
@@ -103,7 +98,7 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
                                 String msg = new String(bytes, "UTF-8");
                                 if (isMatch(msg,wanted)) {
                                     isCaught.set(true);
-                                    sb.append(a_partition + "_" + String.valueOf(currentOffset) + ": \n" + msg);
+                                    sb.append("\"").append(a_partition + "_" + String.valueOf(currentOffset)).append("\":").append(msg).append("\n");
                                 }
                             }
                         } catch (Exception e) {
@@ -119,7 +114,7 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
         KafkaConfig.offsetMap.put(topic, offsets);
 
         if (sb.length() > 0) {
-            return sb.toString();
+            return sb.deleteCharAt(sb.lastIndexOf("\n")).toString();
         }
         return "message match failed.";
     }
@@ -147,6 +142,5 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
     public void setWanted(String wanted) {
         this.wanted = wanted;
     }
-
 
 }

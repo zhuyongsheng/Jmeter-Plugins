@@ -34,24 +34,25 @@ public class KafkaConfig  extends ConfigTestElement implements TestBean, TestSta
     private String topic;
     private String brokers;
     private int    partitionNum;
-    private String role;
+    private int    role;
 
     public static ConcurrentHashMap<String, Producer> producerMap = new ConcurrentHashMap<>();
     public static ConcurrentHashMap<String, SimpleConsumer[]> consumerMap = new ConcurrentHashMap<>();
     public static ConcurrentHashMap<String, Long[]> offsetMap = new ConcurrentHashMap<>();
 
 
+
     @Override
     public void testStarted() {
-        switch (role){
-            case "PRODUCER" :
+        switch (ROLES.values()[role]){
+            case PRODUCER :
                 initProducer();
                 break;
-            case "CONSUMER" :
+            case CONSUMER :
                 initConsumer();
                 getoffsets();
                 break;
-            case "BOTH" :
+            case BOTH :
                 initProducer();
                 initConsumer();
                 getoffsets();
@@ -68,15 +69,16 @@ public class KafkaConfig  extends ConfigTestElement implements TestBean, TestSta
 
     @Override
     public void testEnded() {
-        switch (role){
-            case "PRODUCER" :
+
+        switch (ROLES.values()[role]){
+            case PRODUCER :
                 closeProducer();
                 break;
-            case "CONSUMER" :
+            case CONSUMER :
                 closeConsumer();
                 clearoffsets();
                 break;
-            case "BOTH" :
+            case BOTH :
                 closeProducer();
                 closeConsumer();
                 clearoffsets();
@@ -226,12 +228,18 @@ public class KafkaConfig  extends ConfigTestElement implements TestBean, TestSta
         this.partitionNum = partitionNum;
     }
 
-    public String getRole() {
+    public int getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(int role) {
         this.role = role;
     }
 
+    public enum ROLES
+    {
+        PRODUCER,
+        CONSUMER,
+        BOTH
+    }
 }
