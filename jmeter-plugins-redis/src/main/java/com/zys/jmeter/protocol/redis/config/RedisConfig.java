@@ -3,6 +3,9 @@ package com.zys.jmeter.protocol.redis.config;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.testelement.TestStateListener;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.jmeter.testbeans.TestBean;
@@ -31,9 +34,7 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
 
     private static JedisPoolConfig CONFIG = new JedisPoolConfig();
 
-    private static int TIMEOUT = 0;
-
-    public static ConcurrentHashMap<String, Pool<Jedis>> jedisMap = new ConcurrentHashMap<>();
+    private static int TIMEOUT = 60000;
 
     private JedisPool initJedisPool(){
         String host = address.split(",")[0];
@@ -48,8 +49,13 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
         }
         return new JedisSentinelPool(master, sentinels, CONFIG, TIMEOUT, password);
     }
-    public static Pool<Jedis> getPool(String redisName){
-        return jedisMap.get(redisName);
+    public static Pool<Jedis> getPool(String redisName) throws Exception{
+        Object object = JMeterContextService.getContext().getVariables().getObject(redisName);
+        if (object == null) {
+            throw new Exception("No pool found named: '" + redisName);
+        }else {
+            return (Pool<Jedis>)object;
+        }
     }
 
     public void testStarted(String s) {
@@ -57,13 +63,18 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
     }
 
     public void testStarted() {
-        if (sentinel){
-            jedisMap.put(redisName, initJedisSentinelPool());
-        }else {
-            jedisMap.put(redisName, initJedisPool());
+        JMeterVariables variables = getThreadContext().getVariables();
+        if(JOrphanUtils.isBlank(redisName)) {
+            throw new IllegalArgumentException("redisName must not be empty.");
+        } else if (variables.getObject(redisName) != null) {
+            log.error("Redis config already defined.");
+        } else {
+            if (sentinel){
+                variables.putObject(redisName, initJedisSentinelPool());
+            }else {
+                variables.putObject(redisName, initJedisPool());
+            }
         }
-
-        log.info(redisName + "initialed!");
     }
 
     public void testEnded(String s) {
@@ -71,9 +82,7 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
     }
 
     public void testEnded() {
-        jedisMap.get(redisName).destroy();
-        jedisMap.remove(redisName);
-        log.info(redisName + "removed!");
+        ((Pool<Jedis>)JMeterContextService.getContext().getVariables().getObject(redisName)).destroy();
     }
 
     public String getRedisName() {

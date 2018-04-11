@@ -1,10 +1,16 @@
 package com.zys.jmeter.protocol.redis.sampler;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zys.jmeter.protocol.redis.config.RedisConfig;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
@@ -13,6 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.Set;
 
 /**
@@ -21,6 +28,8 @@ import java.util.Set;
 public class RedisQuerier extends AbstractSampler implements TestBean {
 
     private static final Logger log = LoggerFactory.getLogger(RedisQuerier.class);
+
+    public static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private String redisName;
     private String key;
@@ -55,7 +64,7 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
             ByteArrayInputStream bi = new ByteArrayInputStream(bytes);
             ObjectInputStream oi;
             oi = new ObjectInputStream(bi);
-            return ObjectReader.objectMapper.writeValueAsString(oi.readObject());
+            return OBJECT_MAPPER.writeValueAsString(oi.readObject());
 //            return new String(jedis.get(key.getBytes()), "UTF-8");
         } catch (Exception e) {
             if(bytes != null){
@@ -68,36 +77,11 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
         }
         return null;
     }
-    /*public String query (JedisPool jedisPool, String key) {
-        StringBuilder sb = new StringBuilder();
-        Jedis jedis = jedisPool.getResource();
-        Set<String> keys = jedis.keys(key);
-        if (keys.size() == 0){
-            return "no key found!";
-        }
-        for (String  k : keys) {
-            sb.append(k).append(" : ").append(get(jedis, k)).append("\n");
-        }
-        return sb.deleteCharAt(sb.length()-1).toString();
-    }
-
-    public String query (JedisSentinelPool jedisSentinelPool, String key) {
-        StringBuilder sb = new StringBuilder();
-        Jedis jedis = jedisSentinelPool.getResource();
-        Set<String> keys = jedis.keys(key);
-        for (String  k : keys) {
-            sb.append(k).append(" : ").append(get(jedis, k)).append("\n");
-        }
-        if (sb.length() > 0){
-            return sb.deleteCharAt(sb.length()-1).toString();
-        }
-        return "no key found!";
-    }*/
     public String query (Jedis jedis, String key) {
         StringBuilder sb = new StringBuilder();
         Set<String> keys = jedis.keys(key);
         if (keys.size() == 0){
-            return "no key found!";
+            return "no key found.";
         }
         for (String  k : keys) {
             sb.append(k).append(" : ").append(get(jedis, k)).append("\n");
@@ -105,54 +89,12 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
         return sb.deleteCharAt(sb.length()-1).toString();
     }
 
-    public String run() throws IOException {
+    public String run() throws Exception {
         Jedis jedis = RedisConfig.getPool(redisName).getResource();
         String result = query(jedis, key);
         RedisConfig.getPool(redisName).returnResource(jedis);
         return result;
     }
-
-
-
-   /* public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getMaster() {
-        return master;
-    }
-
-    public void setMaster(String master) {
-        this.master = master;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public Boolean getSentinel() {
-        return sentinel;
-    }
-
-    public void setSentinel(Boolean sentinel) {
-        this.sentinel = sentinel;
-    }*/
 
     public String getRedisName() {
         return redisName;
