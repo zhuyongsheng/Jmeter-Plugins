@@ -62,7 +62,7 @@ public class KafkaProducer extends AbstractSampler implements TestBean{
             default:
                 throw new Exception("unsupported serializer.");
         }
-        KafkaConfig.producerMap.get(topic).send(msg);
+        KafkaConfig.getProducer(topic).send(msg);
     }
 
 

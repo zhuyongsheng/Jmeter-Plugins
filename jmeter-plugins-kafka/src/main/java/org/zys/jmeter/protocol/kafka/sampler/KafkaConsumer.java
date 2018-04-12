@@ -64,11 +64,10 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
     }
 
     public String run() throws InterruptedException {
-        SimpleConsumer[] simpleConsumers = KafkaConfig.consumerMap.get(topic);
-        Long[] offsets = KafkaConfig.offsetMap.get(topic);
+        SimpleConsumer[] simpleConsumers = KafkaConfig.getConsumer(topic);
+        long[] offsets = KafkaConfig.getOffsets(topic);
         int partitionNum = offsets.length;
         ExecutorService executor = Executors.newFixedThreadPool(partitionNum);
-
         StringBuilder sb = new StringBuilder();
         AtomicBoolean isCaught = new AtomicBoolean(false);
         CountDownLatch latch = new CountDownLatch(partitionNum);
@@ -111,7 +110,7 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
         latch.await();
         executor.shutdownNow();
 
-        KafkaConfig.offsetMap.put(topic, offsets);
+        KafkaConfig.updateOffset(topic, offsets);
 
         if (sb.length() > 0) {
             return sb.deleteCharAt(sb.lastIndexOf("\n")).toString();
