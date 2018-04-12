@@ -31,34 +31,21 @@ public class KafkaConfig  extends ConfigTestElement implements TestBean, TestSta
     private final static int TIME_OUT = 100000;
     private final static int BUFFER_SIZE = 64 * 1024;
 
+    private final static String PRODUCER = "PRODUCER_";
+    private final static String CONSUMER = "CONSUMER_";
+    private final static String OFFSET = "OFFSET_";
+
+    private static ConcurrentHashMap<String, Object> KAFKA_VAR= new ConcurrentHashMap<>();
+
     private String topic;
     private String brokers;
     private int    partitionNum;
-    private String role;
-
-    public static ConcurrentHashMap<String, Producer> producerMap = new ConcurrentHashMap<>();
-    public static ConcurrentHashMap<String, SimpleConsumer[]> consumerMap = new ConcurrentHashMap<>();
-    public static ConcurrentHashMap<String, Long[]> offsetMap = new ConcurrentHashMap<>();
-
+    private int    role;
 
     @Override
     public void testStarted() {
-        switch (role){
-            case "PRODUCER" :
-                initProducer();
-                break;
-            case "CONSUMER" :
-                initConsumer();
-                getoffsets();
-                break;
-            case "BOTH" :
-                initProducer();
-                initConsumer();
-                getoffsets();
-                break;
-            default:
-                throw new UnsupportedOperationException("没有你要的这种角色");
-        }
+        initProducer();
+        initConsumer();
     }
 
     @Override
@@ -68,22 +55,8 @@ public class KafkaConfig  extends ConfigTestElement implements TestBean, TestSta
 
     @Override
     public void testEnded() {
-        switch (role){
-            case "PRODUCER" :
-                closeProducer();
-                break;
-            case "CONSUMER" :
-                closeConsumer();
-                clearoffsets();
-                break;
-            case "BOTH" :
-                closeProducer();
-                closeConsumer();
-                clearoffsets();
-                break;
-            default:
-                throw new UnsupportedOperationException("没有你要的这种角色");
-        }
+        closeProducer();
+        closeConsumer();
     }
 
     @Override
@@ -91,68 +64,80 @@ public class KafkaConfig  extends ConfigTestElement implements TestBean, TestSta
         testEnded();
     }
 
+//    public static void main(String[] args){
+//        System.out.println(ROLES.PRODUCER.equals(ROLES.values()[0]));
+//    }
     private void initProducer(){
-        try{
-            Properties props = new Properties();
-            props.put("metadata.broker.list", brokers);
-            ProducerConfig config = new ProducerConfig(props);
-            Producer<String, byte[]> producer = new Producer(config);
-            producerMap.put(topic, producer);
-        }catch (Exception e){
-            e.printStackTrace();
+        if ((ROLES.PRODUCER.ordinal() == role) || (ROLES.BOTH.ordinal() == role)){
+            try{
+                Properties props = new Properties();
+                props.put("metadata.broker.list", brokers);
+                ProducerConfig config = new ProducerConfig(props);
+                Producer<String, byte[]> producer = new Producer(config);
+                KAFKA_VAR.put(PRODUCER + topic, producer);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
     private void closeProducer(){
-        try{
-            producerMap.get(topic).close();
-            producerMap.remove(topic);
-        }catch (Exception e){
-            e.printStackTrace();
+        if ((ROLES.PRODUCER.ordinal() == role) || (ROLES.BOTH.ordinal() == role)){
+            try{
+                getProducer(topic).close();
+                KAFKA_VAR.remove(PRODUCER + topic);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
+    public static SimpleConsumer[] getConsumer(String topic){
+        return (SimpleConsumer[])KAFKA_VAR.get(CONSUMER + topic);
+    }
+    public static long[] getOffsets(String topic){
+        return (long[])KAFKA_VAR.get(OFFSET + topic);
+    }
+    public static void updateOffset(String topic, long[] offsets){
+        KAFKA_VAR.put(OFFSET + topic, offsets);
+    }
+    public static Producer getProducer(String topic){
+        return (Producer)KAFKA_VAR.get(PRODUCER + topic);
+    }
     private void initConsumer(){
-        SimpleConsumer[] simpleConsumers = new SimpleConsumer[partitionNum];
-        try{
-            for (int partition = 0; partition < partitionNum; partition++) {
-                Broker b = findLeader(brokers, topic, partition);
-                String clientId = topic + "_" + partition;
-                simpleConsumers[partition] = new SimpleConsumer(b.host(), b.port(), TIME_OUT, BUFFER_SIZE, clientId);
+        if ((ROLES.CONSUMER.ordinal() == role) || (ROLES.BOTH.ordinal() == role)){
+            SimpleConsumer[] simpleConsumers = new SimpleConsumer[partitionNum];
+            long[] offsets = new long[partitionNum];
+            try{
+                for (int partition = 0; partition < partitionNum; partition++) {
+                    Broker b = findLeader(brokers, topic, partition);
+                    String clientId = topic + "_" + partition;
+                    simpleConsumers[partition] = new SimpleConsumer(b.host(), b.port(), TIME_OUT, BUFFER_SIZE, clientId);
+                    offsets[partition] = getLastOffset(simpleConsumers[partition], partition);
+                }
+                KAFKA_VAR.put(CONSUMER + topic, simpleConsumers);
+                KAFKA_VAR.put(OFFSET + topic, offsets);
+            }catch (Exception e){
+                e.printStackTrace();
             }
-            consumerMap.put(topic, simpleConsumers);
-        }catch (Exception e){
-            e.printStackTrace();
         }
     }
 
     private void closeConsumer(){
-        try{
-            for (int partition = 0; partition < partitionNum; partition++) {
-                consumerMap.get(topic)[partition].close();
-                consumerMap.remove(topic);
+        if ((ROLES.CONSUMER.ordinal() == role) || (ROLES.BOTH.ordinal() == role)){
+            try{
+                for (SimpleConsumer simpleConsumer : getConsumer(topic)) {
+                    simpleConsumer.close();
+                }
+                KAFKA_VAR.remove(CONSUMER + topic);
+                KAFKA_VAR.remove(OFFSET + topic);
+            }catch (Exception e){
+                e.printStackTrace();
             }
-        }catch (Exception e){
-            e.printStackTrace();
         }
     }
 
-    private void getoffsets(){
-        Long[] offsets = new Long[partitionNum];
-        try{
-            for (int partition = 0; partition < partitionNum; partition++) {
-                offsets[partition] = getLastOffset(consumerMap.get(topic)[partition], partition);
-            }
-            offsetMap.put(topic, offsets);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-    private void clearoffsets(){
-        offsetMap.remove(topic);
-    }
-
-    public long getLastOffset(SimpleConsumer consumer, int partition) {
+    private long getLastOffset(SimpleConsumer consumer, int partition) {
         TopicAndPartition topicAndPartition = new TopicAndPartition(topic, partition);
         Map<TopicAndPartition, PartitionOffsetRequestInfo> requestInfo = new HashMap<TopicAndPartition, PartitionOffsetRequestInfo>();
         requestInfo.put(topicAndPartition, new PartitionOffsetRequestInfo(LatestTime(), 1));
@@ -226,12 +211,18 @@ public class KafkaConfig  extends ConfigTestElement implements TestBean, TestSta
         this.partitionNum = partitionNum;
     }
 
-    public String getRole() {
+    public int getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(int role) {
         this.role = role;
     }
 
+    public enum ROLES
+    {
+        PRODUCER,
+        CONSUMER,
+        BOTH
+    }
 }

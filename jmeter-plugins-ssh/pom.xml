@@ -17,11 +17,6 @@
             <artifactId>jsch</artifactId>
             <version>0.1.54</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.jmeter</groupId>
-            <artifactId>ApacheJMeter_core</artifactId>
-            <version>3.2</version>
-        </dependency>
     </dependencies>
     <build>
         <resources>

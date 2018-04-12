@@ -24,7 +24,7 @@ public class RpcSampler extends AbstractSampler {
 
     private static final Logger log = LoggerFactory.getLogger(RpcSampler.class);
 
-    public static final ObjectMapper OBJECT_MAPPER;
+    public static final ObjectMapper OBJECT_MAPPER ;
     static {
         OBJECT_MAPPER = new ObjectMapper();
          /*序列化时使用*/
@@ -94,7 +94,7 @@ public class RpcSampler extends AbstractSampler {
     public String visitDubboService() throws Exception {
 
         ReferenceConfig ref = getReference(protocol, host, port, interfaceCls, version);
-        Class<?> paramType = method.getParameterTypes()[0];
+        Class paramType = method.getParameterTypes()[0];
         return OBJECT_MAPPER.writerWithDefaultPrettyPrinter()
                 .writeValueAsString(method.invoke(ref.get(), OBJECT_MAPPER.readValue(args, paramType)));
     }

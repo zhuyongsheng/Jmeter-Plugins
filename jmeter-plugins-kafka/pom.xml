@@ -12,11 +12,6 @@
     <artifactId>jmeter-plugins-kafka</artifactId>
     <dependencies>
         <dependency>
-            <groupId>org.apache.jmeter</groupId>
-            <artifactId>ApacheJMeter_core</artifactId>
-            <version>RELEASE</version>
-        </dependency>
-        <dependency>
             <groupId>com.sf.kafka</groupId>
             <artifactId>sf-kafka-api-core</artifactId>
             <version>1.12</version>
