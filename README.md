@@ -1,2 +1,2 @@
 # Jmeter-Plugins
-Plugins for Jmeter
+为JMeter开发的插件，目前包括dubbo,redis,kafka,ssh,hbase
