@@ -24,9 +24,9 @@ public class RedisConfigBeanInfo extends BeanInfoSupport {
         p = property("password", TypeEditor.PasswordEditor);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
-        p = property("sentinel");
+        p = property("sentinel", RedisConfig.SENTINEL.class);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.TRUE);
+        p.setValue(DEFAULT, RedisConfig.SENTINEL.YES);
         p = property("master");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");

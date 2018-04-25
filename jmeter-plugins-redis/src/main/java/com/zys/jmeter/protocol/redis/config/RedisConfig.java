@@ -30,7 +30,7 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
     private String address;
     private String master;
     private String password;
-    private Boolean sentinel;
+    private int sentinel;
 
     private static JedisPoolConfig CONFIG = new JedisPoolConfig();
 
@@ -69,7 +69,7 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
         } else if (variables.getObject(redisName) != null) {
             log.error("Redis config already defined.");
         } else {
-            if (sentinel){
+            if (SENTINEL.YES.ordinal() == sentinel){
                 variables.putObject(redisName, initJedisSentinelPool());
             }else {
                 variables.putObject(redisName, initJedisPool());
@@ -116,12 +116,18 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
         this.password = password;
     }
 
-    public Boolean getSentinel() {
+    public int getSentinel() {
         return sentinel;
     }
 
-    public void setSentinel(Boolean sentinel) {
+    public void setSentinel(int sentinel) {
         this.sentinel = sentinel;
+    }
+
+    public enum SENTINEL
+    {
+        YES,
+        NO
     }
 
 }
