@@ -48,7 +48,7 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     }
 
     public String getStaticLabel() {
-        return "RPC请求";
+        return "DUBBO请求";
     }
 
 
@@ -95,15 +95,6 @@ public class RpcSamplerGui extends AbstractSamplerGui {
         version.setText(element.getPropertyAsString(RpcSampler.VERSION));
         interfaceCls.setText(element.getPropertyAsString(RpcSampler.INTERFACE_CLASS));
         method.removeAllItems();
-//        if (StringUtils.isNotEmpty(interfaceCls.getText())) {
-//            try {
-//                for (Method m : Class.forName(interfaceCls.getText()).getDeclaredMethods())
-//                    method.addItem(new StringBuilder(m.getName()).append("(").append(m.getParameterTypes()[0].getName()).append(")").toString());
-//            } catch (ClassNotFoundException e) {
-//                e.printStackTrace();
-//            }
-//            method.setSelectedItem(element.getPropertyAsString(RpcSampler.METHOD));
-//        }
         if (StringUtils.isNotEmpty(interfaceCls.getText())) {
             for (String m : getMetods(interfaceCls.getText())) {
                 method.addItem(m);
@@ -111,7 +102,6 @@ public class RpcSamplerGui extends AbstractSamplerGui {
         }
         method.setSelectedItem(element.getPropertyAsString(RpcSampler.METHOD));
         args.setInitialText(element.getPropertyAsString(RpcSampler.ARGS));
-//        args.setCaretPosition(0);
     }
 
     public void clearGui() {
@@ -142,7 +132,6 @@ public class RpcSamplerGui extends AbstractSamplerGui {
         panel.add(JTextScrollPane.getInstance(args), BorderLayout.CENTER);
         return panel;
     }
-
     private JPanel createInterfacePanel() {
         interfaceCls = new JLabeledTextField(" 接口：", 40);
         method = new JComboBox<>();
@@ -179,8 +168,15 @@ public class RpcSamplerGui extends AbstractSamplerGui {
             List<String> method = new ArrayList();
             if (StringUtils.isNotEmpty(interfaceCls)) {
                 try {
-                    for (Method m : Class.forName(interfaceCls).getDeclaredMethods())
-                        method.add(new StringBuilder(m.getName()).append("(").append(m.getParameterTypes()[0].getName()).append(")").toString());
+                    for (Method m : Class.forName(interfaceCls).getDeclaredMethods()){
+                        StringBuffer sb = new StringBuffer(m.getName()).append("(");
+                        Class[] pts = m.getParameterTypes();
+                        for (Class pt : pts){
+                            sb.append(pt.getName()).append(",");
+                        }
+                        sb.deleteCharAt(sb.lastIndexOf(",")).append(")");
+                        method.add(sb.toString());
+                    }
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }

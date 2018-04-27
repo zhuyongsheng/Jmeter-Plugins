@@ -12,7 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by 01369755 on 2018/3/24.
@@ -23,10 +24,11 @@ public class RpcSampler extends AbstractSampler {
     private static final Logger log = LoggerFactory.getLogger(RpcSampler.class);
 
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper().setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
-
     private static ApplicationConfig DUBBOSAMPLER = new ApplicationConfig("dubboSampler");
+    private static int TIMEOUT = 5000;
 
-    private static ConcurrentHashMap<String, ReferenceConfig> clients = new ConcurrentHashMap();
+    private static Map<String, ReferenceConfig> clients = new HashMap();
+
 
     public static String PROTOCOL = "protocol";
     public static String HOST = "host";
@@ -60,8 +62,8 @@ public class RpcSampler extends AbstractSampler {
         res.setSampleLabel(getName());
         try {
             init();
-            res.sampleStart();
             res.setSamplerData(interfaceCls + "." + methodInfo + "?\n"  + args);
+            res.sampleStart();
             res.setResponseData(visitDubboService(), "UTF-8");
             res.setResponseCode("0");
             res.setSuccessful(true);
@@ -72,7 +74,6 @@ public class RpcSampler extends AbstractSampler {
             res.setSuccessful(false);
             res.setResponseMessage(e.getMessage());
             e.printStackTrace();
-            return res;
         } finally {
             res.sampleEnd();
         }
@@ -82,10 +83,20 @@ public class RpcSampler extends AbstractSampler {
     public String visitDubboService() throws Exception {
 
         ReferenceConfig ref = getReference(protocol, host, port, interfaceCls, version);
+
         Class paramType = Class.forName(methodInfo.substring(methodInfo.indexOf("(") + 1, methodInfo.indexOf(")")));
         Method method = Class.forName(interfaceCls).getDeclaredMethod(methodInfo.substring(0,methodInfo.indexOf("(")), paramType);
         return OBJECT_MAPPER.writerWithDefaultPrettyPrinter()
                 .writeValueAsString(method.invoke(ref.get(), OBJECT_MAPPER.readValue(args, paramType)));
+    }
+
+    private Class[] getparamTypes(String paramTypesList) throws ClassNotFoundException {
+        String[] paramTypes = paramTypesList.split(",");
+        Class[] paramType = new Class[paramTypes.length];
+        for (int i=0; i < paramTypes.length; i++){
+            paramType[i] = Class.forName(paramTypes[i]);
+        }
+        return paramType;
     }
 
     private ReferenceConfig getReference(String protocol, String host, String port, String interfaceCls, String version) throws Exception{
@@ -95,6 +106,7 @@ public class RpcSampler extends AbstractSampler {
             ref.setApplication(DUBBOSAMPLER);
             ref.setInterface(interfaceCls);
             ref.setVersion(version);
+            ref.setTimeout(TIMEOUT);
             switch (protocol) {
                 case "dubbo" :
                     ref.setUrl(new StringBuffer(protocol).append("://").append(host).append(":").append(port).append("/").append(interfaceCls).toString());
