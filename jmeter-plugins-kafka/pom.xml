@@ -12,14 +12,14 @@
     <artifactId>jmeter-plugins-kafka</artifactId>
     <dependencies>
         <dependency>
-            <groupId>com.sf.kafka</groupId>
-            <artifactId>sf-kafka-api-core</artifactId>
-            <version>1.12</version>
-        </dependency>
-        <dependency>
             <groupId>Cpda</groupId>
             <artifactId>fvp-interface</artifactId>
             <version>RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka_2.10</artifactId>
+            <version>0.8.2.1</version>
         </dependency>
     </dependencies>
     <build>

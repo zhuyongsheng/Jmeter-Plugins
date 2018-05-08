@@ -11,7 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by 01369755 on 2018/4/25.
@@ -20,8 +21,7 @@ public class HbaseConfig extends ConfigTestElement implements TestBean, TestStat
 
     private static final Logger log = LoggerFactory.getLogger(HbaseConfig.class);
 
-    private static ConcurrentHashMap<String, Connection> HBASE_CLIENTS= new ConcurrentHashMap<>();
-
+    private static Map<String, Connection> HBASE_CLIENTS= new HashMap<>();
 
     private String hbaseName;
     private String zkAddr;

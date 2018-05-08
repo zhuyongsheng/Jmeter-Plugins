@@ -2,22 +2,21 @@ package com.zys.jmeter.protocol.redis.config;
 
 
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.jmeter.testbeans.TestBean;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisSentinelPool;
+import redis.clients.util.Pool;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import redis.clients.util.Pool;
 
 /**
  * Created by 01369755 on 2018/3/17.

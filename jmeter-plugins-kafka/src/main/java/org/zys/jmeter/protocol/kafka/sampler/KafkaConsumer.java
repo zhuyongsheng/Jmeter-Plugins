@@ -49,8 +49,8 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
             res.setSuccessful(false);
         } finally {
             res.sampleEnd();
+            return res;
         }
-        return res;
     }
 
     private static Boolean isMatch(String msg, String wanted){

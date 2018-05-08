@@ -1,6 +1,7 @@
 package org.zys.jmeter.protocol.kafka.sampler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sf.fvp.ConvertUtil;
 import com.sf.fvp.dto.FactRouteDto;
 import kafka.producer.KeyedMessage;
@@ -11,7 +12,6 @@ import org.apache.jmeter.testbeans.TestBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zys.jmeter.protocol.kafka.config.KafkaConfig;
-import java.text.SimpleDateFormat;
 
 /**
  * Created by 01369755 on 2018/3/22.
@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat;
 public class KafkaProducer extends AbstractSampler implements TestBean{
 
     private static final Logger log = LoggerFactory.getLogger(KafkaProducer.class);
-    public static final ObjectMapper OBJECT_MAPPER  = new ObjectMapper().setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+    private static Gson GSON = new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
     private String topic;
     private String serializer;
@@ -57,7 +57,7 @@ public class KafkaProducer extends AbstractSampler implements TestBean{
                 msg = new KeyedMessage(topic, message.getBytes("UTF-8"));
                 break;
             case "FACTROUTEDTO":
-                msg = new KeyedMessage(topic, ConvertUtil.toByte(OBJECT_MAPPER.readValue(message, FactRouteDto.class)));
+                msg = new KeyedMessage(topic, ConvertUtil.toByte(GSON.fromJson(message, FactRouteDto.class)));
                 break;
             default:
                 throw new Exception("unsupported serializer.");

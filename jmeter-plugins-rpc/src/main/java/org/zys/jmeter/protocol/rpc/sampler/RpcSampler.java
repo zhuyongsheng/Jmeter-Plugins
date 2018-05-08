@@ -4,6 +4,8 @@ import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -23,7 +25,8 @@ public class RpcSampler extends AbstractSampler {
 
     private static final Logger log = LoggerFactory.getLogger(RpcSampler.class);
 
-    public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper().setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+
+    private static Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setPrettyPrinting().create();
     private static ApplicationConfig DUBBOSAMPLER = new ApplicationConfig("dubboSampler");
     private static int TIMEOUT = 5000;
 
@@ -86,8 +89,7 @@ public class RpcSampler extends AbstractSampler {
 
         Class paramType = Class.forName(methodInfo.substring(methodInfo.indexOf("(") + 1, methodInfo.indexOf(")")));
         Method method = Class.forName(interfaceCls).getDeclaredMethod(methodInfo.substring(0,methodInfo.indexOf("(")), paramType);
-        return OBJECT_MAPPER.writerWithDefaultPrettyPrinter()
-                .writeValueAsString(method.invoke(ref.get(), OBJECT_MAPPER.readValue(args, paramType)));
+        return GSON.toJson(method.invoke(ref.get(), GSON.fromJson(args, paramType)));
     }
 
     private Class[] getparamTypes(String paramTypesList) throws ClassNotFoundException {
