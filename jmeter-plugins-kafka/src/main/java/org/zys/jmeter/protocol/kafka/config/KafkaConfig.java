@@ -163,7 +163,8 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
         for (String seed : Brokers) {
             SimpleConsumer consumer = null;
             try {
-                consumer = new SimpleConsumer(seed.split(":")[0], Integer.parseInt(seed.split(":")[1]), TIME_OUT, BUFFER_SIZE, "leaderLookup");
+                String[] seedInfo = seed.split(":");
+                consumer = new SimpleConsumer(seedInfo[0], Integer.parseInt(seedInfo[1]), TIME_OUT, BUFFER_SIZE, "leaderLookup");
                 List<String> topics = Collections.singletonList(topic);
                 TopicMetadataRequest req = new TopicMetadataRequest(topics);
                 TopicMetadataResponse resp = consumer.send(req);
