@@ -3,31 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="34d97e20-edd3-4040-8514-1ddc07e6e75a" name="Default" comment="V1.0Dubbo插件重写">
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jmeter-plugins-rpc/src/main/test/test.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_4_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_9_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_4_5.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_9_4.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_4_5.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_9_4.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/Jmeter-Plugins.iml" afterPath="$PROJECT_DIR$/.idea/Jmeter-Plugins.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__Cpda_fvp_interface_0_0_2.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__Cpda_fvp_interface_0_0_2.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-hbase/src/main/java/com/zys/jmeter/protocol/hbase/config/HbaseConfig.java" afterPath="$PROJECT_DIR$/jmeter-plugins-hbase/src/main/java/com/zys/jmeter/protocol/hbase/config/HbaseConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/jmeter-plugins-kafka.iml" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/jmeter-plugins-kafka.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/pom.xml" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/config/KafkaConfig.java" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/config/KafkaConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumer.java" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaProducer.java" afterPath="$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaProducer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-redis/jmeter-plugins-redis.iml" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/jmeter-plugins-redis.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-redis/pom.xml" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-redis/src/main/java/com/zys/jmeter/protocol/redis/config/RedisConfig.java" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/src/main/java/com/zys/jmeter/protocol/redis/config/RedisConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-redis/src/main/java/com/zys/jmeter/protocol/redis/sampler/RedisQuerier.java" afterPath="$PROJECT_DIR$/jmeter-plugins-redis/src/main/java/com/zys/jmeter/protocol/redis/sampler/RedisQuerier.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-rpc/jmeter-plugins-rpc.iml" afterPath="$PROJECT_DIR$/jmeter-plugins-rpc/jmeter-plugins-rpc.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-rpc/pom.xml" afterPath="$PROJECT_DIR$/jmeter-plugins-rpc/pom.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jmeter-plugins-rpc/src/main/java/org/zys/jmeter/protocol/rpc/sampler/RpcSampler.java" afterPath="$PROJECT_DIR$/jmeter-plugins-rpc/src/main/java/org/zys/jmeter/protocol/rpc/sampler/RpcSampler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/JmeterPluginsDubbo/target/" />
     <ignored path="$PROJECT_DIR$/JmeterPluginsHbase/target/" />
@@ -50,7 +28,112 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="KafkaConsumer.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="406">
+              <caret line="117" column="33" lean-forward="false" selection-start-line="117" selection-start-column="33" selection-end-line="117" selection-end-column="33" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HbaseConfig.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jmeter-plugins-hbase/src/main/java/com/zys/jmeter/protocol/hbase/config/HbaseConfig.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="216">
+              <caret line="60" column="0" lean-forward="false" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
+              <folding>
+                <element signature="e#1434#1435#0" expanded="true" />
+                <element signature="e#1485#1486#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Configuration.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/org/apache/hadoop/hadoop-common/2.5.1/hadoop-common-2.5.1.jar!/org/apache/hadoop/conf/Configuration.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="400" column="27" lean-forward="false" selection-start-line="400" selection-start-column="27" selection-end-line="400" selection-end-column="27" />
+              <folding>
+                <element signature="e#14973#14974#0" expanded="true" />
+                <element signature="e#15024#15025#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KafkaConfig.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/config/KafkaConfig.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="82">
+              <caret line="168" column="76" lean-forward="false" selection-start-line="168" selection-start-column="76" selection-end-line="168" selection-end-column="76" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RpcSampler.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/jmeter-plugins-rpc/src/main/java/org/zys/jmeter/protocol/rpc/sampler/RpcSampler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="176">
+              <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KafkaConfigResources.properties" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/config/KafkaConfigResources.properties">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="54">
+              <caret line="3" column="9" lean-forward="false" selection-start-line="3" selection-start-column="9" selection-end-line="3" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KafkaProducer.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaProducer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="378">
+              <caret line="21" column="20" lean-forward="false" selection-start-line="21" selection-start-column="20" selection-end-line="21" selection-end-column="20" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KafkaConsumerBeanInfo.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumerBeanInfo.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="126">
+              <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Gson.java" pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.8.1/gson-2.8.1-sources.jar!/com/google/gson/Gson.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="795" column="15" lean-forward="false" selection-start-line="795" selection-start-column="15" selection-end-line="795" selection-end-column="15" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -113,23 +196,23 @@
         <option value="$PROJECT_DIR$/jmeter-plugins-rpc/src/main/test/test.java" />
         <option value="$PROJECT_DIR$/jmeter-plugins-redis/src/main/java/com/zys/jmeter/protocol/redis/config/RedisConfigBeanInfo.java" />
         <option value="$PROJECT_DIR$/jmeter-plugins-redis/src/main/java/com/zys/jmeter/protocol/redis/config/RedisConfigResources.properties" />
-        <option value="$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumer.java" />
         <option value="$PROJECT_DIR$/jmeter-plugins-hbase/src/main/java/com/zys/jmeter/protocol/hbase/config/HbaseConfigBeanInfo.java" />
         <option value="$PROJECT_DIR$/jmeter-plugins-hbase/pom.xml" />
         <option value="$PROJECT_DIR$/jmeter-plugins-hbase/src/main/java/com/zys/jmeter/protocol/hbase/config/HbaseConfigResources.properties" />
         <option value="$PROJECT_DIR$/jmeter-plugins-hbase/src/main/java/com/zys/jmeter/protocol/hbase/sampler/HbaseSampler.java" />
         <option value="$PROJECT_DIR$/jmeter-plugins-hbase/src/main/java/com/zys/jmeter/protocol/hbase/sampler/HbaseSamplerBeanInfo.java" />
         <option value="$PROJECT_DIR$/jmeter-plugins-hbase/src/main/java/com/zys/jmeter/protocol/hbase/sampler/HbaseSamplerResources.properties" />
-        <option value="$PROJECT_DIR$/jmeter-plugins-hbase/src/main/java/com/zys/jmeter/protocol/hbase/config/HbaseConfig.java" />
         <option value="$PROJECT_DIR$/jmeter-plugins-rpc/src/main/java/org/zys/jmeter/protocol/rpc/sampler/gui/RpcSamplerGui.java" />
-        <option value="$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/config/KafkaConfig.java" />
         <option value="$PROJECT_DIR$/jmeter-plugins-redis/src/main/java/com/zys/jmeter/protocol/redis/config/RedisConfig.java" />
-        <option value="$PROJECT_DIR$/jmeter-plugins-rpc/src/main/java/org/zys/jmeter/protocol/rpc/sampler/RpcSampler.java" />
         <option value="$PROJECT_DIR$/jmeter-plugins-redis/src/main/java/com/zys/jmeter/protocol/redis/sampler/RedisQuerier.java" />
         <option value="$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaProducer.java" />
         <option value="$PROJECT_DIR$/jmeter-plugins-rpc/pom.xml" />
         <option value="$PROJECT_DIR$/jmeter-plugins-redis/pom.xml" />
         <option value="$PROJECT_DIR$/jmeter-plugins-kafka/pom.xml" />
+        <option value="$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/config/KafkaConfig.java" />
+        <option value="$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumer.java" />
+        <option value="$PROJECT_DIR$/jmeter-plugins-hbase/src/main/java/com/zys/jmeter/protocol/hbase/config/HbaseConfig.java" />
+        <option value="$PROJECT_DIR$/jmeter-plugins-rpc/src/main/java/org/zys/jmeter/protocol/rpc/sampler/RpcSampler.java" />
       </list>
     </option>
   </component>
@@ -150,20 +233,6 @@
         <PATH_ELEMENT>
           <option name="myItemId" value="jmeter-plugins-kafka" />
           <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="" />
-          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="jmeter-plugins-kafka" />
-          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="Lifecycle" />
-          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$LifecycleNode" />
         </PATH_ELEMENT>
       </PATH>
     </treeState>
@@ -326,106 +395,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="jmeter-plugins-redis" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Jmeter-Plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Jmeter-Plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jmeter-plugins-redis" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Jmeter-Plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Jmeter-Plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jmeter-plugins-redis" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="redis" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sampler" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Jmeter-Plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Jmeter-Plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jmeter-plugins-redis" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="redis" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Jmeter-Plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Jmeter-Plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="jmeter-plugins-kafka" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -457,10 +426,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="kafka" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sampler" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1044,6 +1009,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290461" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1051,14 +1017,14 @@
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290461" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3118971" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290461" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18923241" sideWeight="0.5" order="5" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18923241" sideWeight="0.5" order="5" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31449893" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
@@ -1141,24 +1107,10 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/jmeter-plugins-redis/src/main/java/com/zys/jmeter/protocol/redis/config/RedisConfigResources.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="12" column="4" lean-forward="false" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jmeter-plugins-redis/src/test/java/test.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="13" column="0" lean-forward="true" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumerBeanInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -1173,13 +1125,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
           <caret line="21" column="21" lean-forward="false" selection-start-line="21" selection-start-column="21" selection-end-line="21" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/hadoop/hadoop-common/2.5.1/hadoop-common-2.5.1.jar!/org/apache/hadoop/conf/Configuration.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="82" column="13" lean-forward="false" selection-start-line="82" selection-start-column="13" selection-end-line="82" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -1324,13 +1269,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jmeter-plugins-hbase/src/main/java/com/zys/jmeter/protocol/hbase/config/HbaseConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="733">
-          <caret line="53" column="33" lean-forward="false" selection-start-line="53" selection-start-column="33" selection-end-line="53" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jmeter-plugins-rpc/src/main/java/org/zys/jmeter/protocol/rpc/sampler/gui/RpcSamplerGui.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="576">
@@ -1342,6 +1280,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="103">
           <caret line="519" column="60" lean-forward="true" selection-start-line="519" selection-start-column="60" selection-end-line="519" selection-end-column="60" />
+          <folding>
+            <element signature="e#21303#21304#0" expanded="false" />
+            <element signature="e#21335#21336#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1434,14 +1376,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jmeter-plugins-rpc/src/main/java/org/zys/jmeter/protocol/rpc/sampler/RpcSampler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="28" column="105" lean-forward="false" selection-start-line="28" selection-start-column="105" selection-end-line="28" selection-end-column="105" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jmeter-plugins-redis/src/main/java/com/zys/jmeter/protocol/redis/sampler/RedisQuerier.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="504">
@@ -1486,34 +1420,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="577">
-          <caret line="51" column="23" lean-forward="false" selection-start-line="51" selection-start-column="23" selection-end-line="51" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.8.1/gson-2.8.1-sources.jar!/com/google/gson/Gson.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="102" column="19" lean-forward="false" selection-start-line="102" selection-start-column="19" selection-end-line="102" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaProducer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1134">
-          <caret line="63" column="9" lean-forward="true" selection-start-line="63" selection-start-column="9" selection-end-line="63" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jmeter-plugins-kafka/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="342">
@@ -1522,11 +1428,89 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/config/KafkaConfigResources.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="3" column="9" lean-forward="false" selection-start-line="3" selection-start-column="9" selection-end-line="3" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumerBeanInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaProducer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="21" column="20" lean-forward="false" selection-start-line="21" selection-start-column="20" selection-end-line="21" selection-end-column="20" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.8.1/gson-2.8.1-sources.jar!/com/google/gson/Gson.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="795" column="15" lean-forward="false" selection-start-line="795" selection-start-column="15" selection-end-line="795" selection-end-column="15" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/sampler/KafkaConsumer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="406">
+          <caret line="117" column="33" lean-forward="false" selection-start-line="117" selection-start-column="33" selection-end-line="117" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/hadoop/hadoop-common/2.5.1/hadoop-common-2.5.1.jar!/org/apache/hadoop/conf/Configuration.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="400" column="27" lean-forward="false" selection-start-line="400" selection-start-column="27" selection-end-line="400" selection-end-column="27" />
+          <folding>
+            <element signature="e#14973#14974#0" expanded="true" />
+            <element signature="e#15024#15025#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmeter-plugins-hbase/src/main/java/com/zys/jmeter/protocol/hbase/config/HbaseConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="60" column="0" lean-forward="false" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
+          <folding>
+            <element signature="e#1434#1435#0" expanded="true" />
+            <element signature="e#1485#1486#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/jmeter-plugins-kafka/src/main/java/org/zys/jmeter/protocol/kafka/config/KafkaConfig.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="107">
-          <caret line="150" column="9" lean-forward="false" selection-start-line="147" selection-start-column="33" selection-end-line="150" selection-end-column="9" />
+        <state relative-caret-position="82">
+          <caret line="168" column="76" lean-forward="false" selection-start-line="168" selection-start-column="76" selection-end-line="168" selection-end-column="76" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmeter-plugins-rpc/src/main/java/org/zys/jmeter/protocol/rpc/sampler/RpcSampler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

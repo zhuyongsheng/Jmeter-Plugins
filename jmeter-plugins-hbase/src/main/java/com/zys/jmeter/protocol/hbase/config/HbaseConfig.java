@@ -56,20 +56,8 @@ public class HbaseConfig extends ConfigTestElement implements TestBean, TestStat
     }
 
     private void initConnection() {
-        String addr = zkAddr.split(",")[0];
-        int index = addr.indexOf(":");
-        String host;
-        String port;
-        if (index < 0){
-            host = addr;
-            port = "2181";
-        }else {
-            host = addr.substring(0, index);
-            port = addr.substring(index + 1);
-        }
         Configuration conf = HBaseConfiguration.create();
-        conf.set("hbase.zookeeper.quorum", host);
-        conf.set("hbase.zookeeper.property.clientPort",port);
+        conf.set("hbase.zookeeper.quorum", zkAddr);
         try {
             Connection connection = ConnectionFactory.createConnection(conf);
             HBASE_CLIENTS.put(hbaseName, connection);
