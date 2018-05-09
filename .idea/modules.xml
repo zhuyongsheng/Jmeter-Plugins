@@ -3,10 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Jmeter-Plugins.iml" filepath="$PROJECT_DIR$/.idea/Jmeter-Plugins.iml" />
-      <module fileurl="file://$PROJECT_DIR$/jmeter-plugins-dubbo/jmeter-plugins-dubbo.iml" filepath="$PROJECT_DIR$/jmeter-plugins-dubbo/jmeter-plugins-dubbo.iml" />
       <module fileurl="file://$PROJECT_DIR$/jmeter-plugins-hbase/jmeter-plugins-hbase.iml" filepath="$PROJECT_DIR$/jmeter-plugins-hbase/jmeter-plugins-hbase.iml" />
       <module fileurl="file://$PROJECT_DIR$/jmeter-plugins-kafka/jmeter-plugins-kafka.iml" filepath="$PROJECT_DIR$/jmeter-plugins-kafka/jmeter-plugins-kafka.iml" />
       <module fileurl="file://$PROJECT_DIR$/jmeter-plugins-redis/jmeter-plugins-redis.iml" filepath="$PROJECT_DIR$/jmeter-plugins-redis/jmeter-plugins-redis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jmeter-plugins-rpc/jmeter-plugins-rpc.iml" filepath="$PROJECT_DIR$/jmeter-plugins-rpc/jmeter-plugins-rpc.iml" />
       <module fileurl="file://$PROJECT_DIR$/jmeter-plugins-ssh/jmeter-plugins-ssh.iml" filepath="$PROJECT_DIR$/jmeter-plugins-ssh/jmeter-plugins-ssh.iml" />
     </modules>
   </component>

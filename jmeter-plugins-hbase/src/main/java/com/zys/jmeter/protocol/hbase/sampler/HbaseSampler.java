@@ -4,10 +4,9 @@ package com.zys.jmeter.protocol.hbase.sampler;
  * Created by 01369755 on 2018/1/3.
  */
 
-import org.apache.hadoop.conf.Configuration;
+import com.zys.jmeter.protocol.hbase.config.HbaseConfig;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
-import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.exceptions.DeserializationException;
@@ -24,12 +23,13 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 public class HbaseSampler extends AbstractSampler implements TestBean {
     private static final Logger log = LoggerFactory.getLogger(HbaseSampler.class);
-    private String zkAddr;
+
+
+    private String hbaseName;
     private String tableName;
     private String rowKey;
     private String family;
@@ -49,22 +49,19 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
             res.setResponseData(scan(),"UTF-8");
             res.setResponseCode("0");
             res.setSuccessful(true);
-
         } catch (Exception e) {
             res.setResponseMessage(e.toString());
             res.setResponseCode("500");
             res.setSuccessful(false);
-//            e.printStackTrace();
-//            return res;
         } finally {
             res.sampleEnd();
+            return res;
         }
-        return res;
     }
 
     public String scan() throws IOException, DeserializationException {
 
-        Connection connection = ConnectionSinglet.getConnection(zkAddr);
+        Connection connection = HbaseConfig.getConnection(hbaseName);
 
         Table table = connection.getTable(TableName.valueOf(tableName));
 
@@ -129,8 +126,12 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
 
     }
 
-    public void setZkAddr(String zkAddr) {
-        this.zkAddr = zkAddr;
+    public String getHbaseName() {
+        return hbaseName;
+    }
+
+    public void setHbaseName(String hbaseName) {
+        this.hbaseName = hbaseName;
     }
 
     public void setTableName(String tableName) {
@@ -139,10 +140,6 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
 
     public void setRowKey(String rowKey) {
         this.rowKey = rowKey;
-    }
-
-    public String getZkAddr() {
-        return zkAddr;
     }
 
     public String getTableName() {
@@ -167,35 +164,6 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
 
     public void setColumn(String column) {
         this.column = column;
-    }
-
-    private static class ConnectionSinglet {
-
-        private static ConcurrentHashMap<String, Connection> clients = new ConcurrentHashMap<String, Connection>();
-
-        private ConnectionSinglet() {
-        }
-
-        private static Connection getConnection(String zk) throws IOException {
-            if (!clients.containsKey(zk)) {
-                int index = zk.indexOf(":");
-                String host;
-                String port;
-                if (index < 0){
-                    host = zk;
-                    port = "2181";
-                }else {
-                    host = zk.substring(0, index);
-                    port = zk.substring(index + 1);
-                }
-                Configuration conf = HBaseConfiguration.create();
-                conf.set("hbase.zookeeper.quorum", host);
-                conf.set("hbase.zookeeper.property.clientPort",port);
-                Connection connection = ConnectionFactory.createConnection(conf);
-                clients.put(zk, connection);
-            }
-            return clients.get(zk);
-        }
     }
 
 }

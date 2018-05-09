@@ -1,25 +1,19 @@
 package com.zys.jmeter.protocol.redis.sampler;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.zys.jmeter.protocol.redis.config.RedisConfig;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
-import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
 import java.util.Set;
 
 /**
@@ -29,7 +23,7 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
 
     private static final Logger log = LoggerFactory.getLogger(RedisQuerier.class);
 
-    public static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static Gson GSON = new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
     private String redisName;
     private String key;
@@ -64,7 +58,7 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
             ByteArrayInputStream bi = new ByteArrayInputStream(bytes);
             ObjectInputStream oi;
             oi = new ObjectInputStream(bi);
-            return OBJECT_MAPPER.writeValueAsString(oi.readObject());
+            return GSON.toJson(oi.readObject());
 //            return new String(jedis.get(key.getBytes()), "UTF-8");
         } catch (Exception e) {
             if(bytes != null){

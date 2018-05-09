@@ -16,6 +16,10 @@ import org.zys.jmeter.protocol.rpc.sampler.RpcSampler;
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by 01369755 on 2018/3/26.
@@ -24,13 +28,15 @@ public class RpcSamplerGui extends AbstractSamplerGui {
 
     private static final Logger log = LoggerFactory.getLogger(RpcSamplerGui.class);
 
+    private static Map<String, List<String>> methods = new HashMap<>();
+
     private JLabeledTextField protocol;
     private JLabeledTextField host;
     private JLabeledTextField port;
     private JLabeledTextField interfaceCls;
     private JLabeledTextField version;
     private JComboBox<String> method;
-    private JSyntaxTextArea   args;
+    private JSyntaxTextArea args;
 
     public RpcSamplerGui() {
         init();
@@ -42,7 +48,7 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     }
 
     public String getStaticLabel() {
-        return "RPC请求";
+        return "DUBBO请求";
     }
 
 
@@ -62,9 +68,7 @@ public class RpcSamplerGui extends AbstractSamplerGui {
         testElement.setProperty(RpcSampler.PORT, port.getText());
         testElement.setProperty(RpcSampler.INTERFACE_CLASS, interfaceCls.getText());
         if (method.getSelectedItem() != null) {
-            testElement.setProperty(RpcSampler.METHOD ,method.getSelectedIndex());
-        }else {
-            testElement.setProperty(RpcSampler.METHOD , Integer.valueOf(0));
+            testElement.setProperty(RpcSampler.METHOD, method.getSelectedItem().toString());
         }
         testElement.setProperty(RpcSampler.VERSION, version.getText());
         testElement.setProperty(RpcSampler.ARGS, args.getText());
@@ -92,16 +96,12 @@ public class RpcSamplerGui extends AbstractSamplerGui {
         interfaceCls.setText(element.getPropertyAsString(RpcSampler.INTERFACE_CLASS));
         method.removeAllItems();
         if (StringUtils.isNotEmpty(interfaceCls.getText())) {
-            try {
-                for (Method m : Class.forName(interfaceCls.getText()).getDeclaredMethods())
-                    method.addItem(m.getName());
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+            for (String m : getMetods(interfaceCls.getText())) {
+                method.addItem(m);
             }
-            method.setSelectedIndex(element.getPropertyAsInt(RpcSampler.METHOD));
         }
+        method.setSelectedItem(element.getPropertyAsString(RpcSampler.METHOD));
         args.setInitialText(element.getPropertyAsString(RpcSampler.ARGS));
-//        args.setCaretPosition(0);
     }
 
     public void clearGui() {
@@ -110,8 +110,8 @@ public class RpcSamplerGui extends AbstractSamplerGui {
         host.setText("");
         port.setText("");
         interfaceCls.setText("");
+        method.setSelectedIndex(-1);
         version.setText("");
-        method.removeAllItems();
         args.setInitialText("");
         args.setCaretPosition(0);
     }
@@ -132,7 +132,6 @@ public class RpcSamplerGui extends AbstractSamplerGui {
         panel.add(JTextScrollPane.getInstance(args), BorderLayout.CENTER);
         return panel;
     }
-
     private JPanel createInterfacePanel() {
         interfaceCls = new JLabeledTextField(" 接口：", 40);
         method = new JComboBox<>();
@@ -162,5 +161,28 @@ public class RpcSamplerGui extends AbstractSamplerGui {
         webServerPanel.add(host);
         webServerPanel.add(port);
         return webServerPanel;
+    }
+
+    private List<String> getMetods(String interfaceCls) {
+        if (!methods.containsKey(interfaceCls)) {
+            List<String> method = new ArrayList();
+            if (StringUtils.isNotEmpty(interfaceCls)) {
+                try {
+                    for (Method m : Class.forName(interfaceCls).getDeclaredMethods()){
+                        StringBuffer sb = new StringBuffer(m.getName()).append("(");
+                        Class[] pts = m.getParameterTypes();
+                        for (Class pt : pts){
+                            sb.append(pt.getName()).append(",");
+                        }
+                        sb.deleteCharAt(sb.lastIndexOf(",")).append(")");
+                        method.add(sb.toString());
+                    }
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                methods.put(interfaceCls, method);
+            }
+        }
+        return methods.get(interfaceCls);
     }
 }

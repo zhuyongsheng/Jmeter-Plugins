@@ -16,7 +16,6 @@ import kafka.javaapi.consumer.SimpleConsumer;
 
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static kafka.api.OffsetRequest.CurrentVersion;
 import static kafka.api.OffsetRequest.LatestTime;
@@ -24,7 +23,7 @@ import static kafka.api.OffsetRequest.LatestTime;
 /**
  * Created by 01369755 on 2018/3/22.
  */
-public class KafkaConfig  extends ConfigTestElement implements TestBean, TestStateListener {
+public class KafkaConfig extends ConfigTestElement implements TestBean, TestStateListener {
 
     private static final Logger log = LoggerFactory.getLogger(KafkaConfig.class);
 
@@ -35,7 +34,9 @@ public class KafkaConfig  extends ConfigTestElement implements TestBean, TestSta
     private final static String CONSUMER = "CONSUMER_";
     private final static String OFFSET = "OFFSET_";
 
-    private static ConcurrentHashMap<String, Object> KAFKA_VAR= new ConcurrentHashMap<>();
+    /*考虑到kafka配置是全局的，直接用了静态Map，比JMeterVariables更适合一些；
+    JMeterVariables用于不同线程中需要区分的情况*/
+    private static Map<String, Object> KAFKA_VAR= new HashMap<>();
 
     private String topic;
     private String brokers;
@@ -162,7 +163,8 @@ public class KafkaConfig  extends ConfigTestElement implements TestBean, TestSta
         for (String seed : Brokers) {
             SimpleConsumer consumer = null;
             try {
-                consumer = new SimpleConsumer(seed.split(":")[0], Integer.parseInt(seed.split(":")[1]), TIME_OUT, BUFFER_SIZE, "leaderLookup");
+                String[] seedInfo = seed.split(":");
+                consumer = new SimpleConsumer(seedInfo[0], Integer.parseInt(seedInfo[1]), TIME_OUT, BUFFER_SIZE, "leaderLookup");
                 List<String> topics = Collections.singletonList(topic);
                 TopicMetadataRequest req = new TopicMetadataRequest(topics);
                 TopicMetadataResponse resp = consumer.send(req);

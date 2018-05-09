@@ -49,8 +49,8 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
             res.setSuccessful(false);
         } finally {
             res.sampleEnd();
+            return res;
         }
-        return res;
     }
 
     private static Boolean isMatch(String msg, String wanted){
@@ -115,7 +115,7 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
         if (sb.length() > 0) {
             return sb.deleteCharAt(sb.lastIndexOf("\n")).toString();
         }
-        return "message match failed.";
+        return "message not found.";
     }
 
     public int getDuration() {

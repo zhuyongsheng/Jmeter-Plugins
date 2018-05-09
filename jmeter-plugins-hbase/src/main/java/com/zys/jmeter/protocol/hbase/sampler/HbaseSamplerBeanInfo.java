@@ -10,9 +10,8 @@ public class HbaseSamplerBeanInfo extends BeanInfoSupport {
     public HbaseSamplerBeanInfo()
     {
         super(HbaseSampler.class);
-        createPropertyGroup("ZooKeeper信息", new String[] { "zkAddr" });
-        createPropertyGroup("Hbase信息", new String[] {"tableName", "rowKey", "family", "column"});
-        PropertyDescriptor p = property("zkAddr");
+        createPropertyGroup("查询信息", new String[] {"hbaseName", "tableName", "rowKey", "family", "column"});
+        PropertyDescriptor p = property("hbaseName");
         p.setValue("notUndefined", Boolean.TRUE);
         p.setValue("default", "");
         p = property("tableName");

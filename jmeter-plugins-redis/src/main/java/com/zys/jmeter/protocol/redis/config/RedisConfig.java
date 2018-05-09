@@ -2,22 +2,21 @@ package com.zys.jmeter.protocol.redis.config;
 
 
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.jmeter.testbeans.TestBean;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisSentinelPool;
+import redis.clients.util.Pool;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import redis.clients.util.Pool;
 
 /**
  * Created by 01369755 on 2018/3/17.
@@ -30,7 +29,7 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
     private String address;
     private String master;
     private String password;
-    private Boolean sentinel;
+    private int sentinel;
 
     private static JedisPoolConfig CONFIG = new JedisPoolConfig();
 
@@ -69,7 +68,7 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
         } else if (variables.getObject(redisName) != null) {
             log.error("Redis config already defined.");
         } else {
-            if (sentinel){
+            if (SENTINEL.YES.ordinal() == sentinel){
                 variables.putObject(redisName, initJedisSentinelPool());
             }else {
                 variables.putObject(redisName, initJedisPool());
@@ -116,12 +115,18 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
         this.password = password;
     }
 
-    public Boolean getSentinel() {
+    public int getSentinel() {
         return sentinel;
     }
 
-    public void setSentinel(Boolean sentinel) {
+    public void setSentinel(int sentinel) {
         this.sentinel = sentinel;
+    }
+
+    public enum SENTINEL
+    {
+        YES,
+        NO
     }
 
 }
