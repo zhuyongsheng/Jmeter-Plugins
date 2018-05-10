@@ -69,7 +69,7 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
 //        System.out.println(ROLES.PRODUCER.equals(ROLES.values()[0]));
 //    }
     private void initProducer(){
-        if ((ROLES.PRODUCER.ordinal() == role) || (ROLES.BOTH.ordinal() == role)){
+        if ((ROLES.PRODUCER.ordinal() == role)){
             try{
                 Properties props = new Properties();
                 props.put("metadata.broker.list", brokers);
@@ -83,7 +83,7 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
     }
 
     private void closeProducer(){
-        if ((ROLES.PRODUCER.ordinal() == role) || (ROLES.BOTH.ordinal() == role)){
+        if ((ROLES.PRODUCER.ordinal() == role)){
             try{
                 getProducer(topic).close();
                 KAFKA_VAR.remove(PRODUCER + topic);
@@ -106,7 +106,7 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
         return (Producer)KAFKA_VAR.get(PRODUCER + topic);
     }
     private void initConsumer(){
-        if ((ROLES.CONSUMER.ordinal() == role) || (ROLES.BOTH.ordinal() == role)){
+        if ((ROLES.CONSUMER.ordinal() == role)){
             SimpleConsumer[] simpleConsumers = new SimpleConsumer[partitionNum];
             long[] offsets = new long[partitionNum];
             try{
@@ -125,7 +125,7 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
     }
 
     private void closeConsumer(){
-        if ((ROLES.CONSUMER.ordinal() == role) || (ROLES.BOTH.ordinal() == role)){
+        if ((ROLES.CONSUMER.ordinal() == role)){
             try{
                 for (SimpleConsumer simpleConsumer : getConsumer(topic)) {
                     simpleConsumer.close();
@@ -224,7 +224,6 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
     public enum ROLES
     {
         PRODUCER,
-        CONSUMER,
-        BOTH
+        CONSUMER
     }
 }
