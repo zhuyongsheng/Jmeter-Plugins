@@ -37,6 +37,7 @@ public class RpcSampler extends AbstractSampler {
     public static String INTERFACE_CLASS = "interfaceCls";
     public static String METHOD = "method";
     public static String VERSION = "version";
+    public static String GROUP = "group";
     public static String ARGS = "args";
 
     private String protocol;
@@ -45,6 +46,7 @@ public class RpcSampler extends AbstractSampler {
     private String interfaceCls;
     private String methodInfo;
     private String version;
+    private String group;
     private String args;
 
     private void init() throws Exception {
@@ -53,9 +55,9 @@ public class RpcSampler extends AbstractSampler {
         port = getPropertyAsString(PORT).trim();
         interfaceCls = getPropertyAsString(INTERFACE_CLASS);
         version = getPropertyAsString(VERSION).trim();
+        group = getPropertyAsString(GROUP).trim();
         args = getPropertyAsString(ARGS).trim().replace("\n", "").replace("\t","");
         methodInfo = getPropertyAsString(METHOD);
-
     }
 
     public SampleResult sample(Entry entry) {
@@ -83,7 +85,7 @@ public class RpcSampler extends AbstractSampler {
 
     public String visitDubboService() throws Exception {
 
-        ReferenceConfig ref = getReference(protocol, host, port, interfaceCls, version);
+        ReferenceConfig ref = getReference(protocol, host, port, interfaceCls, version, group);
 
         Class paramType = Class.forName(methodInfo.substring(methodInfo.indexOf("(") + 1, methodInfo.indexOf(")")));
         Method method = Class.forName(interfaceCls).getDeclaredMethod(methodInfo.substring(0,methodInfo.indexOf("(")), paramType);
@@ -99,13 +101,14 @@ public class RpcSampler extends AbstractSampler {
         return paramType;
     }
 
-    private ReferenceConfig getReference(String protocol, String host, String port, String interfaceCls, String version) throws Exception{
-        StringBuffer key = new StringBuffer(host).append("_").append(interfaceCls).append("_").append(version);
+    private ReferenceConfig getReference(String protocol, String host, String port, String interfaceCls, String version, String group) throws Exception{
+        StringBuffer key = new StringBuffer(host).append("_").append(interfaceCls).append("_").append(version).append("_").append(group);
         if (!clients.containsKey(key.toString())){
             ReferenceConfig ref = new ReferenceConfig();
             ref.setApplication(DUBBOSAMPLER);
             ref.setInterface(interfaceCls);
             ref.setVersion(version);
+            ref.setGroup(group);
             ref.setTimeout(TIMEOUT);
             switch (protocol) {
                 case "dubbo" :
