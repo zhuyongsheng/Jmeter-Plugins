@@ -125,6 +125,7 @@ public class RpcSamplerGui extends AbstractSamplerGui implements ChangeListener 
         host.setText("");
         port.setText("");
         className.setSelectedIndex(-1);
+        methodName.setValues(ArrayUtils.EMPTY_STRING_ARRAY);
         methodName.setSelectedIndex(-1);
         version.setText("");
         group.setText("");
