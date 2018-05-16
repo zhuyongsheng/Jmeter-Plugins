@@ -46,8 +46,6 @@ public class RpcSamplerGui extends AbstractSamplerGui implements ChangeListener 
     private JSyntaxTextArea args;
     private JLabeledChoice className;
     private JLabeledChoice methodName;
-    
-
 
 
     private static final String[] SPATHS = new String[]{
@@ -55,6 +53,7 @@ public class RpcSamplerGui extends AbstractSamplerGui implements ChangeListener 
     };
 
     public RpcSamplerGui() {
+        setupClassNames();
         init();
     }
 
@@ -82,19 +81,14 @@ public class RpcSamplerGui extends AbstractSamplerGui implements ChangeListener 
         testElement.setProperty(RpcSampler.PROTOCOL, protocol.getText());
         testElement.setProperty(RpcSampler.HOST, host.getText());
         testElement.setProperty(RpcSampler.PORT, port.getText());
-        if (className.getText() != null) {
-            testElement.setProperty(RpcSampler.INTERFACE_CLASS, className.getText());
-        }
-        if (methodName.getText() != null) {
-            testElement.setProperty(RpcSampler.METHOD, methodName.getText());
-        }
+        testElement.setProperty(RpcSampler.INTERFACE_CLASS, className.getText());
+        testElement.setProperty(RpcSampler.METHOD, methodName.getText());
         testElement.setProperty(RpcSampler.VERSION, version.getText());
         testElement.setProperty(RpcSampler.GROUP, group.getText());
         testElement.setProperty(RpcSampler.ARGS, args.getText());
     }
 
     private void init() {
-        log.info(System.getProperty("java.class.path"));
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
         Box box = Box.createVerticalBox();
@@ -150,7 +144,7 @@ public class RpcSamplerGui extends AbstractSamplerGui implements ChangeListener 
     }
 
     private JPanel createInterfacePanel() {
-        className  = new JLabeledChoice(" 接口:  ", getClassNames());
+        className = new JLabeledChoice(" 接口:  ", classNames.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
         className.addChangeListener(this);
         methodName = new JLabeledChoice(" 方法:  ", ArrayUtils.EMPTY_STRING_ARRAY);
         version = new JLabeledTextField(" 版本：", 6);
@@ -202,15 +196,15 @@ public class RpcSamplerGui extends AbstractSamplerGui implements ChangeListener 
         }
         return methodNames.get(interfaceCls);
     }
-    private String[] getClassNames() {
-        if (classNames.size() == 0){
+
+    private void setupClassNames() {
+        if (classNames.size() == 0) {
             try {
                 classNames = ClassFinder.findClasses(SPATHS, new InterfaceFilter("Service", "RestService"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return classNames.toArray(ArrayUtils.EMPTY_STRING_ARRAY);
     }
 
     @Override
