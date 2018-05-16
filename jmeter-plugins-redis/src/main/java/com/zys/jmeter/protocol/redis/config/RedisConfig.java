@@ -81,7 +81,11 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
     }
 
     public void testEnded() {
-        ((Pool<Jedis>)JMeterContextService.getContext().getVariables().getObject(redisName)).destroy();
+        try {
+            getPool(redisName).destroy();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String getRedisName() {

@@ -36,6 +36,7 @@ public class RpcSamplerGui extends AbstractSamplerGui implements ChangeListener 
     private static final Logger log = LoggerFactory.getLogger(RpcSamplerGui.class);
 
     private static Map<String, List<String>> methodNames = new HashMap<>();
+    private static List<String> classNames = new ArrayList<>();
 
     private JLabeledTextField protocol;
     private JLabeledTextField host;
@@ -148,13 +149,8 @@ public class RpcSamplerGui extends AbstractSamplerGui implements ChangeListener 
     }
 
     private JPanel createInterfacePanel() {
-        try {
-            className = new JLabeledChoice(" 接口:  ", ClassFinder.findClasses(SPATHS,
-                        new InterfaceFilter("Service", "RestService")).toArray(ArrayUtils.EMPTY_STRING_ARRAY));
-            className.addChangeListener(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        className  = new JLabeledChoice(" 接口:  ", getClassNames());
+        className.addChangeListener(this);
         methodName = new JLabeledChoice(" 方法:  ", ArrayUtils.EMPTY_STRING_ARRAY);
         version = new JLabeledTextField(" 版本：", 6);
         group = new JLabeledTextField(" 群组：", 6);
@@ -205,13 +201,22 @@ public class RpcSamplerGui extends AbstractSamplerGui implements ChangeListener 
         }
         return methodNames.get(interfaceCls);
     }
+    private String[] getClassNames() {
+        if (classNames.size() == 0){
+            try {
+                classNames = ClassFinder.findClasses(SPATHS, new InterfaceFilter("Service", "RestService"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return classNames.toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+    }
 
     @Override
     public void stateChanged(ChangeEvent evt) {
         if (evt.getSource() == className) {
             methodName.setValues(getMethodNames(className.getText()).toArray(ArrayUtils.EMPTY_STRING_ARRAY));
         }
-
     }
 
 
