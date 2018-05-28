@@ -130,7 +130,7 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
         return hbase;
     }
 
-    public void setHbase(String hbaseName) {
+    public void setHbase(String hbase) {
         this.hbase = hbase;
     }
 
