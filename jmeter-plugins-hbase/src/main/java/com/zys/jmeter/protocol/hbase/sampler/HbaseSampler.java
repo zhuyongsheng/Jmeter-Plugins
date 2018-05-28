@@ -29,7 +29,7 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
     private static final Logger log = LoggerFactory.getLogger(HbaseSampler.class);
 
 
-    private String hbaseName;
+    private String hbase;
     private String tableName;
     private String rowKey;
     private String family;
@@ -61,7 +61,7 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
 
     public String scan() throws IOException, DeserializationException {
 
-        Connection connection = HbaseConfig.getConnection(hbaseName);
+        Connection connection = HbaseConfig.getConnection(hbase);
 
         Table table = connection.getTable(TableName.valueOf(tableName));
 
@@ -126,12 +126,12 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
 
     }
 
-    public String getHbaseName() {
-        return hbaseName;
+    public String getHbase() {
+        return hbase;
     }
 
-    public void setHbaseName(String hbaseName) {
-        this.hbaseName = hbaseName;
+    public void setHbase(String hbaseName) {
+        this.hbase = hbase;
     }
 
     public void setTableName(String tableName) {

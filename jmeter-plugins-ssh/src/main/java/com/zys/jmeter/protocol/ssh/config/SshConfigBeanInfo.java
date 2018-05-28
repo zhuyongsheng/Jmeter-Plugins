@@ -13,8 +13,8 @@ public class SshConfigBeanInfo extends BeanInfoSupport {
 
     {
         super(SshConfig.class);
-        createPropertyGroup("SSH主机信息", new String[] { "host", "port", "user", "password"});
-        PropertyDescriptor p = property("host");
+        createPropertyGroup("SSH主机信息", new String[] { "hostName", "port", "user", "password"});
+        PropertyDescriptor p = property("hostName");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
         p = property("port");

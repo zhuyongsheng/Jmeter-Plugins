@@ -13,8 +13,8 @@ public class KafkaConfigBeanInfo extends BeanInfoSupport {
 
     {
         super(KafkaConfig.class);
-        createPropertyGroup("Kafka信息", new String[] { "topic", "brokers", "partitionNum", "role"});
-        PropertyDescriptor p = property("topic");
+        createPropertyGroup("Kafka信息", new String[] { "topicName", "brokers", "partitionNum", "serializer", "clazz", "role"});
+        PropertyDescriptor p = property("topicName");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
         p = property("brokers");
@@ -23,6 +23,14 @@ public class KafkaConfigBeanInfo extends BeanInfoSupport {
         p = property("partitionNum");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, 4);
+        p = property("serializer");
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, "STRING");
+        p.setValue(TAGS, new String[]{"STRING", "PROTOSTUFF"});
+        p.setValue(NOT_OTHER, Boolean.TRUE);
+        p = property("clazz");
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, "");
         p = property("role", KafkaConfig.ROLES.class);
         p.setValue(DEFAULT, KafkaConfig.ROLES.PRODUCER);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);

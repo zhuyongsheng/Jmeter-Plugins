@@ -49,7 +49,7 @@ public class RpcSamplerGui extends AbstractSamplerGui implements ChangeListener 
 
 
     private static final String[] SPATHS = new String[]{
-            JMeterUtils.getJMeterHome() + "/lib/dubbo/"             //需将/lib/dubbo加入user.classpath配置中，否则无法加载类
+            JMeterUtils.getJMeterHome() + "/lib/dubbo"             //需将/lib/dubbo加入user.classpath配置中，否则无法加载类
     };
 
     public RpcSamplerGui() {
