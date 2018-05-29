@@ -7,6 +7,8 @@ import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestStateListener;
+import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.ObjectProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,11 +23,10 @@ public class HbaseConfig extends ConfigTestElement implements TestBean, TestStat
 
     private static final Logger log = LoggerFactory.getLogger(HbaseConfig.class);
 
-    private static Map<String, Connection> HBASE_CLIENTS= new HashMap<>();
+//    private static Map<String, Connection> HBASE_CLIENTS= new HashMap<>();
 
     private String hbaseName;
     private String zkAddr;
-
     @Override
     public void testStarted() {
         initConnection();
@@ -39,8 +40,8 @@ public class HbaseConfig extends ConfigTestElement implements TestBean, TestStat
     @Override
     public void testEnded() {
         try {
-            getConnection(hbaseName).close();
-            HBASE_CLIENTS.remove(hbaseName);
+            ((Connection)getProperty(hbaseName)).close();
+            removeProperty(hbaseName);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -51,16 +52,17 @@ public class HbaseConfig extends ConfigTestElement implements TestBean, TestStat
         testEnded();
     }
 
-    public static Connection getConnection(String hbaseName){
+    /*public static Connection getConnection(String hbaseName){
         return HBASE_CLIENTS.get(hbaseName);
-    }
+    }*/
 
     private void initConnection() {
         Configuration conf = HBaseConfiguration.create();
         conf.set("hbase.zookeeper.quorum", zkAddr);
         try {
             Connection connection = ConnectionFactory.createConnection(conf);
-            HBASE_CLIENTS.put(hbaseName, connection);
+            setProperty(new ObjectProperty(hbaseName, connection));
+//            HBASE_CLIENTS.put(hbaseName, connection);
         } catch (IOException e) {
             e.printStackTrace();
         }
