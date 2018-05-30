@@ -16,7 +16,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
 /**
- * Created by 01369755 on 2018/1/3.
+ * Created by zhuyongsheng on 2018/1/3.
  */
 public class SshSampler extends AbstractSampler implements TestBean{
 

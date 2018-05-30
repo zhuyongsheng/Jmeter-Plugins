@@ -13,7 +13,7 @@ import org.zys.jmeter.protocol.kafka.config.KafkaConfig;
 import org.zys.jmeter.protocol.kafka.utils.ProtostuffRuntimeUtil;
 
 /**
- * Created by 01369755 on 2018/3/22.
+ * Created by zhuyongsheng on 2018/3/22.
  */
 public class KafkaProducer extends AbstractSampler implements TestBean{
 

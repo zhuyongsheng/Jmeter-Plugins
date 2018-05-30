@@ -6,7 +6,7 @@ import org.apache.jmeter.testbeans.gui.TypeEditor;
 import java.beans.PropertyDescriptor;
 
 /**
- * Created by 01369755 on 2018/3/24.
+ * Created by zhuyongsheng on 2018/3/24.
  */
 public class SshSamplerBeanInfo extends BeanInfoSupport {
 

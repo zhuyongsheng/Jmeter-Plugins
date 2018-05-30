@@ -17,7 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Set;
 
 /**
- * Created by 01369755 on 2018/3/2.
+ * Created by zhuyongsheng on 2018/3/2.
  */
 public class RedisQuerier extends AbstractSampler implements TestBean {
 

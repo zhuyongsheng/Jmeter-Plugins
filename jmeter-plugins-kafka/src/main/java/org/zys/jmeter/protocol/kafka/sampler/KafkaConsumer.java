@@ -21,7 +21,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Created by 01369755 on 2018/3/22.
+ * Created by zhuyongsheng on 2018/3/22.
  */
 public class KafkaConsumer extends AbstractSampler implements TestBean {
 

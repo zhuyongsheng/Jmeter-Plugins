@@ -5,7 +5,7 @@ import org.apache.jmeter.testbeans.BeanInfoSupport;
 import java.beans.PropertyDescriptor;
 
 /**
- * Created by 01369755 on 2018/3/2.
+ * Created by zhuyongsheng on 2018/3/2.
  */
 public class RedisQuerierBeanInfo extends BeanInfoSupport {
     public RedisQuerierBeanInfo() {

@@ -1,7 +1,7 @@
 package com.zys.jmeter.protocol.hbase.sampler;
 
 /**
- * Created by 01369755 on 2018/1/3.
+ * Created by zhuyongsheng on 2018/1/3.
  */
 
 import org.apache.hadoop.hbase.Cell;

@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by 01369755 on 2018/4/25.
+ * Created by zhuyongsheng on 2018/4/25.
  */
 public class HbaseConfig extends ConfigTestElement implements TestBean, TestStateListener {
 

@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by 01369755 on 2018/3/26.
+ * Created by zhuyongsheng on 2018/3/26.
  */
 public class RpcSamplerGui extends AbstractSamplerGui implements ChangeListener {
 
