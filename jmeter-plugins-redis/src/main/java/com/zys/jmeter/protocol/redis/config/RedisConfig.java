@@ -51,7 +51,7 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
     public static Pool<Jedis> getPool(String redisName) throws Exception{
         Object object = JMeterContextService.getContext().getVariables().getObject(redisName);
         if (object == null) {
-            throw new Exception("No pool found named: '" + redisName);
+            throw new Exception("No pool found named: " + redisName);
         }else {
             return (Pool<Jedis>)object;
         }
