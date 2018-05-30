@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by 01369755 on 2018/3/17.
+ * Created by zhuyongsheng on 2018/3/17.
  */
 public class RedisConfig extends ConfigTestElement implements TestBean, TestStateListener {
 
@@ -51,7 +51,7 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
     public static Pool<Jedis> getPool(String redisName) throws Exception{
         Object object = JMeterContextService.getContext().getVariables().getObject(redisName);
         if (object == null) {
-            throw new Exception("No pool found named: '" + redisName);
+            throw new Exception("No pool found named: " + redisName);
         }else {
             return (Pool<Jedis>)object;
         }
@@ -81,7 +81,11 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
     }
 
     public void testEnded() {
-        ((Pool<Jedis>)JMeterContextService.getContext().getVariables().getObject(redisName)).destroy();
+        try {
+            getPool(redisName).destroy();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String getRedisName() {

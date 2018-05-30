@@ -5,13 +5,13 @@ import org.apache.jmeter.testbeans.BeanInfoSupport;
 import java.beans.PropertyDescriptor;
 
 /**
- * Created by 01369755 on 2018/3/2.
+ * Created by zhuyongsheng on 2018/3/2.
  */
 public class RedisQuerierBeanInfo extends BeanInfoSupport {
     public RedisQuerierBeanInfo() {
         super(RedisQuerier.class);
 //        createPropertyGroup("Redis信息", new String[] { "address", "sentinel", "master", "password"});
-        createPropertyGroup("查询信息", new String[] {"redisName", "key"});
+        createPropertyGroup("查询信息", new String[] {"redis", "key"});
        /* PropertyDescriptor p = property("address");
         p.setValue("notUndefined", Boolean.TRUE);
         p.setValue("default", "");
@@ -32,7 +32,7 @@ public class RedisQuerierBeanInfo extends BeanInfoSupport {
                 Boolean.FALSE,
                 Boolean.TRUE
         });*/
-        PropertyDescriptor p = property("redisName");
+        PropertyDescriptor p = property("redis");
         p.setValue("notUndefined", Boolean.TRUE);
         p.setValue("default", "");
         p = property("key");

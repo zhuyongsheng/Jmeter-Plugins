@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Created by 01369755 on 2018/3/23.
+ * Created by zhuyongsheng on 2018/3/23.
  */
 public class SshConfig extends ConfigTestElement implements TestBean, TestStateListener {
 
@@ -20,7 +20,7 @@ public class SshConfig extends ConfigTestElement implements TestBean, TestStateL
     private static JSch JSCH = new JSch();
     private static int TIMEOUT = 6000;
 
-    private String host;
+    private String hostName;
     private int    port;
     private String user;
     private String password;
@@ -31,12 +31,12 @@ public class SshConfig extends ConfigTestElement implements TestBean, TestStateL
 
     private void initSession(){
         try {
-            session = JSCH.getSession(user, host, port); // 根据用户名，主机ip，端口获取一个Session对象
+            session = JSCH.getSession(user, hostName, port); // 根据用户名，主机ip，端口获取一个Session对象
             session.setPassword(password); // 设置密码
             session.setConfig("StrictHostKeyChecking", "no"); // 为Session对象设置properties
             session.setTimeout(TIMEOUT); // 设置timeout时间
             session.connect();
-            sessionMap.put(host, session);
+            sessionMap.put(hostName, session);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -44,8 +44,8 @@ public class SshConfig extends ConfigTestElement implements TestBean, TestStateL
 
     private void closeSession(){
         try{
-            sessionMap.get(host).disconnect();
-            sessionMap.remove(host);
+            sessionMap.get(hostName).disconnect();
+            sessionMap.remove(hostName);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -70,12 +70,12 @@ public class SshConfig extends ConfigTestElement implements TestBean, TestStateL
         testEnded();
     }
 
-    public String getHost() {
-        return host;
+    public String getHostName() {
+        return hostName;
     }
 
-    public void setHost(String host) {
-        this.host = host;
+    public void setHostName(String hostName) {
+        this.hostName = hostName;
     }
 
     public int getPort() {

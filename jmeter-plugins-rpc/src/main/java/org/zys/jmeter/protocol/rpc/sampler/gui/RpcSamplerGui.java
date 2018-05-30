@@ -1,6 +1,6 @@
 package org.zys.jmeter.protocol.rpc.sampler.gui;
 
-import junit.framework.TestCase;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
@@ -9,6 +9,7 @@ import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.reflect.ClassFilter;
 import org.apache.jorphan.reflect.ClassFinder;
@@ -17,9 +18,9 @@ import org.slf4j.LoggerFactory;
 import org.zys.jmeter.protocol.rpc.sampler.RpcSampler;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -28,28 +29,31 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by 01369755 on 2018/3/26.
+ * Created by zhuyongsheng on 2018/3/26.
  */
-public class RpcSamplerGui extends AbstractSamplerGui implements ActionListener {
+public class RpcSamplerGui extends AbstractSamplerGui implements ChangeListener {
 
     private static final Logger log = LoggerFactory.getLogger(RpcSamplerGui.class);
 
     private static Map<String, List<String>> methodNames = new HashMap<>();
+    private static List<String> classNames = new ArrayList<>();
 
     private JLabeledTextField protocol;
     private JLabeledTextField host;
     private JLabeledTextField port;
     private JLabeledTextField version;
+    private JLabeledTextField group;
     private JSyntaxTextArea args;
-    private JComboBox<String> classNameCombo;
-    private JComboBox<String> methodNameCombo;
+    private JLabeledChoice className;
+    private JLabeledChoice methodName;
 
 
     private static final String[] SPATHS = new String[]{
-            JMeterUtils.getJMeterHome() + "/lib/dubbo/" //$NON-NLS-1$
+            JMeterUtils.getJMeterHome() + "/lib/dubbo"             //需将/lib/dubbo加入user.classpath配置中，否则无法加载类
     };
 
     public RpcSamplerGui() {
+        setupClassNames();
         init();
     }
 
@@ -77,18 +81,14 @@ public class RpcSamplerGui extends AbstractSamplerGui implements ActionListener 
         testElement.setProperty(RpcSampler.PROTOCOL, protocol.getText());
         testElement.setProperty(RpcSampler.HOST, host.getText());
         testElement.setProperty(RpcSampler.PORT, port.getText());
-        if (classNameCombo.getSelectedItem() != null) {
-            testElement.setProperty(RpcSampler.INTERFACE_CLASS, classNameCombo.getSelectedItem().toString());
-        }
-        if (methodNameCombo.getSelectedItem() != null) {
-            testElement.setProperty(RpcSampler.METHOD, methodNameCombo.getSelectedItem().toString());
-        }
+        testElement.setProperty(RpcSampler.INTERFACE_CLASS, className.getText());
+        testElement.setProperty(RpcSampler.METHOD, methodName.getText());
         testElement.setProperty(RpcSampler.VERSION, version.getText());
+        testElement.setProperty(RpcSampler.GROUP, group.getText());
         testElement.setProperty(RpcSampler.ARGS, args.getText());
     }
 
     private void init() {
-        log.info(System.getProperty("java.class.path"));
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
         Box box = Box.createVerticalBox();
@@ -107,8 +107,9 @@ public class RpcSamplerGui extends AbstractSamplerGui implements ActionListener 
         host.setText(element.getPropertyAsString(RpcSampler.HOST));
         port.setText(element.getPropertyAsString(RpcSampler.PORT));
         version.setText(element.getPropertyAsString(RpcSampler.VERSION));
-        classNameCombo.setSelectedItem(element.getPropertyAsString(RpcSampler.INTERFACE_CLASS));
-        methodNameCombo.setSelectedItem(element.getPropertyAsString(RpcSampler.METHOD));
+        group.setText(element.getPropertyAsString(RpcSampler.GROUP));
+        className.setText(element.getPropertyAsString(RpcSampler.INTERFACE_CLASS));
+        methodName.setText(element.getPropertyAsString(RpcSampler.METHOD));
         args.setInitialText(element.getPropertyAsString(RpcSampler.ARGS));
     }
 
@@ -117,9 +118,11 @@ public class RpcSamplerGui extends AbstractSamplerGui implements ActionListener 
         protocol.setText("");
         host.setText("");
         port.setText("");
-        classNameCombo.setSelectedIndex(-1);
-        methodNameCombo.setSelectedIndex(-1);
+        className.setSelectedIndex(-1);
+        methodName.setValues(ArrayUtils.EMPTY_STRING_ARRAY);
+        methodName.setSelectedIndex(-1);
         version.setText("");
+        group.setText("");
         args.setInitialText("");
         args.setCaretPosition(0);
     }
@@ -141,32 +144,17 @@ public class RpcSamplerGui extends AbstractSamplerGui implements ActionListener 
     }
 
     private JPanel createInterfacePanel() {
-        try {
-            classNameCombo = new JComboBox(ClassFinder.findClasses(SPATHS,
-                    new InterfaceFilter("Service", "RestService")).toArray());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        classNameCombo.addActionListener(this);
-        JLabel classLabel = new JLabel(" 接口:  ");
-        classLabel.setLabelFor(classNameCombo);
-        JPanel classPanel = new JPanel(new BorderLayout());
-        classPanel.add(classLabel, BorderLayout.WEST);
-        classPanel.add(classNameCombo, BorderLayout.CENTER);
-
-        methodNameCombo = new JComboBox<>();
-        JLabel methodLabel = new JLabel(" 方法:  ");
-        methodLabel.setLabelFor(methodNameCombo);
-        JPanel methodPanel = new JPanel(new BorderLayout());
-        methodPanel.add(methodLabel, BorderLayout.WEST);
-        methodPanel.add(methodNameCombo, BorderLayout.CENTER);
-
-        version = new JLabeledTextField(" 版本：", 7);
+        className = new JLabeledChoice(" 接口:  ", classNames.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+        className.addChangeListener(this);
+        methodName = new JLabeledChoice(" 方法:  ", ArrayUtils.EMPTY_STRING_ARRAY);
+        version = new JLabeledTextField(" 版本：", 6);
+        group = new JLabeledTextField(" 群组：", 6);
 
         JPanel webServerPanel = new HorizontalPanel();
-        webServerPanel.add(classPanel, BorderLayout.WEST);
-        webServerPanel.add(methodPanel, BorderLayout.CENTER);
-        webServerPanel.add(version, BorderLayout.EAST);
+        webServerPanel.add(className);
+        webServerPanel.add(methodName);
+        webServerPanel.add(version);
+        webServerPanel.add(group);
         return webServerPanel;
     }
 
@@ -209,24 +197,20 @@ public class RpcSamplerGui extends AbstractSamplerGui implements ActionListener 
         return methodNames.get(interfaceCls);
     }
 
-    private void setupMethods() {
-        methodNameCombo.removeAllItems();
-        if (null != classNameCombo.getSelectedItem()) {
-            String className = classNameCombo.getSelectedItem().toString();
-            if (className != null) {
-                List<String> names = getMethodNames(className);
-                for (String name : names) {
-                    methodNameCombo.addItem(name);
-                }
-                methodNameCombo.repaint();
+    private void setupClassNames() {
+        if (classNames.size() == 0) {
+            try {
+                classNames = ClassFinder.findClasses(SPATHS, new InterfaceFilter("Service", "RestService"));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
 
     @Override
-    public void actionPerformed(ActionEvent evt) {
-        if (evt.getSource() == classNameCombo) {
-            setupMethods();
+    public void stateChanged(ChangeEvent evt) {
+        if (evt.getSource() == className) {
+            methodName.setValues(getMethodNames(className.getText()).toArray(ArrayUtils.EMPTY_STRING_ARRAY));
         }
     }
 

@@ -1,16 +1,15 @@
 package com.zys.jmeter.protocol.hbase.sampler;
 
 /**
- * Created by 01369755 on 2018/1/3.
+ * Created by zhuyongsheng on 2018/1/3.
  */
 
-import com.zys.jmeter.protocol.hbase.config.HbaseConfig;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.exceptions.DeserializationException;
-import org.apache.hadoop.hbase.filter.*;
+import org.apache.hadoop.hbase.filter.FuzzyRowFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.hbase.util.Pair;
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -25,11 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 public class HbaseSampler extends AbstractSampler implements TestBean {
     private static final Logger log = LoggerFactory.getLogger(HbaseSampler.class);
 
 
-    private String hbaseName;
+    private String hbase;
     private String tableName;
     private String rowKey;
     private String family;
@@ -40,13 +40,13 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
         SampleResult res = new SampleResult();
         StringBuffer sp = new StringBuffer("scan '" + tableName + "','" + rowKey + "'");
         if (!"".equals(family)) {
-            sp.append(",'" + family).append("".equals(column) ? "'" : ":" + column + "'" );
+            sp.append(",'" + family).append("".equals(column) ? "'" : ":" + column + "'");
         }
         res.setSamplerData(sp.toString());
         res.setSampleLabel(getName());
         try {
             res.sampleStart();
-            res.setResponseData(scan(),"UTF-8");
+            res.setResponseData(scan(), "UTF-8");
             res.setResponseCode("0");
             res.setSuccessful(true);
         } catch (Exception e) {
@@ -61,7 +61,7 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
 
     public String scan() throws IOException, DeserializationException {
 
-        Connection connection = HbaseConfig.getConnection(hbaseName);
+        Connection connection = ((Connection) getProperty(hbase));
 
         Table table = connection.getTable(TableName.valueOf(tableName));
 
@@ -73,8 +73,8 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
 
             byte[] mask = new byte[rowKey.length()];
 
-            for (int i = 0; i < rowKey.length(); i++){
-                mask[i] =  '?' == ch[i] ? (byte)1 : 0;
+            for (int i = 0; i < rowKey.length(); i++) {
+                mask[i] = '?' == ch[i] ? (byte) 1 : 0;
             }
 
             List<Pair<byte[], byte[]>> fuzzyKeysData = new ArrayList<>();
@@ -87,10 +87,10 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
 
         }
 
-        if (!"".equals(family)){
+        if (!"".equals(family)) {
             scan.addFamily(Bytes.toBytes(family));
-            if (!"".equals(column)){
-                scan.addColumn(Bytes.toBytes(family),Bytes.toBytes(column));
+            if (!"".equals(column)) {
+                scan.addColumn(Bytes.toBytes(family), Bytes.toBytes(column));
             }
         }
 
@@ -126,12 +126,12 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
 
     }
 
-    public String getHbaseName() {
-        return hbaseName;
+    public String getHbase() {
+        return hbase;
     }
 
-    public void setHbaseName(String hbaseName) {
-        this.hbaseName = hbaseName;
+    public void setHbase(String hbase) {
+        this.hbase = hbase;
     }
 
     public void setTableName(String tableName) {

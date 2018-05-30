@@ -5,7 +5,7 @@ import org.apache.jmeter.testbeans.BeanInfoSupport;
 import java.beans.PropertyDescriptor;
 
 /**
- * Created by 01369755 on 2018/4/25.
+ * Created by zhuyongsheng on 2018/4/25.
  */
 public class HbaseConfigBeanInfo  extends BeanInfoSupport {
     public HbaseConfigBeanInfo()

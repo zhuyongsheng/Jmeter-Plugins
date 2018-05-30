@@ -12,14 +12,24 @@
     <artifactId>jmeter-plugins-kafka</artifactId>
     <dependencies>
         <dependency>
-            <groupId>Cpda</groupId>
-            <artifactId>fvp-interface</artifactId>
-            <version>RELEASE</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka_2.10</artifactId>
             <version>0.8.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>protostuff-core</artifactId>
+            <version>1.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>protostuff-api</artifactId>
+            <version>1.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>protostuff-runtime</artifactId>
+            <version>1.0.5</version>
         </dependency>
     </dependencies>
     <build>

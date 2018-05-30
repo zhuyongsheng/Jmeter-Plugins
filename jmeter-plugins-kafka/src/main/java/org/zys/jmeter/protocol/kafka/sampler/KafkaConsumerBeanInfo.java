@@ -6,7 +6,7 @@ import org.apache.jmeter.testbeans.gui.TypeEditor;
 import java.beans.PropertyDescriptor;
 
 /**
- * Created by 01369755 on 2018/3/22.
+ * Created by zhuyongsheng on 2018/3/22.
  */
 public class KafkaConsumerBeanInfo  extends BeanInfoSupport {
     public KafkaConsumerBeanInfo ()

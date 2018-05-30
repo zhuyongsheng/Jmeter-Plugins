@@ -1,5 +1,7 @@
 package org.zys.jmeter.protocol.kafka.sampler;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import kafka.api.FetchRequest;
 import kafka.api.FetchRequestBuilder;
 import kafka.javaapi.*;
@@ -12,17 +14,20 @@ import org.apache.jmeter.testbeans.TestBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zys.jmeter.protocol.kafka.config.KafkaConfig;
+import org.zys.jmeter.protocol.kafka.utils.ProtostuffRuntimeUtil;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Created by 01369755 on 2018/3/22.
+ * Created by zhuyongsheng on 2018/3/22.
  */
 public class KafkaConsumer extends AbstractSampler implements TestBean {
 
     private static final Logger log = LoggerFactory.getLogger(KafkaConsumer.class);
+
+    private static Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setPrettyPrinting().create();
 
     private final static int FETCH_SIZE = 100000;
 
@@ -64,6 +69,8 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
     }
 
     public String run() throws InterruptedException {
+
+        String clazz = KafkaConfig.getSerializeClazz(topic);
         SimpleConsumer[] simpleConsumers = KafkaConfig.getConsumer(topic);
         long[] offsets = KafkaConfig.getOffsets(topic);
         int partitionNum = offsets.length;
@@ -94,7 +101,12 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
                                 ByteBuffer payload = messageAndOffset.message().payload();
                                 byte[] bytes = new byte[payload.limit()];
                                 payload.get(bytes);
-                                String msg = new String(bytes, "UTF-8");
+                                String msg;
+                                if ("".equals(clazz)){
+                                    msg = new String(bytes, "UTF-8");
+                                }else {
+                                    msg = GSON.toJson(ProtostuffRuntimeUtil.deserialize(bytes, Class.forName(clazz)));
+                                }
                                 if (isMatch(msg,wanted)) {
                                     isCaught.set(true);
                                     sb.append("\"").append(a_partition + "_" + String.valueOf(currentOffset)).append("\":").append(msg).append("\n");

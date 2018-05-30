@@ -5,15 +5,15 @@ import kafka.api.PartitionOffsetRequestInfo;
 import kafka.cluster.Broker;
 import kafka.common.TopicAndPartition;
 import kafka.javaapi.*;
+import kafka.javaapi.consumer.SimpleConsumer;
+import kafka.javaapi.producer.Producer;
 import kafka.producer.ProducerConfig;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestStateListener;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import kafka.javaapi.producer.Producer;
-import kafka.javaapi.consumer.SimpleConsumer;
-
 
 import java.util.*;
 
@@ -21,7 +21,7 @@ import static kafka.api.OffsetRequest.CurrentVersion;
 import static kafka.api.OffsetRequest.LatestTime;
 
 /**
- * Created by 01369755 on 2018/3/22.
+ * Created by zhuyongsheng on 2018/3/22.
  */
 public class KafkaConfig extends ConfigTestElement implements TestBean, TestStateListener {
 
@@ -33,20 +33,25 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
     private final static String PRODUCER = "PRODUCER_";
     private final static String CONSUMER = "CONSUMER_";
     private final static String OFFSET = "OFFSET_";
+    private final static String SERIALIZER = "SERIALIZER_";
 
     /*考虑到kafka配置是全局的，直接用了静态Map，比JMeterVariables更适合一些；
     JMeterVariables用于不同线程中需要区分的情况*/
     private static Map<String, Object> KAFKA_VAR= new HashMap<>();
 
-    private String topic;
+    private String topicName;
     private String brokers;
     private int    partitionNum;
     private int    role;
+    private String serializer;
+
+    private String clazz;
 
     @Override
     public void testStarted() {
         initProducer();
         initConsumer();
+        initSerializer();
     }
 
     @Override
@@ -58,6 +63,7 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
     public void testEnded() {
         closeProducer();
         closeConsumer();
+        closeSerializer();
     }
 
     @Override
@@ -75,7 +81,7 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
                 props.put("metadata.broker.list", brokers);
                 ProducerConfig config = new ProducerConfig(props);
                 Producer<String, byte[]> producer = new Producer(config);
-                KAFKA_VAR.put(PRODUCER + topic, producer);
+                KAFKA_VAR.put(PRODUCER + topicName, producer);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -85,8 +91,8 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
     private void closeProducer(){
         if ((ROLES.PRODUCER.ordinal() == role)){
             try{
-                getProducer(topic).close();
-                KAFKA_VAR.remove(PRODUCER + topic);
+                getProducer(topicName).close();
+                KAFKA_VAR.remove(PRODUCER + topicName);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -105,33 +111,35 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
     public static Producer getProducer(String topic){
         return (Producer)KAFKA_VAR.get(PRODUCER + topic);
     }
+    public static String getSerializeClazz(String topic){
+        return (String)KAFKA_VAR.get(SERIALIZER + topic);
+    }
     private void initConsumer(){
         if ((ROLES.CONSUMER.ordinal() == role)){
             SimpleConsumer[] simpleConsumers = new SimpleConsumer[partitionNum];
             long[] offsets = new long[partitionNum];
             try{
                 for (int partition = 0; partition < partitionNum; partition++) {
-                    Broker b = findLeader(brokers, topic, partition);
-                    String clientId = topic + "_" + partition;
+                    Broker b = findLeader(brokers, topicName, partition);
+                    String clientId = topicName + "_" + partition;
                     simpleConsumers[partition] = new SimpleConsumer(b.host(), b.port(), TIME_OUT, BUFFER_SIZE, clientId);
                     offsets[partition] = getLastOffset(simpleConsumers[partition], partition);
                 }
-                KAFKA_VAR.put(CONSUMER + topic, simpleConsumers);
-                KAFKA_VAR.put(OFFSET + topic, offsets);
+                KAFKA_VAR.put(CONSUMER + topicName, simpleConsumers);
+                KAFKA_VAR.put(OFFSET + topicName, offsets);
             }catch (Exception e){
                 e.printStackTrace();
             }
         }
     }
-
     private void closeConsumer(){
         if ((ROLES.CONSUMER.ordinal() == role)){
             try{
-                for (SimpleConsumer simpleConsumer : getConsumer(topic)) {
+                for (SimpleConsumer simpleConsumer : getConsumer(topicName)) {
                     simpleConsumer.close();
                 }
-                KAFKA_VAR.remove(CONSUMER + topic);
-                KAFKA_VAR.remove(OFFSET + topic);
+                KAFKA_VAR.remove(CONSUMER + topicName);
+                KAFKA_VAR.remove(OFFSET + topicName);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -139,17 +147,17 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
     }
 
     private long getLastOffset(SimpleConsumer consumer, int partition) {
-        TopicAndPartition topicAndPartition = new TopicAndPartition(topic, partition);
+        TopicAndPartition topicAndPartition = new TopicAndPartition(topicName, partition);
         Map<TopicAndPartition, PartitionOffsetRequestInfo> requestInfo = new HashMap<TopicAndPartition, PartitionOffsetRequestInfo>();
         requestInfo.put(topicAndPartition, new PartitionOffsetRequestInfo(LatestTime(), 1));
         OffsetRequest request = new OffsetRequest(requestInfo, CurrentVersion(), consumer.clientId());
         OffsetResponse response = consumer.getOffsetsBefore(request);
 
         if (response.hasError()) {
-            System.out.println("Error fetching data Offset Data the Broker. Reason: " + response.errorCode(topic, partition) );
+            System.out.println("Error fetching data Offset Data the Broker. Reason: " + response.errorCode(topicName, partition) );
             return 0;
         }
-        long[] offsets = response.offsets(topic, partition);
+        long[] offsets = response.offsets(topicName, partition);
         if (offsets.length > 0){
             return offsets[0];
         }
@@ -188,13 +196,30 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
         return returnMetaData.leader();
     }
 
-
-    public String getTopic() {
-        return topic;
+    private void initSerializer(){
+        switch (serializer) {
+            case "STRING":
+                KAFKA_VAR.put(SERIALIZER + topicName, "");
+                break;
+            case "PROTOSTUFF":
+                if (JOrphanUtils.isBlank(clazz)){
+                    throw new IllegalArgumentException("Class Name must not be empty for element: " + getName() + " while serializer is PROTOSTUFF!");
+                } else {
+                    KAFKA_VAR.put(SERIALIZER + topicName, clazz);
+                }
+                break;
+        }
+    }
+    private void closeSerializer(){
+        KAFKA_VAR.remove(SERIALIZER + topicName);
     }
 
-    public void setTopic(String topic) {
-        this.topic = topic;
+    public String getTopicName() {
+        return topicName;
+    }
+
+    public void setTopicName(String topic) {
+        this.topicName = topic;
     }
 
     public String getBrokers() {
@@ -220,6 +245,23 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
     public void setRole(int role) {
         this.role = role;
     }
+
+    public String getSerializer() {
+        return serializer;
+    }
+
+    public void setSerializer(String serializer) {
+        this.serializer = serializer;
+    }
+
+    public String getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(String clazz) {
+        this.clazz = clazz;
+    }
+
 
     public enum ROLES
     {

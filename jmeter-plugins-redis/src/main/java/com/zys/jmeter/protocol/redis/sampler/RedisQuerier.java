@@ -17,7 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Set;
 
 /**
- * Created by 01369755 on 2018/3/2.
+ * Created by zhuyongsheng on 2018/3/2.
  */
 public class RedisQuerier extends AbstractSampler implements TestBean {
 
@@ -25,7 +25,7 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
 
     private static Gson GSON = new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
-    private String redisName;
+    private String redis;
     private String key;
 
     @Override
@@ -84,18 +84,18 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
     }
 
     public String run() throws Exception {
-        Jedis jedis = RedisConfig.getPool(redisName).getResource();
+        Jedis jedis = RedisConfig.getPool(redis).getResource();
         String result = query(jedis, key);
-        RedisConfig.getPool(redisName).returnResource(jedis);
+        RedisConfig.getPool(redis).returnResource(jedis);
         return result;
     }
 
-    public String getRedisName() {
-        return redisName;
+    public String getRedis() {
+        return redis;
     }
 
-    public void setRedisName(String redisName) {
-        this.redisName = redisName;
+    public void setRedis(String redis) {
+        this.redis = redis;
     }
 
     public String getKey() {
