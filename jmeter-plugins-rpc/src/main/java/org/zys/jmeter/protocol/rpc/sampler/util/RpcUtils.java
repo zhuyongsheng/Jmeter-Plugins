@@ -1,10 +1,9 @@
 package org.zys.jmeter.protocol.rpc.sampler.util;
 
+import com.alibaba.dubbo.common.json.ParseException;
 import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -19,18 +18,20 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
 
+import static com.alibaba.dubbo.common.json.JSON.json;
+import static com.alibaba.dubbo.common.json.JSON.parse;
+
 /**
- * Created by 01369755 on 2018/6/1.
+ * Created by zhuyongsheng on 2018/6/1.
  */
 public class RpcUtils {
 
     private static final Logger log = LoggerFactory.getLogger(RpcUtils.class);
 
-    private static Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setPrettyPrinting().create();
     private static ApplicationConfig DUBBOSAMPLER = new ApplicationConfig("dubboSampler");
     private static int TIMEOUT = 5000;
 
-    private static final Map<String, Map<String, List<String>>> treeMap = new HashMap<>();
+    private static final Map<String, Map<String, List<String>>> interfaceMap = new HashMap<>();
     private static final Map<String, Method> methodMap = new HashMap<>();
 
     private static final String[] SPATHS = new String[]{
@@ -38,7 +39,7 @@ public class RpcUtils {
     };
 
     public static String invokeMethod(ReferenceConfig ref, Method method, Object[] args) throws Exception {
-        return GSON.toJson(method.invoke(ref.get(), args));
+        return json(method.invoke(ref.get(), args));
     }
 
     public static Method getMethod(String className, String methodName){
@@ -46,7 +47,7 @@ public class RpcUtils {
     }
 
     public static String[] getMethodNames(String interfaceCls) {
-        if (null == treeMap.get(interfaceCls)) {
+        if (null == interfaceMap.get(interfaceCls)) {
             if (StringUtils.isNotEmpty(interfaceCls)) {
                 Map<String, List<String>> mMap = new HashMap<>();
                 try {
@@ -56,7 +57,7 @@ public class RpcUtils {
                         List<String> paramTypes = new ArrayList<>();
                         if (null != pts && pts.length > 0) {
                             for (Class pt : pts) {
-                                paramTypes.add(pt.getName());
+                                paramTypes.add(pt.getSimpleName());
                             }
                         }
                         mMap.put(m.getName(), paramTypes);
@@ -66,36 +67,40 @@ public class RpcUtils {
                 } catch (ClassNotFoundException e) {
                     log.error("class {} not found!", interfaceCls);
                 }
-                treeMap.put(interfaceCls, mMap);
+                interfaceMap.put(interfaceCls, mMap);
             }
         }
-        return treeMap.get(interfaceCls).keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+        return interfaceMap.get(interfaceCls).keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
     }
 
     public static String[] getClassNames(){
-        if (treeMap.size() == 0) {
+        if (interfaceMap.size() == 0) {
             try {
                 Iterator<String> it = ClassFinder.findClasses(SPATHS, new InterfaceFilter("Service", "RestService")).iterator();
                 while (it.hasNext()) {
                     String clazz = it.next();
-                    treeMap.put(clazz, null);
+                    interfaceMap.put(clazz, null);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return treeMap.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+        return interfaceMap.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
     }
 
     public static List<String> getparamTypes(String clz, String method){
-        return treeMap.get(clz).get(method);
+        return interfaceMap.get(clz).get(method);
     }
 
     public static Object[] getArgs(Method method, String[] args){
         Class[] types = method.getParameterTypes();
         List<Object> argList = new ArrayList<>();
         for (int i=0; i<types.length; i++){
-            argList.add(GSON.fromJson(args[i], types[i]));
+            try {
+                argList.add(parse(args[i], types[i]));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         return argList.toArray(ArrayUtils.EMPTY_OBJECT_ARRAY);
     }
