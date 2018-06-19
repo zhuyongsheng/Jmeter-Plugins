@@ -61,7 +61,7 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
 
     public String scan() throws IOException, DeserializationException {
 
-        Connection connection = ((Connection) getProperty(hbase));
+        Connection connection = (Connection) getProperty(hbase).getObjectValue();
 
         Table table = connection.getTable(TableName.valueOf(tableName));
 
