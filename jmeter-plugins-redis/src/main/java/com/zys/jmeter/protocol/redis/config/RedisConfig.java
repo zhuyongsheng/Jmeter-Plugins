@@ -4,8 +4,7 @@ package com.zys.jmeter.protocol.redis.config;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestStateListener;
-import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.testelement.property.ObjectProperty;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,30 +47,20 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
         }
         return new JedisSentinelPool(master, sentinels, CONFIG, TIMEOUT, password);
     }
-    public static Pool<Jedis> getPool(String redisName) throws Exception{
-        Object object = JMeterContextService.getContext().getVariables().getObject(redisName);
-        if (object == null) {
-            throw new Exception("No pool found named: " + redisName);
-        }else {
-            return (Pool<Jedis>)object;
-        }
-    }
 
     public void testStarted(String s) {
         testStarted();
     }
 
     public void testStarted() {
-        JMeterVariables variables = getThreadContext().getVariables();
         if(JOrphanUtils.isBlank(redisName)) {
             throw new IllegalArgumentException("redisName must not be empty.");
-        } else if (variables.getObject(redisName) != null) {
-            log.error("Redis config already defined.");
         } else {
             if (SENTINEL.YES.ordinal() == sentinel){
-                variables.putObject(redisName, initJedisSentinelPool());
-            }else {
-                variables.putObject(redisName, initJedisPool());
+                setProperty(new ObjectProperty(redisName, initJedisSentinelPool()));
+            }
+            if (SENTINEL.NO.ordinal() == sentinel){
+                setProperty(new ObjectProperty(redisName, initJedisPool()));
             }
         }
     }
@@ -82,7 +71,7 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
 
     public void testEnded() {
         try {
-            getPool(redisName).destroy();
+            ((Pool<Jedis>)getProperty(redisName).getObjectValue()).destroy();
         } catch (Exception e) {
             e.printStackTrace();
         }

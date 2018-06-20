@@ -4,6 +4,7 @@ import com.alibaba.dubbo.common.json.ParseException;
 import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -74,7 +75,7 @@ public class RpcUtils {
     }
 
     public static String[] getClassNames(){
-        if (interfaceMap.size() == 0) {
+        if (MapUtils.isEmpty(interfaceMap)) {
             try {
                 Iterator<String> it = ClassFinder.findClasses(SPATHS, new InterfaceFilter("Service", "RestService")).iterator();
                 while (it.hasNext()) {

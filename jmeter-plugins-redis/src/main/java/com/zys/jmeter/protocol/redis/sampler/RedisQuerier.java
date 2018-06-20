@@ -2,7 +2,7 @@ package com.zys.jmeter.protocol.redis.sampler;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.zys.jmeter.protocol.redis.config.RedisConfig;
+import org.apache.commons.codec.Charsets;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -10,10 +10,10 @@ import org.apache.jmeter.testbeans.TestBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
+import redis.clients.util.Pool;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.Set;
 
 /**
@@ -35,7 +35,7 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
         res.setSampleLabel(getName());
         try {
             res.sampleStart();
-            res.setResponseData(run(),"UTF-8");
+            res.setResponseData(run(), "UTF-8");
             res.setResponseCode("0");
             res.setSuccessful(true);
 
@@ -50,8 +50,7 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
     }
 
 
-
-    public String get(Jedis jedis, String key){
+    public String get(Jedis jedis, String key) {
         byte[] bytes = null;
         try {
             bytes = jedis.get(key.getBytes());
@@ -59,34 +58,31 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
             ObjectInputStream oi;
             oi = new ObjectInputStream(bi);
             return GSON.toJson(oi.readObject());
-//            return new String(jedis.get(key.getBytes()), "UTF-8");
         } catch (Exception e) {
-            if(bytes != null){
-                try {
-                    return new String(bytes, "UTF-8");
-                } catch (UnsupportedEncodingException e1) {
-                    e1.printStackTrace();
-                }
+            if (bytes != null) {
+                return new String(bytes, Charsets.UTF_8);
             }
         }
         return null;
     }
-    public String query (Jedis jedis, String key) {
+
+    public String query(Jedis jedis, String key) {
         StringBuilder sb = new StringBuilder();
         Set<String> keys = jedis.keys(key);
-        if (keys.size() == 0){
+        if (keys.size() == 0) {
             return "no key found.";
         }
-        for (String  k : keys) {
+        for (String k : keys) {
             sb.append(k).append(" : ").append(get(jedis, k)).append("\n");
         }
-        return sb.deleteCharAt(sb.length()-1).toString();
+        return sb.deleteCharAt(sb.length() - 1).toString();
     }
 
     public String run() throws Exception {
-        Jedis jedis = RedisConfig.getPool(redis).getResource();
+        Pool<Jedis> jedisPool = (Pool<Jedis>) getProperty(redis).getObjectValue();
+        Jedis jedis = jedisPool.getResource();
         String result = query(jedis, key);
-        RedisConfig.getPool(redis).returnResource(jedis);
+        jedisPool.returnResource(jedis);
         return result;
     }
 

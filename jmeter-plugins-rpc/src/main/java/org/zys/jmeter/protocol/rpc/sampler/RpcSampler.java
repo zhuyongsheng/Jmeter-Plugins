@@ -20,14 +20,14 @@ public class RpcSampler extends AbstractSampler {
 
     private static final Logger log = LoggerFactory.getLogger(RpcSampler.class);
 
-    public static String PROTOCOL = "protocol";
-    public static String HOST = "host";
-    public static String PORT = "port";
-    public static String INTERFACE_CLASS = "interfaceCls";
-    public static String METHOD = "method";
-    public static String VERSION = "version";
-    public static String GROUP = "group";
-    public static String ARGUMENTS = "arguments";
+    public static final String PROTOCOL = "protocol";
+    public static final String HOST = "host";
+    public static final String PORT = "port";
+    public static final String INTERFACE_CLASS = "interfaceCls";
+    public static final String METHOD = "method";
+    public static final String VERSION = "version";
+    public static final String GROUP = "group";
+    public static final String ARGUMENTS = "arguments";
 
     private String protocol;
     private String host;

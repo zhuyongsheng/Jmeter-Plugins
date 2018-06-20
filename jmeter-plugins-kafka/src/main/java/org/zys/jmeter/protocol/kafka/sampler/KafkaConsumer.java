@@ -4,20 +4,23 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import kafka.api.FetchRequest;
 import kafka.api.FetchRequestBuilder;
-import kafka.javaapi.*;
+import kafka.javaapi.FetchResponse;
 import kafka.javaapi.consumer.SimpleConsumer;
 import kafka.message.MessageAndOffset;
+import org.apache.commons.codec.Charsets;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zys.jmeter.protocol.kafka.config.KafkaConfig;
+import org.zys.jmeter.protocol.kafka.config.KafkaEntity;
 import org.zys.jmeter.protocol.kafka.utils.ProtostuffRuntimeUtil;
 
 import java.nio.ByteBuffer;
-import java.util.concurrent.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -69,11 +72,11 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
     }
 
     public String run() throws InterruptedException {
-
-        String clazz = KafkaConfig.getSerializeClazz(topic);
-        SimpleConsumer[] simpleConsumers = KafkaConfig.getConsumer(topic);
-        long[] offsets = KafkaConfig.getOffsets(topic);
-        int partitionNum = offsets.length;
+        KafkaEntity kafkaEntity = (KafkaEntity)getProperty(topic).getObjectValue();
+        Class clazz = kafkaEntity.getSerializeClazz();
+        SimpleConsumer[] simpleConsumers = kafkaEntity.getSimpleConsumers();
+        long[] offsets = kafkaEntity.getOffsets();
+        int partitionNum = kafkaEntity.getPartitionNum();
         ExecutorService executor = Executors.newFixedThreadPool(partitionNum);
         StringBuilder sb = new StringBuilder();
         AtomicBoolean isCaught = new AtomicBoolean(false);
@@ -102,10 +105,10 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
                                 byte[] bytes = new byte[payload.limit()];
                                 payload.get(bytes);
                                 String msg;
-                                if ("".equals(clazz)){
-                                    msg = new String(bytes, "UTF-8");
+                                if (null == clazz){
+                                    msg = new String(bytes, Charsets.UTF_8);
                                 }else {
-                                    msg = GSON.toJson(ProtostuffRuntimeUtil.deserialize(bytes, Class.forName(clazz)));
+                                    msg = GSON.toJson(ProtostuffRuntimeUtil.deserialize(bytes, clazz));
                                 }
                                 if (isMatch(msg,wanted)) {
                                     isCaught.set(true);
@@ -122,7 +125,7 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
         latch.await();
         executor.shutdownNow();
 
-        KafkaConfig.updateOffset(topic, offsets);
+        kafkaEntity.setOffsets(offsets);
 
         if (sb.length() > 0) {
             return sb.deleteCharAt(sb.lastIndexOf("\n")).toString();

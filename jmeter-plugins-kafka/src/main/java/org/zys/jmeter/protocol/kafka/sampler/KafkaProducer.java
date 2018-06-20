@@ -3,13 +3,14 @@ package org.zys.jmeter.protocol.kafka.sampler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import kafka.producer.KeyedMessage;
+import org.apache.commons.codec.Charsets;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zys.jmeter.protocol.kafka.config.KafkaConfig;
+import org.zys.jmeter.protocol.kafka.config.KafkaEntity;
 import org.zys.jmeter.protocol.kafka.utils.ProtostuffRuntimeUtil;
 
 /**
@@ -48,15 +49,16 @@ public class KafkaProducer extends AbstractSampler implements TestBean{
     }
 
     private void run() throws Exception {
+        KafkaEntity kafkaEntity = (KafkaEntity)getProperty(topic).getObjectValue();
         KeyedMessage<String, byte[]> msg;
         message = message.trim().replace("\n", "").replace("\t","");
-        String clazz = KafkaConfig.getSerializeClazz(topic);
-        if ("".equals(clazz)){
-            msg = new KeyedMessage(topic, message.getBytes("UTF-8"));
+        Class clazz = kafkaEntity.getSerializeClazz();
+        if (null == clazz){
+            msg = new KeyedMessage(topic, message.getBytes(Charsets.UTF_8));
         }else {
-            msg = new KeyedMessage(topic, ProtostuffRuntimeUtil.serialize(GSON.fromJson(message, Class.forName(clazz))));
+            msg = new KeyedMessage(topic, ProtostuffRuntimeUtil.serialize(GSON.fromJson(message, clazz)));
         }
-        KafkaConfig.getProducer(topic).send(msg);
+        kafkaEntity.getProducer().send(msg);
     }
 
 

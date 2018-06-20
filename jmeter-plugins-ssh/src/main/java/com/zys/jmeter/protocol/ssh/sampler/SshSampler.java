@@ -2,9 +2,9 @@ package com.zys.jmeter.protocol.ssh.sampler;
 
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.Session;
-import com.zys.jmeter.protocol.ssh.config.SshConfig;
 import jodd.log.Logger;
 import jodd.log.LoggerFactory;
+import org.apache.commons.codec.Charsets;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -13,7 +13,6 @@ import org.apache.jmeter.testbeans.TestBean;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 
 /**
  * Created by zhuyongsheng on 2018/1/3.
@@ -51,15 +50,15 @@ public class SshSampler extends AbstractSampler implements TestBean{
 
         StringBuffer sb = new StringBuffer();
         try{
-            Session session = SshConfig.sessionMap.get(host);
+            Session session = (Session)getProperty(host).getObjectValue();
             ChannelExec channelExec = (ChannelExec) session.openChannel("exec");
             channelExec.setCommand(cmd);
             channelExec.setInputStream(null);
             channelExec.setErrStream(System.err);
             channelExec.connect();
             InputStream in = channelExec.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in, Charset.forName("UTF-8")));
-            String buf = null;
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in,  Charsets.UTF_8));
+            String buf;
             while ((buf = reader.readLine()) != null) {
                 sb.append(buf).append("\n");
             }
