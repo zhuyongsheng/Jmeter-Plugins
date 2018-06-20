@@ -14,7 +14,7 @@ import static kafka.api.OffsetRequest.CurrentVersion;
 import static kafka.api.OffsetRequest.LatestTime;
 
 /**
- * Created by 01369755 on 2018/6/20.
+ * Created by zhuyongsheng on 2018/6/20.
  */
 public class KafkaUtil {
 
