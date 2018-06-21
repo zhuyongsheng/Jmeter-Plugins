@@ -31,8 +31,8 @@ public class KafkaConfigBeanInfo extends BeanInfoSupport {
         p = property("clazz");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
-        p = property("role", KafkaConfig.ROLES.class);
-        p.setValue(DEFAULT, KafkaConfig.ROLES.PRODUCER);
+        p = property("role", KafkaEntity.ROLES.class);
+        p.setValue(DEFAULT, KafkaEntity.ROLES.PRODUCER);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
 
         /*
