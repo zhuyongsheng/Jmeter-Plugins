@@ -122,6 +122,7 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
                                 }
                             }
                         } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                     latch.countDown();
