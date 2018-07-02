@@ -12,6 +12,8 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zys.jmeter.protocol.kafka.config.KafkaEntity;
@@ -30,8 +32,7 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
 
     private static final Logger log = LoggerFactory.getLogger(KafkaConsumer.class);
 
-    private static Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setPrettyPrinting().create();
-
+    private final static Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setPrettyPrinting().create();
     private final static int FETCH_SIZE = 100000;
 
     private String topic;
@@ -75,19 +76,24 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
         KafkaEntity kafkaEntity = (KafkaEntity)getProperty(topic).getObjectValue();
         Class clazz = kafkaEntity.getSerializeClazz();
         SimpleConsumer[] simpleConsumers = kafkaEntity.getSimpleConsumers();
-        long[] offsets = kafkaEntity.getOffsets();
+        JMeterVariables variables = getThreadContext().getVariables();
+        Object object = variables.getObject(topic);
+        if (null == object){
+            object = kafkaEntity.getOffsets().clone();
+            variables.putObject(topic, object);
+        }
+        long[] offsets = (long[])object;
         int partitionNum = kafkaEntity.getPartitionNum();
         ExecutorService executor = Executors.newFixedThreadPool(partitionNum);
+        CountDownLatch latch = new CountDownLatch(partitionNum);
         StringBuilder sb = new StringBuilder();
         AtomicBoolean isCaught = new AtomicBoolean(false);
-        CountDownLatch latch = new CountDownLatch(partitionNum);
         long beginTime = System.currentTimeMillis();
         for (int partition = 0; partition < partitionNum; partition++) {
             final int a_partition = partition;
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
-
                     while (!isCaught.get() && System.currentTimeMillis() - beginTime < duration) {
                         try {
                             FetchRequest req = new FetchRequestBuilder()
@@ -124,9 +130,6 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
         }
         latch.await();
         executor.shutdownNow();
-
-        kafkaEntity.setOffsets(offsets);
-
         if (sb.length() > 0) {
             return sb.deleteCharAt(sb.lastIndexOf("\n")).toString();
         }
