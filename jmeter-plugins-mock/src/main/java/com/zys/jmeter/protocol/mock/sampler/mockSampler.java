@@ -24,7 +24,6 @@ public class mockSampler extends AbstractSampler implements TestBean {
     private String server;
     private String request;
     private String response;
-    private int timeout;
 
     @Override
     public SampleResult sample(Entry entry) {
@@ -49,12 +48,12 @@ public class mockSampler extends AbstractSampler implements TestBean {
         return result;
     }
 
-    private String excute() throws Exception{
-        Socket socket = ((ServerSocket)getProperty(server).getObjectValue()).accept();
+    private String excute() throws Exception {
+        Socket socket = ((ServerSocket) getProperty(server).getObjectValue()).accept();
         String[] requestArray = request.split("\n");
         String recvRequest = recvRequest(socket);
-        for (String requestLine : requestArray){
-            if (!recvRequest.contains(requestLine)){
+        for (String requestLine : requestArray) {
+            if (!recvRequest.contains(requestLine)) {
                 return "request not match.";
             }
         }
@@ -66,23 +65,27 @@ public class mockSampler extends AbstractSampler implements TestBean {
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         String requestHeaderLine;
         StringBuffer requestHeaders = new StringBuffer();
-        long beginTime = System.currentTimeMillis();
-        while ((requestHeaderLine = in.readLine()) != null && !requestHeaderLine.isEmpty() && System.currentTimeMillis() - beginTime < timeout) {
+//        long beginTime = System.currentTimeMillis();
+        while ((requestHeaderLine = in.readLine()) != null && !requestHeaderLine.isEmpty()) {
             requestHeaders.append(requestHeaderLine);
         }
         String requestHeaderString = requestHeaders.toString();
-        if (requestHeaderString.startsWith("POST")){
-            return requestHeaderString + getPostParas(in, Integer.parseInt(requestHeaderString.substring(requestHeaderString.indexOf("Content-Length:"),requestHeaderString.indexOf("\n")).trim()));
+        if (requestHeaderString.startsWith("POST")) {
+            return requestHeaderString + getPostParas(in, Integer.parseInt(requestHeaderString.substring(requestHeaderString.indexOf("Content-Length:"), requestHeaderString.indexOf("\n")).trim()));
         }
         return requestHeaderString;
     }
 
-    private String doResponse(Socket socket) throws IOException {
+    private String doResponse(Socket socket){
 
-        PrintWriter pw = new PrintWriter(socket.getOutputStream());
-        pw.println(response);
-        pw.flush();
-        socket.close();
+        try {
+            PrintWriter pw = new PrintWriter(socket.getOutputStream());
+            pw.println(response);
+            pw.flush();
+            socket.close();
+        } catch (IOException e) {
+           return e.getMessage();
+        }
         return response;
     }
 
@@ -122,15 +125,6 @@ public class mockSampler extends AbstractSampler implements TestBean {
     public void setServer(String server) {
         this.server = server;
     }
-
-    public int getTimeout() {
-        return timeout;
-    }
-
-    public void setTimeout(int timeout) {
-        this.timeout = timeout;
-    }
-
 
 
 }

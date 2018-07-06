@@ -12,13 +12,10 @@ public class mockSamplerBeanInfo extends BeanInfoSupport {
     public mockSamplerBeanInfo()
     {
         super(mockSampler.class);
-        createPropertyGroup("mock消息", new String[] { "server", "timeout", "request", "response"});
+        createPropertyGroup("mock消息", new String[] { "server", "request", "response"});
         PropertyDescriptor p = property("server");
         p.setValue("notUndefined", Boolean.TRUE);
         p.setValue("default", "");
-        p = property("timeout");
-        p.setValue("notUndefined", Boolean.TRUE);
-        p.setValue("default", 6000);
         p = property("request", TypeEditor.TextAreaEditor);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
