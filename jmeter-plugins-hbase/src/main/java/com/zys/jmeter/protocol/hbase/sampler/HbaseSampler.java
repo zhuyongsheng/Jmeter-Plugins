@@ -4,6 +4,7 @@ package com.zys.jmeter.protocol.hbase.sampler;
  * Created by zhuyongsheng on 2018/1/3.
  */
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.TableName;
@@ -67,7 +68,7 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
 
         Scan scan = new Scan();
 
-        if (!"".equals(rowKey)) {
+        if (StringUtils.isNotEmpty(rowKey)) {
 
             char[] ch = rowKey.toCharArray();
 
@@ -87,9 +88,9 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
 
         }
 
-        if (!"".equals(family)) {
+        if (StringUtils.isNotEmpty(family)) {
             scan.addFamily(Bytes.toBytes(family));
-            if (!"".equals(column)) {
+            if (StringUtils.isNotEmpty(column)) {
                 scan.addColumn(Bytes.toBytes(family), Bytes.toBytes(column));
             }
         }
