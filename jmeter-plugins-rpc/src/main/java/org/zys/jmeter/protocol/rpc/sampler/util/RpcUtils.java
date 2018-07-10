@@ -86,10 +86,6 @@ public class RpcUtils {
         return interfaceMap.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
     }
 
-    public static String[] getparamTypes(String method) {
-        return method.substring(method.indexOf('(') + 1, method.indexOf(')')).split(",");
-    }
-
     public static Object[] getArgs(Method method, String[] args) {
         Class[] types = method.getParameterTypes();
         List<Object> argList = new ArrayList<>();

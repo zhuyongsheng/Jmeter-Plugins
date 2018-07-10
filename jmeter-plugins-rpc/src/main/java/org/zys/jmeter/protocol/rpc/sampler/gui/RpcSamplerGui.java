@@ -1,6 +1,7 @@
 package org.zys.jmeter.protocol.rpc.sampler.gui;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.gui.util.HorizontalPanel;
@@ -168,13 +169,11 @@ public class RpcSamplerGui extends AbstractSamplerGui {
 
     private void setupArgs() {
         Arguments arguments = new Arguments();
-        for (String paramType : RpcUtils.getparamTypes(methodName.getText())) {
-            if (!paramType.isEmpty()) {
+        for (String paramType : StringUtils.substringBetween(methodName.getText(),"(", ")").split(",")) {
+            if (StringUtils.isNotEmpty(paramType)) {
                 arguments.addArgument(paramType, "");
             }
         }
         argsPanel.configure(arguments);
     }
-
-
 }
