@@ -54,7 +54,8 @@ public class mockSampler extends AbstractSampler implements TestBean {
         String recvRequest = recvRequest(socket);
         for (String requestLine : requestArray) {
             if (!recvRequest.contains(requestLine)) {
-                return "request not match.";
+                socket.close();
+                return "The actual request is：\n" + recvRequest + "\nBut expect :\n" + requestLine;
             }
         }
         return doResponse(socket);
@@ -65,13 +66,16 @@ public class mockSampler extends AbstractSampler implements TestBean {
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         String requestHeaderLine;
         StringBuffer requestHeaders = new StringBuffer();
-//        long beginTime = System.currentTimeMillis();
+        int postParaLength = 0;
         while ((requestHeaderLine = in.readLine()) != null && !requestHeaderLine.isEmpty()) {
-            requestHeaders.append(requestHeaderLine);
+            requestHeaders.append(requestHeaderLine).append("\n");
+            if (requestHeaderLine.startsWith("Content-Length:")){
+                postParaLength = Integer.parseInt(requestHeaderLine.substring(requestHeaderLine.indexOf(":") + 1).trim());
+            }
         }
         String requestHeaderString = requestHeaders.toString();
         if (requestHeaderString.startsWith("POST")) {
-            return requestHeaderString + getPostParas(in, Integer.parseInt(requestHeaderString.substring(requestHeaderString.indexOf("Content-Length:"), requestHeaderString.indexOf("\n")).trim()));
+            return requestHeaderString + getPostParas(in, postParaLength);
         }
         return requestHeaderString;
     }
