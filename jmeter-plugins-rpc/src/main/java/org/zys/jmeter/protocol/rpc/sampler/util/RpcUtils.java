@@ -1,9 +1,10 @@
 package org.zys.jmeter.protocol.rpc.sampler.util;
 
-import com.alibaba.dubbo.common.json.ParseException;
 import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -19,9 +20,6 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import static com.alibaba.dubbo.common.json.JSON.json;
-import static com.alibaba.dubbo.common.json.JSON.parse;
-
 /**
  * Created by zhuyongsheng on 2018/6/1.
  */
@@ -29,41 +27,40 @@ public class RpcUtils {
 
     private static final Logger log = LoggerFactory.getLogger(RpcUtils.class);
 
+    private static Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setPrettyPrinting().create();
     private static ApplicationConfig DUBBOSAMPLER = new ApplicationConfig("dubboSampler");
     private static int TIMEOUT = 5000;
 
-    private static final Map<String, Map<String, List<String>>> interfaceMap = new HashMap<>();
-    private static final Map<String, Method> methodMap = new HashMap<>();
+    private static final Map<String, Map<String, Method>> interfaceMap = new HashMap<>();
 
     private static final String[] SPATHS = new String[]{
-            JMeterUtils.getJMeterHome() + "/lib/dubbo"             //需将/lib/dubbo加入user.classpath配置中，否则无法加载类
+            JMeterUtils.getJMeterHome() + "/lib/dubbo"             //需将/lib/dubbo加入user.classpath配置中，以加载类
     };
 
     public static String invokeMethod(ReferenceConfig ref, Method method, Object[] args) throws Exception {
-        return json(method.invoke(ref.get(), args));
+        return GSON.toJson(method.invoke(ref.get(), args));
     }
 
-    public static Method getMethod(String className, String methodName){
-        return  methodMap.get(className + "." + methodName);
+    public static Method getMethod(String className, String methodName) {
+        return interfaceMap.get(className).get(methodName);
     }
 
     public static String[] getMethodNames(String interfaceCls) {
-        if (null == interfaceMap.get(interfaceCls)) {
-            if (StringUtils.isNotEmpty(interfaceCls)) {
-                Map<String, List<String>> mMap = new HashMap<>();
+        if (StringUtils.isNotEmpty(interfaceCls)) {
+            if (null == interfaceMap.get(interfaceCls)) {
+                Map<String, Method> mMap = new HashMap<>();
                 try {
                     for (Method m : Class.forName(interfaceCls).getDeclaredMethods()) {
-
+                        StringBuffer methodName = new StringBuffer(m.getName()).append('(');
                         Class[] pts = m.getParameterTypes();
-                        List<String> paramTypes = new ArrayList<>();
                         if (null != pts && pts.length > 0) {
                             for (Class pt : pts) {
-                                paramTypes.add(pt.getSimpleName());
+                                methodName.append(pt.getSimpleName()).append(',');
                             }
+                            methodName.deleteCharAt(methodName.lastIndexOf(","));
                         }
-                        mMap.put(m.getName(), paramTypes);
-                        methodMap.put(interfaceCls + "." + m.getName(), m);
-
+                        methodName.append(')');
+                        mMap.put(methodName.toString(), m);
                     }
                 } catch (ClassNotFoundException e) {
                     log.error("class {} not found!", interfaceCls);
@@ -74,7 +71,7 @@ public class RpcUtils {
         return interfaceMap.get(interfaceCls).keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
     }
 
-    public static String[] getClassNames(){
+    public static String[] getClassNames() {
         if (MapUtils.isEmpty(interfaceMap)) {
             try {
                 Iterator<String> it = ClassFinder.findClasses(SPATHS, new InterfaceFilter("Service", "RestService")).iterator();
@@ -89,19 +86,15 @@ public class RpcUtils {
         return interfaceMap.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
     }
 
-    public static List<String> getparamTypes(String clz, String method){
-        return interfaceMap.get(clz).get(method);
+    public static String[] getparamTypes(String method) {
+        return method.substring(method.indexOf('(') + 1, method.indexOf(')')).split(",");
     }
 
-    public static Object[] getArgs(Method method, String[] args){
+    public static Object[] getArgs(Method method, String[] args) {
         Class[] types = method.getParameterTypes();
         List<Object> argList = new ArrayList<>();
-        for (int i=0; i<types.length; i++){
-            try {
-                argList.add(parse(args[i], types[i]));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+        for (int i = 0; i < types.length; i++) {
+            argList.add(GSON.fromJson(args[i], types[i]));
         }
         return argList.toArray(ArrayUtils.EMPTY_OBJECT_ARRAY);
     }
@@ -133,7 +126,7 @@ public class RpcUtils {
             variables.putObject(key.toString(), ref);
             return ref;
         }
-        return (ReferenceConfig)object;
+        return (ReferenceConfig) object;
     }
 
     private static class InterfaceFilter implements ClassFilter {

@@ -20,7 +20,6 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.util.Iterator;
 
 /**
  * Created by zhuyongsheng on 2018/3/26.
@@ -168,11 +167,11 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     }
 
     private void setupArgs() {
-
         Arguments arguments = new Arguments();
-        Iterator<String> it = RpcUtils.getparamTypes(className.getText(), methodName.getText()).iterator();
-        while (it.hasNext()) {
-            arguments.addArgument(it.next(), "");
+        for (String paramType : RpcUtils.getparamTypes(methodName.getText())) {
+            if (!paramType.isEmpty()) {
+                arguments.addArgument(paramType, "");
+            }
         }
         argsPanel.configure(arguments);
     }
