@@ -33,6 +33,7 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
 
     private final static Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setPrettyPrinting().create();
     private final static int FETCH_SIZE = 100000;
+    private final static ExecutorService executor = Executors.newCachedThreadPool();
 
     private String topic;
     private int duration;
@@ -83,7 +84,6 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
         }
         long[] offsets = (long[])object;
         int partitionNum = kafkaEntity.getPartitionNum();
-        ExecutorService executor = Executors.newFixedThreadPool(partitionNum);
         CountDownLatch latch = new CountDownLatch(partitionNum);
         StringBuilder sb = new StringBuilder();
         AtomicBoolean isCaught = new AtomicBoolean(false);
@@ -129,7 +129,6 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
             });
         }
         latch.await();
-        executor.shutdownNow();
         if (sb.length() > 0) {
             return sb.deleteCharAt(sb.lastIndexOf("\n")).toString();
         }
