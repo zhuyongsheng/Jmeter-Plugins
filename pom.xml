@@ -14,6 +14,7 @@
         <module>jmeter-plugins-ssh</module>
         <module>jmeter-plugins-rpc</module>
         <module>jmeter-plugins-hbase</module>
+        <module>jmeter-plugins-mock</module>
     </modules>
     <dependencies>
         <dependency>

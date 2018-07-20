@@ -22,6 +22,6 @@ public class KafkaConsumerBeanInfo  extends BeanInfoSupport {
         p.setValue(DEFAULT, "");
         p = property("duration");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, 60000);
+        p.setValue(DEFAULT, 6000);
     }
 }
