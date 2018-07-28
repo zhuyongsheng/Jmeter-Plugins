@@ -28,21 +28,21 @@ public class KafkaUtil {
         return new Producer(config);
     }
 
-    public static SimpleConsumer[] initConsumer(int partitionNum, String brokers, String topicName) {
-        SimpleConsumer[] simpleConsumers = new SimpleConsumer[partitionNum];
+    public static List<SimpleConsumer> initConsumer(int partitionNum, String brokers, String topicName) {
+        List<SimpleConsumer> simpleConsumerList = new ArrayList<>();
         for (int partition = 0; partition < partitionNum; partition++) {
             Broker b = findLeader(brokers, topicName, partition);
-            String clientId = topicName + "_" + partition;
-            simpleConsumers[partition] = new SimpleConsumer(b.host(), b.port(), TIME_OUT, BUFFER_SIZE, clientId);
+            simpleConsumerList.add(new SimpleConsumer(b.host(), b.port(), TIME_OUT, BUFFER_SIZE, String.valueOf(partition)));
         }
-        return simpleConsumers;
+        return simpleConsumerList;
     }
 
-    public static long[] initOffset(SimpleConsumer[] consumers, String topicName, int partitionNum) {
-        long[] offsets = new long[partitionNum];
-        for (int partition = 0; partition < partitionNum; partition++) {
-            offsets[partition] = getLastOffset(consumers[partition], topicName, partition);
-        }
+    public static long[] initOffset(List<SimpleConsumer> simpleConsumerList, String topicName) {
+        long[] offsets = new long[simpleConsumerList.size()];
+        simpleConsumerList.forEach(simpleConsumer -> {
+            int partition = Integer.parseInt(simpleConsumer.clientId());
+            offsets[partition] = getLastOffset(simpleConsumer, topicName, partition);
+        });
         return offsets;
     }
 
@@ -83,8 +83,7 @@ public class KafkaUtil {
         TopicAndPartition topicAndPartition = new TopicAndPartition(topicName, partition);
         Map<TopicAndPartition, PartitionOffsetRequestInfo> requestInfo = new HashMap<TopicAndPartition, PartitionOffsetRequestInfo>();
         requestInfo.put(topicAndPartition, new PartitionOffsetRequestInfo(LatestTime(), 1));
-        OffsetRequest request = new OffsetRequest(requestInfo, CurrentVersion(), consumer.clientId());
-        OffsetResponse response = consumer.getOffsetsBefore(request);
+        OffsetResponse response = consumer.getOffsetsBefore(new OffsetRequest(requestInfo, CurrentVersion(), consumer.clientId()));
 
         if (response.hasError()) {
             System.out.println("Error fetching data Offset Data the Broker. Reason: " + response.errorCode(topicName, partition));

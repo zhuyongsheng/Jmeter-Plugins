@@ -148,8 +148,8 @@ public class RpcUtils {
                 return Class.forName(className, false, contextClassLoader).isInterface();
             } catch (ClassNotFoundException e) {
                 log.error("class {} not found!", className);
+                return false;
             }
-            return false;
         }
     }
 }
