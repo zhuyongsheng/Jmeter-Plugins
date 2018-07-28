@@ -39,7 +39,6 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
     private int duration;
     private String wanted;
 
-
     public SampleResult sample(Entry entry) {
         SampleResult res = new SampleResult();
         StringBuffer sp = new StringBuffer("Fetch " + wanted + " in " + topic);
@@ -62,10 +61,10 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
         }
     }
 
-    private static Boolean isMatch(String msg, String wanted){
+    private static Boolean isMatch(String msg, String wanted) {
         String[] wants = wanted.split(",");
-        for (String w : wants){
-            if (!msg.contains(w)){
+        for (String w : wants) {
+            if (!msg.contains(w)) {
                 return false;
             }
         }
@@ -73,16 +72,16 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
     }
 
     public String run() throws InterruptedException {
-        KafkaEntity kafkaEntity = (KafkaEntity)getProperty(topic).getObjectValue();
+        KafkaEntity kafkaEntity = (KafkaEntity) getProperty(topic).getObjectValue();
         Class clazz = kafkaEntity.getSerializeClazz();
         SimpleConsumer[] simpleConsumers = kafkaEntity.getSimpleConsumers();
         JMeterVariables variables = getThreadContext().getVariables();
         Object object = variables.getObject(topic);
-        if (null == object){
+        if (null == object) {
             object = kafkaEntity.getOffsets().clone();
             variables.putObject(topic, object);
         }
-        long[] offsets = (long[])object;
+        long[] offsets = (long[]) object;
         int partitionNum = kafkaEntity.getPartitionNum();
         CountDownLatch latch = new CountDownLatch(partitionNum);
         StringBuilder sb = new StringBuilder();
@@ -90,42 +89,39 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
         long beginTime = System.currentTimeMillis();
         for (int partition = 0; partition < partitionNum; partition++) {
             final int a_partition = partition;
-            executor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    while (!isCaught.get() && System.currentTimeMillis() - beginTime < duration) {
-                        try {
-                            FetchRequest req = new FetchRequestBuilder()
-                                    .clientId(simpleConsumers[a_partition].clientId())
-                                    .addFetch(topic, a_partition, offsets[a_partition], FETCH_SIZE) // Note: this fetchSize of 100000 might need to be increased if large batches are written to Kafka
-                                    .build();
-                            FetchResponse fetchResponse = simpleConsumers[a_partition].fetch(req);
-                            for (MessageAndOffset messageAndOffset : fetchResponse.messageSet(topic, a_partition)) {
-                                long currentOffset = messageAndOffset.offset();
-                                if (currentOffset < offsets[a_partition]) {
-                                    continue;
-                                }
-                                offsets[a_partition] = messageAndOffset.nextOffset();
-                                ByteBuffer payload = messageAndOffset.message().payload();
-                                byte[] bytes = new byte[payload.limit()];
-                                payload.get(bytes);
-                                String msg;
-                                if (null == clazz){
-                                    msg = new String(bytes, Charsets.UTF_8);
-                                }else {
-                                    msg = GSON.toJson(ProtostuffRuntimeUtil.deserialize(bytes, clazz));
-                                }
-                                if (isMatch(msg,wanted)) {
-                                    isCaught.set(true);
-                                    sb.append("\"").append(a_partition + "_" + String.valueOf(currentOffset)).append("\":").append(msg).append("\n");
-                                }
+            executor.execute((Runnable) () -> {
+                while (!isCaught.get() && System.currentTimeMillis() - beginTime < duration) {
+                    try {
+                        FetchRequest req = new FetchRequestBuilder()
+                                .clientId(simpleConsumers[a_partition].clientId())
+                                .addFetch(topic, a_partition, offsets[a_partition], FETCH_SIZE) // Note: this fetchSize of 100000 might need to be increased if large batches are written to Kafka
+                                .build();
+                        FetchResponse fetchResponse = simpleConsumers[a_partition].fetch(req);
+                        for (MessageAndOffset messageAndOffset : fetchResponse.messageSet(topic, a_partition)) {
+                            long currentOffset = messageAndOffset.offset();
+                            if (currentOffset < offsets[a_partition]) {
+                                continue;
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                            offsets[a_partition] = messageAndOffset.nextOffset();
+                            ByteBuffer payload = messageAndOffset.message().payload();
+                            byte[] bytes = new byte[payload.limit()];
+                            payload.get(bytes);
+                            String msg;
+                            if (null == clazz) {
+                                msg = new String(bytes, Charsets.UTF_8);
+                            } else {
+                                msg = GSON.toJson(ProtostuffRuntimeUtil.deserialize(bytes, clazz));
+                            }
+                            if (isMatch(msg, wanted)) {
+                                isCaught.set(true);
+                                sb.append("\"").append(a_partition + "_" + String.valueOf(currentOffset)).append("\":").append(msg).append("\n");
+                            }
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    latch.countDown();
                 }
+                latch.countDown();
             });
         }
         latch.await();
