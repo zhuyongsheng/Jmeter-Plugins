@@ -126,21 +126,15 @@ public class RpcSamplerGui extends AbstractSamplerGui {
 
     private JPanel createInterfacePanel() {
         className = new JLabeledChoice(" 接口:  ", RpcUtils.getClassNames());
-        className.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent evt) {
-                if (evt.getSource() == className) {
-                    methodName.setValues(RpcUtils.getMethodNames(className.getText()));
-                }
+        methodName = new JLabeledChoice(" 方法:  ", ArrayUtils.EMPTY_STRING_ARRAY);
+        className.addChangeListener((ChangeListener) (ChangeEvent evt) -> {
+            if (evt.getSource() == className) {
+                methodName.setValues(RpcUtils.getMethodNames(className.getText()));
             }
         });
-        methodName = new JLabeledChoice(" 方法:  ", ArrayUtils.EMPTY_STRING_ARRAY);
-        methodName.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                if (e.getSource() == methodName) {
-                    setupArgs();
-                }
+        methodName.addChangeListener((ChangeListener) (ChangeEvent evt) -> {
+            if (evt.getSource() == methodName) {
+                setupArgs();
             }
         });
         version = new JLabeledTextField(" 版本：", 6);
@@ -169,7 +163,7 @@ public class RpcSamplerGui extends AbstractSamplerGui {
 
     private void setupArgs() {
         Arguments arguments = new Arguments();
-        for (String paramType : StringUtils.substringBetween(methodName.getText(),"(", ")").split(",")) {
+        for (String paramType : StringUtils.substringBetween(methodName.getText(), "(", ")").split(",")) {
             if (StringUtils.isNotEmpty(paramType)) {
                 arguments.addArgument(paramType, "");
             }
