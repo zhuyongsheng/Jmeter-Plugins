@@ -4,16 +4,17 @@ import kafka.javaapi.consumer.SimpleConsumer;
 import kafka.javaapi.producer.Producer;
 import org.zys.jmeter.protocol.kafka.utils.KafkaUtil;
 
+import java.util.List;
+
 /**
  * Created by zhuyongsheng on 2018/6/20.
  */
 public class KafkaEntity {
 
-    private Producer producer;
-    private SimpleConsumer[] simpleConsumers;
-    private long[] offsets;
     private Class serializeClazz;
-    private int partitionNum;
+    private Producer producer;
+    private List<SimpleConsumer> simpleConsumerList;
+    private long[] offsets;
 
     public KafkaEntity(int role, String serializer, String clazz, String brokers, String topic, int partitionNum) {
         try {
@@ -25,10 +26,9 @@ public class KafkaEntity {
             setProducer(KafkaUtil.initProducer(brokers));
         }
         if (ROLES.CONSUMER.ordinal() == role){
-            setPartitionNum(partitionNum);
-            SimpleConsumer[] simpleConsumers = KafkaUtil.initConsumer(partitionNum, brokers, topic);
-            setSimpleConsumers(simpleConsumers);
-            setOffsets(KafkaUtil.initOffset(simpleConsumers, topic, partitionNum));
+            List<SimpleConsumer> simpleConsumerList = KafkaUtil.initConsumer(partitionNum, brokers, topic);
+            setSimpleConsumerList(simpleConsumerList);
+            setOffsets(KafkaUtil.initOffset(simpleConsumerList, topic));
         }
     }
 
@@ -38,14 +38,6 @@ public class KafkaEntity {
 
     public void setProducer(Producer producer) {
         this.producer = producer;
-    }
-
-    public SimpleConsumer[] getSimpleConsumers() {
-        return simpleConsumers;
-    }
-
-    public void setSimpleConsumers(SimpleConsumer[] simpleConsumers) {
-        this.simpleConsumers = simpleConsumers;
     }
 
     public long[] getOffsets() {
@@ -71,23 +63,21 @@ public class KafkaEntity {
         }
     }
 
-    public int getPartitionNum() {
-        return partitionNum;
-    }
-
-    public void setPartitionNum(int partitionNum) {
-        this.partitionNum = partitionNum;
-    }
-
     public void destroy(int role){
         if (ROLES.PRODUCER.ordinal() == role) {
             producer.close();
         }
         if (ROLES.CONSUMER.ordinal() == role){
-            for (SimpleConsumer simpleConsumer : simpleConsumers){
-                simpleConsumer.close();
-            }
+            simpleConsumerList.forEach(simpleConsumer -> {simpleConsumer.close();});
         }
+    }
+
+    public List<SimpleConsumer> getSimpleConsumerList() {
+        return simpleConsumerList;
+    }
+
+    public void setSimpleConsumerList(List<SimpleConsumer> simpleConsumerList) {
+        this.simpleConsumerList = simpleConsumerList;
     }
 
     public enum ROLES {

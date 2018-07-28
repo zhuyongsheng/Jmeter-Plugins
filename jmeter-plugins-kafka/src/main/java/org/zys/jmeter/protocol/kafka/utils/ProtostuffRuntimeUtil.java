@@ -14,9 +14,9 @@ import static com.dyuproject.protostuff.runtime.RuntimeSchema.getSchema;
 public class ProtostuffRuntimeUtil {
     private static final int linkedBufferSize = 512;
 
-    public static <T> byte[] serialize(T o) {
-        Schema schema = getSchema(o.getClass());
-        return ProtostuffIOUtil.toByteArray(o, schema, LinkedBuffer.allocate(linkedBufferSize));
+    public static <T> byte[] serialize(T t) {
+        Schema schema = getSchema(t.getClass());
+        return ProtostuffIOUtil.toByteArray(t, schema, LinkedBuffer.allocate(linkedBufferSize));
     }
 
     public static Object deserialize(byte[] bytes, Class clazz) {
