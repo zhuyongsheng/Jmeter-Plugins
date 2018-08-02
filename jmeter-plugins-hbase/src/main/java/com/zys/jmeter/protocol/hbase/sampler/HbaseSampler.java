@@ -4,6 +4,7 @@ package com.zys.jmeter.protocol.hbase.sampler;
  * Created by zhuyongsheng on 2018/1/3.
  */
 
+import com.zys.jmeter.protocol.hbase.util.HbaseUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
@@ -24,8 +25,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 public class HbaseSampler extends AbstractSampler implements TestBean {
     private static final Logger log = LoggerFactory.getLogger(HbaseSampler.class);
 
@@ -35,23 +34,28 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
     private String rowKey;
     private String family;
     private String column;
-
+    private int opr;
+    private String value;
 
     public SampleResult sample(Entry entry) {
         SampleResult res = new SampleResult();
-        StringBuffer sp = new StringBuffer("scan '" + tableName + "','" + rowKey + "'");
-        if (!"".equals(family)) {
-            sp.append(",'" + family).append("".equals(column) ? "'" : ":" + column + "'");
+        StringBuffer sb = new StringBuffer(OPRS.values()[opr]+ "'" + tableName + "','" + rowKey + "'");
+        if (StringUtils.isNotEmpty(family)) {
+            sb.append(",'" + family).append(StringUtils.isEmpty(column) ? "'" : ":" + column + "'");
         }
-        res.setSamplerData(sp.toString());
+        if (StringUtils.isNotEmpty(value)) {
+            sb.append(" with value of " + value);
+        }
+        res.setSamplerData(sb.toString());
         res.setSampleLabel(getName());
         try {
             res.sampleStart();
-            res.setResponseData(scan(), "UTF-8");
+            res.setResponseData(run(), "UTF-8");
             res.setResponseCode("0");
             res.setSuccessful(true);
         } catch (Exception e) {
             res.setResponseMessage(e.toString());
+            res.setResponseData(e.getMessage(), "UTF-8");
             res.setResponseCode("500");
             res.setSuccessful(false);
         } finally {
@@ -59,72 +63,26 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
             return res;
         }
     }
-
-    public String scan() throws IOException, DeserializationException {
-
+    public String run() throws Exception {
+        String result;
         Connection connection = (Connection) getProperty(hbase).getObjectValue();
-
-        Table table = connection.getTable(TableName.valueOf(tableName));
-
-        Scan scan = new Scan();
-
-        if (StringUtils.isNotEmpty(rowKey)) {
-
-            char[] ch = rowKey.toCharArray();
-
-            byte[] mask = new byte[rowKey.length()];
-
-            for (int i = 0; i < rowKey.length(); i++) {
-                mask[i] = '?' == ch[i] ? (byte) 1 : 0;
-            }
-
-            List<Pair<byte[], byte[]>> fuzzyKeysData = new ArrayList<>();
-
-            fuzzyKeysData.add(new Pair(Bytes.toBytes(rowKey), mask));
-
-            FuzzyRowFilter fuzzy = new FuzzyRowFilter(fuzzyKeysData);
-
-            scan.setFilter(fuzzy);
-
+        switch (OPRS.values()[opr]){
+            case CREATE:
+                result = HbaseUtils.create(connection, tableName, rowKey, family, column, value);
+                break;
+            case UPDATE:
+                result = HbaseUtils.update(connection, tableName, rowKey, family, column, value);
+                break;
+            case READ:
+                result = HbaseUtils.read(connection, tableName, rowKey, family, column);
+                break;
+            case DELETE:
+                result = HbaseUtils.delete(connection, tableName, rowKey, family, column);
+                break;
+            default:
+                throw new Exception("unknown operation.");
         }
-
-        if (StringUtils.isNotEmpty(family)) {
-            scan.addFamily(Bytes.toBytes(family));
-            if (StringUtils.isNotEmpty(column)) {
-                scan.addColumn(Bytes.toBytes(family), Bytes.toBytes(column));
-            }
-        }
-
-        ResultScanner scanner = table.getScanner(scan);
-
-        StringBuffer sb = new StringBuffer();
-
-        for (Result res : scanner) {
-
-            for (Cell c : res.rawCells()) {
-
-                sb.append(Bytes.toString(CellUtil.cloneRow(c)));
-
-                sb.append(" ==> ");
-
-                sb.append(Bytes.toString(CellUtil.cloneFamily(c)));
-
-                sb.append(" {");
-
-                sb.append(Bytes.toString(CellUtil.cloneQualifier(c)));
-
-                sb.append(":");
-
-                sb.append(Bytes.toString(CellUtil.cloneValue(c)));
-
-                sb.append("}\n");
-
-            }
-
-        }
-
-        return sb.toString();
-
+        return result;
     }
 
     public String getHbase() {
@@ -165,6 +123,30 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
 
     public void setColumn(String column) {
         this.column = column;
+    }
+
+    public int getOpr() {
+        return opr;
+    }
+
+    public void setOpr(int opr) {
+        this.opr = opr;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+
+    public enum OPRS {
+        CREATE,
+        READ,
+        UPDATE,
+        DELETE
     }
 
 }

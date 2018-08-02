@@ -1,11 +1,11 @@
 package com.zys.jmeter.protocol.redis.config;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.ObjectProperty;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
@@ -14,8 +14,8 @@ import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisSentinelPool;
 import redis.clients.util.Pool;
 
+import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by zhuyongsheng on 2018/3/17.
@@ -30,22 +30,16 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
     private String password;
     private int sentinel;
 
-    private static JedisPoolConfig CONFIG = new JedisPoolConfig();
+    private static final JedisPoolConfig CONFIG = new JedisPoolConfig();
 
-    private static int TIMEOUT = 60000;
+    private static final int TIMEOUT = 60000;
 
     private JedisPool initJedisPool(){
-        String host = address.split(",")[0];
-        return new JedisPool(CONFIG, host.split(":")[0], Integer.parseInt(host.split(":")[1]), TIMEOUT, password);
+        return new JedisPool(CONFIG, StringUtils.substringBefore(address,":"), Integer.parseInt(StringUtils.substringAfter(address,":")), TIMEOUT, password);
     }
 
     private JedisSentinelPool initJedisSentinelPool(){
-        String[] hosts = address.split(",");
-        Set<String> sentinels = new HashSet<>();
-        for (String sentinel : hosts) {
-            sentinels.add(sentinel);
-        }
-        return new JedisSentinelPool(master, sentinels, CONFIG, TIMEOUT, password);
+        return new JedisSentinelPool(master, new HashSet<>(Arrays.asList(address.split(","))), CONFIG, TIMEOUT, password);
     }
 
     public void testStarted(String s) {
@@ -53,7 +47,7 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
     }
 
     public void testStarted() {
-        if(JOrphanUtils.isBlank(redisName)) {
+        if(StringUtils.isBlank(redisName)) {
             throw new IllegalArgumentException("redisName must not be empty.");
         } else {
             if (SENTINEL.YES.ordinal() == sentinel){

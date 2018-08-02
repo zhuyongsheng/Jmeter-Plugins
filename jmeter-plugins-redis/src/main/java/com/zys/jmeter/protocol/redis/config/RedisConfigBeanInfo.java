@@ -14,7 +14,7 @@ public class RedisConfigBeanInfo extends BeanInfoSupport {
 
     {
         super(RedisConfig.class);
-        createPropertyGroup("Redis信息", new String[] { "redisName", "address", "sentinel", "master", "password"});
+        createPropertyGroup("Redis信息", new String[] { "redisName", "sentinel", "address", "master", "password"});
         PropertyDescriptor p = property("redisName");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
