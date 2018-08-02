@@ -10,7 +10,7 @@ public class HbaseSamplerBeanInfo extends BeanInfoSupport {
     public HbaseSamplerBeanInfo()
     {
         super(HbaseSampler.class);
-        createPropertyGroup("查询信息", new String[] {"hbase", "tableName", "rowKey", "family", "column"});
+        createPropertyGroup("操作信息", new String[] {"hbase", "tableName", "opr", "rowKey", "family", "column", "value"});
         PropertyDescriptor p = property("hbase");
         p.setValue("notUndefined", Boolean.TRUE);
         p.setValue("default", "");
@@ -24,6 +24,12 @@ public class HbaseSamplerBeanInfo extends BeanInfoSupport {
         p.setValue("notUndefined", Boolean.TRUE);
         p.setValue("default", "");
         p = property("column");
+        p.setValue("notUndefined", Boolean.TRUE);
+        p.setValue("default", "");
+        p = property("opr", HbaseSampler.OPRS.class);
+        p.setValue(DEFAULT, HbaseSampler.OPRS.READ.ordinal());
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p = property("value");
         p.setValue("notUndefined", Boolean.TRUE);
         p.setValue("default", "");
     }

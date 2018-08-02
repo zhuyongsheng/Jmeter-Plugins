@@ -54,8 +54,7 @@ public class HbaseConfig extends ConfigTestElement implements TestBean, TestStat
             /*在windows环境下，org.apache.hadoop.util.shell类会打印找不到winutils.exe文件（如果没有）的ERROR日志，
             可在jmeter/bin目录下log4j2.xml文件中配置关闭org.apache.hadoop.util包的日志：
             <logger name="org.apache.hadoop.util" level="off"/>*/
-            Connection connection = ConnectionFactory.createConnection(conf);
-            setProperty(new ObjectProperty(hbaseName, connection));
+            setProperty(new ObjectProperty(hbaseName, ConnectionFactory.createConnection(conf)));
         } catch (IOException e) {
             e.printStackTrace();
         }
