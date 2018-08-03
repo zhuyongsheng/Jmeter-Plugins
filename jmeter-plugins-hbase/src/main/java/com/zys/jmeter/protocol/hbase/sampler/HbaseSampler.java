@@ -67,11 +67,8 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
         String result;
         Connection connection = (Connection) getProperty(hbase).getObjectValue();
         switch (OPRS.values()[opr]){
-            case CREATE:
-                result = HbaseUtils.create(connection, tableName, rowKey, family, column, value);
-                break;
-            case UPDATE:
-                result = HbaseUtils.update(connection, tableName, rowKey, family, column, value);
+            case PUT:
+                result = HbaseUtils.put(connection, tableName, rowKey, family, column, value);
                 break;
             case READ:
                 result = HbaseUtils.read(connection, tableName, rowKey, family, column);
@@ -143,9 +140,8 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
 
 
     public enum OPRS {
-        CREATE,
+        PUT,
         READ,
-        UPDATE,
         DELETE
     }
 
