@@ -17,19 +17,6 @@ import java.util.List;
  * Created by 01369755 on 2018/8/2.
  */
 public class HbaseUtils {
-
-    public static String create(Connection connection, String tableName, String rowKey, String family, String column, String value) throws IOException {
-
-        Table table = connection.getTable(TableName.valueOf(tableName));
-        Put put = new Put(Bytes.toBytes(rowKey));
-        put.addColumn(Bytes.toBytes(family),Bytes.toBytes(column),Bytes.toBytes(value));
-
-        table.put(put);
-        return "create success.";
-
-    }
-
-
     public static String read(Connection connection, String tableName, String rowKey, String family, String column) throws Exception {
 
         Table table = connection.getTable(TableName.valueOf(tableName));
@@ -83,14 +70,14 @@ public class HbaseUtils {
         return sb.toString();
     }
 
-    public static String update(Connection connection, String tableName, String rowKey, String family, String column, String value) throws Exception {
+    public static String put(Connection connection, String tableName, String rowKey, String family, String column, String value) throws Exception {
 
         Table table = connection.getTable(TableName.valueOf(tableName));
         Put put = new Put(Bytes.toBytes(rowKey));
         put.addColumn(Bytes.toBytes(family),Bytes.toBytes(column),Bytes.toBytes(value));
 
         table.put(put);
-        return "update success.";
+        return "put success.";
 
     }
 
