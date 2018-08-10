@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import kafka.api.FetchRequestBuilder;
 import kafka.javaapi.consumer.SimpleConsumer;
 import org.apache.commons.codec.Charsets;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -38,8 +39,8 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
 
     public SampleResult sample(Entry entry) {
         SampleResult res = new SampleResult();
-        StringBuffer sp = new StringBuffer("Fetch " + wanted + " in " + topic);
-        res.setSamplerData(sp.toString());
+        StringBuffer samplerDate = new StringBuffer("Fetch " + wanted + " in " + topic);
+        res.setSamplerData(samplerDate.toString());
         res.setSampleLabel(getName());
         res.sampleStart();
         try {
@@ -86,7 +87,7 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
         simpleConsumerlist.forEach(simpleConsumer -> {
             int partition = Integer.parseInt(simpleConsumer.clientId());
             executor.execute((Runnable) () -> {
-                while (!isCaught.get() && System.currentTimeMillis() - beginTime < duration) {
+                while (BooleanUtils.isFalse(isCaught.get()) && System.currentTimeMillis() - beginTime < duration) {
                     try {
                         simpleConsumer.fetch(
                                 new FetchRequestBuilder().addFetch(topic, partition, offsets[partition], simpleConsumer.bufferSize()).build()
@@ -103,10 +104,10 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
                                     msg = GSON.toJson(ProtostuffRuntimeUtil.deserialize(bytes, clazz));
                                 }
                                 if (isMatch(msg, wanted)) {
-                                    isCaught.set(true);
                                     sb.append("{\"partition\":\"").append(partition).append("\",")
                                             .append("\"offset\":\"").append(String.valueOf(messageAndOffset.offset())).append("\",")
                                             .append("\"message\":").append(msg).append("}\n");
+                                    isCaught.set(true);
                                 }
                             }
                         });

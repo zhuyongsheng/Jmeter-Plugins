@@ -2,6 +2,7 @@ package org.zys.jmeter.protocol.kafka.config;
 
 import kafka.javaapi.consumer.SimpleConsumer;
 import kafka.javaapi.producer.Producer;
+import org.apache.commons.collections.CollectionUtils;
 import org.zys.jmeter.protocol.kafka.utils.KafkaUtil;
 
 import java.util.List;
@@ -22,34 +23,20 @@ public class KafkaEntity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (ROLES.PRODUCER.ordinal() == role){
-            setProducer(KafkaUtil.initProducer(brokers));
+        switch (ROLES.values()[role]){
+            case PRODUCER:
+                this.producer = KafkaUtil.initProducer(brokers);
+                break;
+            case CONSUMER:
+                this.simpleConsumerList = KafkaUtil.initConsumer(partitionNum, brokers, topic);
+                this.offsets = KafkaUtil.initOffset(simpleConsumerList, topic);
+                break;
+            case BOTH:
+                this.producer = KafkaUtil.initProducer(brokers);
+                this.simpleConsumerList = KafkaUtil.initConsumer(partitionNum, brokers, topic);
+                this.offsets = KafkaUtil.initOffset(simpleConsumerList, topic);
+                break;
         }
-        if (ROLES.CONSUMER.ordinal() == role){
-            List<SimpleConsumer> simpleConsumerList = KafkaUtil.initConsumer(partitionNum, brokers, topic);
-            setSimpleConsumerList(simpleConsumerList);
-            setOffsets(KafkaUtil.initOffset(simpleConsumerList, topic));
-        }
-    }
-
-    public Producer getProducer() {
-        return producer;
-    }
-
-    public void setProducer(Producer producer) {
-        this.producer = producer;
-    }
-
-    public long[] getOffsets() {
-        return offsets;
-    }
-
-    public void setOffsets(long[] offsets) {
-        this.offsets = offsets;
-    }
-
-    public Class getSerializeClazz() {
-        return serializeClazz;
     }
 
     public void setSerializeClazz(String serializer, String clazz) throws Exception {
@@ -63,11 +50,11 @@ public class KafkaEntity {
         }
     }
 
-    public void destroy(int role){
-        if (ROLES.PRODUCER.ordinal() == role) {
+    public void destroy(){
+        if (null != producer) {
             producer.close();
         }
-        if (ROLES.CONSUMER.ordinal() == role){
+        if (CollectionUtils.isNotEmpty(simpleConsumerList)){
             simpleConsumerList.forEach(simpleConsumer -> {simpleConsumer.close();});
         }
     }
@@ -76,12 +63,23 @@ public class KafkaEntity {
         return simpleConsumerList;
     }
 
-    public void setSimpleConsumerList(List<SimpleConsumer> simpleConsumerList) {
-        this.simpleConsumerList = simpleConsumerList;
+    public Producer getProducer() {
+        return producer;
     }
+
+    public long[] getOffsets() {
+        return offsets;
+    }
+
+    public Class getSerializeClazz() {
+        return serializeClazz;
+    }
+
+
 
     public enum ROLES {
         PRODUCER,
-        CONSUMER
+        CONSUMER,
+        BOTH
     }
 }

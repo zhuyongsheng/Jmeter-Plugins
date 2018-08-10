@@ -7,8 +7,7 @@ package org.zys.jmeter.protocol.kafka.utils;
 import com.dyuproject.protostuff.LinkedBuffer;
 import com.dyuproject.protostuff.ProtostuffIOUtil;
 import com.dyuproject.protostuff.Schema;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import static com.dyuproject.protostuff.runtime.RuntimeSchema.getSchema;
 
 public class ProtostuffRuntimeUtil {
@@ -26,9 +25,7 @@ public class ProtostuffRuntimeUtil {
             obj = clazz.newInstance();
             Schema schema = getSchema(obj.getClass());
             ProtostuffIOUtil.mergeFrom(bytes, obj, schema);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return obj;

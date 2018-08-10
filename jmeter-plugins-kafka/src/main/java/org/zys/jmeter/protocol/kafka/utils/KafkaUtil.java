@@ -7,6 +7,7 @@ import kafka.javaapi.*;
 import kafka.javaapi.consumer.SimpleConsumer;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.ProducerConfig;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
@@ -47,42 +48,34 @@ public class KafkaUtil {
     }
 
     private static Broker findLeader(String brokers, String topic, int a_partition) {
-        List<String> Brokers = new ArrayList<>(Arrays.asList(brokers.split(",")));
-        PartitionMetadata returnMetaData = null;
+        PartitionMetadata metaData = null;
         loop:
-        for (String seed : Brokers) {
+        for (String seed : new ArrayList<>(Arrays.asList(brokers.split(",")))) {
             SimpleConsumer consumer = null;
             try {
-                String[] seedInfo = seed.split(":");
-                consumer = new SimpleConsumer(seedInfo[0], Integer.parseInt(seedInfo[1]), TIME_OUT, BUFFER_SIZE, "leaderLookup");
-                List<String> topics = Collections.singletonList(topic);
-                TopicMetadataRequest req = new TopicMetadataRequest(topics);
-                TopicMetadataResponse resp = consumer.send(req);
-
-                List<TopicMetadata> metaData = resp.topicsMetadata();
-                for (TopicMetadata item : metaData) {
+                consumer = new SimpleConsumer(StringUtils.substringBefore(seed,":"),
+                        Integer.valueOf(StringUtils.substringAfter(seed,":")), TIME_OUT, BUFFER_SIZE, "findLeader");
+                for (TopicMetadata item : consumer.send(new TopicMetadataRequest(Collections.singletonList(topic))).topicsMetadata()) {
                     for (PartitionMetadata part : item.partitionsMetadata()) {
                         if (part.partitionId() == a_partition) {
-                            returnMetaData = part;
+                            metaData = part;
                             break loop;
                         }
                     }
                 }
             } catch (Exception e) {
-                System.out.println("Error communicating with Broker [" + seed + "] to find Leader for [" + topic
-                        + ", " + a_partition + "] Reason: " + e);
+                e.printStackTrace();
             } finally {
                 if (consumer != null) consumer.close();
             }
         }
-        return returnMetaData.leader();
+        return metaData.leader();
     }
 
 
     private static long getLastOffset(SimpleConsumer consumer, String topicName, int partition) {
-        TopicAndPartition topicAndPartition = new TopicAndPartition(topicName, partition);
-        Map<TopicAndPartition, PartitionOffsetRequestInfo> requestInfo = new HashMap<TopicAndPartition, PartitionOffsetRequestInfo>();
-        requestInfo.put(topicAndPartition, new PartitionOffsetRequestInfo(LatestTime(), 1));
+        Map<TopicAndPartition, PartitionOffsetRequestInfo> requestInfo = new HashMap<>();
+        requestInfo.put(new TopicAndPartition(topicName, partition), new PartitionOffsetRequestInfo(LatestTime(), 1));
         OffsetResponse response = consumer.getOffsetsBefore(new OffsetRequest(requestInfo, CurrentVersion(), consumer.clientId()));
 
         if (response.hasError()) {
