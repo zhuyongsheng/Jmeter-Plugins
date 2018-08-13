@@ -10,32 +10,25 @@ import java.util.List;
 /**
  * Created by zhuyongsheng on 2018/6/20.
  */
-public class KafkaEntity {
+public class KafkaProperty {
 
     private Class serializeClazz;
     private Producer producer;
     private List<SimpleConsumer> simpleConsumerList;
     private long[] offsets;
 
-    public KafkaEntity(int role, String serializer, String clazz, String brokers, String topic, int partitionNum) {
+    public KafkaProperty(boolean producerFlag, boolean consumerFlag, String serializer, String clazz, String brokers, String topic, int partitionNum) {
         try {
             setSerializeClazz(serializer, clazz);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        switch (ROLES.values()[role]){
-            case PRODUCER:
-                this.producer = KafkaUtil.initProducer(brokers);
-                break;
-            case CONSUMER:
-                this.simpleConsumerList = KafkaUtil.initConsumer(partitionNum, brokers, topic);
-                this.offsets = KafkaUtil.initOffset(simpleConsumerList, topic);
-                break;
-            case BOTH:
-                this.producer = KafkaUtil.initProducer(brokers);
-                this.simpleConsumerList = KafkaUtil.initConsumer(partitionNum, brokers, topic);
-                this.offsets = KafkaUtil.initOffset(simpleConsumerList, topic);
-                break;
+        if (producerFlag){
+            this.producer = KafkaUtil.initProducer(brokers);
+        }
+        if (consumerFlag){
+            this.simpleConsumerList = KafkaUtil.initConsumer(partitionNum, brokers, topic);
+            this.offsets = KafkaUtil.initOffset(simpleConsumerList, topic);
         }
     }
 
@@ -75,11 +68,4 @@ public class KafkaEntity {
         return serializeClazz;
     }
 
-
-
-    public enum ROLES {
-        PRODUCER,
-        CONSUMER,
-        BOTH
-    }
 }

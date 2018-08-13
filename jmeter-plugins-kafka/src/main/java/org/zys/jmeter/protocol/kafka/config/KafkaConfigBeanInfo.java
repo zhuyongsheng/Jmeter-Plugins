@@ -1,7 +1,6 @@
 package org.zys.jmeter.protocol.kafka.config;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
-
 import java.beans.PropertyDescriptor;
 
 /**
@@ -13,7 +12,7 @@ public class KafkaConfigBeanInfo extends BeanInfoSupport {
 
     {
         super(KafkaConfig.class);
-        createPropertyGroup("Kafka信息", new String[] { "topicName", "brokers", "partitionNum", "serializer", "clazz", "role"});
+        createPropertyGroup("Kafka信息", new String[] { "topicName", "brokers", "partitionNum", "serializer", "clazz", "producerFlag", "consumerFlag"});
         PropertyDescriptor p = property("topicName");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
@@ -31,9 +30,12 @@ public class KafkaConfigBeanInfo extends BeanInfoSupport {
         p = property("clazz");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
-        p = property("role", KafkaEntity.ROLES.class);
-        p.setValue(DEFAULT, KafkaEntity.ROLES.PRODUCER.ordinal());
+        p = property("producerFlag");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, Boolean.TRUE);
+        p = property("consumerFlag");
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, Boolean.FALSE);
 
         /*
         p = property("role");

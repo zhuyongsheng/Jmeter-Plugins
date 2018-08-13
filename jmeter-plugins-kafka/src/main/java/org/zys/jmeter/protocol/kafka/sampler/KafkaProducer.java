@@ -10,7 +10,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zys.jmeter.protocol.kafka.config.KafkaEntity;
+import org.zys.jmeter.protocol.kafka.config.KafkaProperty;
 import org.zys.jmeter.protocol.kafka.utils.ProtostuffRuntimeUtil;
 
 /**
@@ -49,16 +49,16 @@ public class KafkaProducer extends AbstractSampler implements TestBean{
     }
 
     private void run() throws Exception {
-        KafkaEntity kafkaEntity = (KafkaEntity)getProperty(topic).getObjectValue();
+        KafkaProperty kafkaProperty = (KafkaProperty)getProperty(topic).getObjectValue();
         KeyedMessage<String, byte[]> msg;
         message = message.trim().replace("\n", "").replace("\t","");
-        Class clazz = kafkaEntity.getSerializeClazz();
+        Class clazz = kafkaProperty.getSerializeClazz();
         if (null == clazz){
             msg = new KeyedMessage(topic, message.getBytes(Charsets.UTF_8));
         }else {
             msg = new KeyedMessage(topic, ProtostuffRuntimeUtil.serialize(GSON.fromJson(message, clazz)));
         }
-        kafkaEntity.getProducer().send(msg);
+        kafkaProperty.getProducer().send(msg);
     }
 
 

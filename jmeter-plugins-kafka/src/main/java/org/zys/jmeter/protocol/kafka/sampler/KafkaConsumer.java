@@ -13,7 +13,7 @@ import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zys.jmeter.protocol.kafka.config.KafkaEntity;
+import org.zys.jmeter.protocol.kafka.config.KafkaProperty;
 import org.zys.jmeter.protocol.kafka.utils.ProtostuffRuntimeUtil;
 
 import java.nio.ByteBuffer;
@@ -70,13 +70,13 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
     }
 
     private String run() throws InterruptedException {
-        KafkaEntity kafkaEntity = (KafkaEntity) getProperty(topic).getObjectValue();
-        Class clazz = kafkaEntity.getSerializeClazz();
-        List<SimpleConsumer> simpleConsumerlist = kafkaEntity.getSimpleConsumerList();
+        KafkaProperty kafkaProperty = (KafkaProperty) getProperty(topic).getObjectValue();
+        Class clazz = kafkaProperty.getSerializeClazz();
+        List<SimpleConsumer> simpleConsumerlist = kafkaProperty.getSimpleConsumerList();
         JMeterVariables variables = getThreadContext().getVariables();
         Object object = variables.getObject(topic);
         if (null == object) {
-            object = kafkaEntity.getOffsets().clone();
+            object = kafkaProperty.getOffsets().clone();
             variables.putObject(topic, object);
         }
         long[] offsets = (long[]) object;

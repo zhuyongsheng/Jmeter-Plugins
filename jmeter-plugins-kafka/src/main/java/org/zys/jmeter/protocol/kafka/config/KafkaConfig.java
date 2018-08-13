@@ -18,13 +18,14 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
     private String topicName;
     private String brokers;
     private int partitionNum;
-    private int role;
+    private boolean producerFlag;
+    private boolean consumerFlag;
     private String serializer;
     private String clazz;
 
     @Override
     public void testStarted() {
-        setProperty(new ObjectProperty(topicName, new KafkaEntity(role, serializer, clazz, brokers, topicName, partitionNum)));
+        setProperty(new ObjectProperty(topicName, new KafkaProperty(producerFlag, consumerFlag, serializer, clazz, brokers, topicName, partitionNum)));
     }
 
     @Override
@@ -34,7 +35,7 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
 
     @Override
     public void testEnded() {
-        ((KafkaEntity) getProperty(topicName).getObjectValue()).destroy();
+        ((KafkaProperty) getProperty(topicName).getObjectValue()).destroy();
     }
 
     @Override
@@ -66,14 +67,6 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
         this.partitionNum = partitionNum;
     }
 
-    public int getRole() {
-        return role;
-    }
-
-    public void setRole(int role) {
-        this.role = role;
-    }
-
     public String getSerializer() {
         return serializer;
     }
@@ -89,5 +82,23 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
     public void setClazz(String clazz) {
         this.clazz = clazz;
     }
+
+
+    public boolean getProducerFlag() {
+        return producerFlag;
+    }
+
+    public void setProducerFlag(boolean producerFlag) {
+        this.producerFlag = producerFlag;
+    }
+
+    public boolean getConsumerFlag() {
+        return consumerFlag;
+    }
+
+    public void setConsumerFlag(boolean consumerFlag) {
+        this.consumerFlag = consumerFlag;
+    }
+
 
 }
