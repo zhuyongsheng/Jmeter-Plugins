@@ -23,6 +23,7 @@ public class KafkaProducer extends AbstractSampler implements TestBean{
 
     private String topic;
     private String message;
+    private String key;
 
     @Override
     public SampleResult sample(Entry entry) {
@@ -50,13 +51,13 @@ public class KafkaProducer extends AbstractSampler implements TestBean{
 
     private void run() throws Exception {
         KafkaProperty kafkaProperty = (KafkaProperty)getProperty(topic).getObjectValue();
-        KeyedMessage<String, byte[]> msg;
+        KeyedMessage<byte[], byte[]> msg;
         message = message.trim().replace("\n", "").replace("\t","");
         Class clazz = kafkaProperty.getSerializeClazz();
         if (null == clazz){
-            msg = new KeyedMessage(topic, message.getBytes(Charsets.UTF_8));
+            msg = new KeyedMessage(topic, key.getBytes(Charsets.UTF_8), message.getBytes(Charsets.UTF_8));
         }else {
-            msg = new KeyedMessage(topic, ProtostuffRuntimeUtil.serialize(GSON.fromJson(message, clazz)));
+            msg = new KeyedMessage(topic, key.getBytes(Charsets.UTF_8), ProtostuffRuntimeUtil.serialize(GSON.fromJson(message, clazz)));
         }
         kafkaProperty.getProducer().send(msg);
     }
@@ -69,6 +70,15 @@ public class KafkaProducer extends AbstractSampler implements TestBean{
     public void setTopic(String topic) {
         this.topic = topic;
     }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
 
     public String getMessage() {
         return message;

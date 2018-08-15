@@ -13,8 +13,11 @@ public class KafkaProducerBeanInfo extends BeanInfoSupport{
 
     {
         super(KafkaProducer.class);
-        createPropertyGroup("消息信息", new String[] { "topic", "message"});
+        createPropertyGroup("消息信息", new String[] { "topic", "key", "message"});
         PropertyDescriptor p = property("topic");
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, "");
+        p = property("key");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
         p = property("message", TypeEditor.TextAreaEditor);
