@@ -27,9 +27,9 @@ public class RpcUtils {
 
     private static final Logger log = LoggerFactory.getLogger(RpcUtils.class);
 
-    private static Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setPrettyPrinting().create();
-    private static ApplicationConfig DUBBOSAMPLER = new ApplicationConfig("dubboSampler");
-    private static int TIMEOUT = 5000;
+    private static final Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setPrettyPrinting().create();
+    private static final ApplicationConfig DUBBOSAMPLER = new ApplicationConfig("dubboSampler");
+    private static final int TIMEOUT = 5000;
 
     private static final Map<String, Map<String, Method>> interfaceMap = new HashMap<>();
 
@@ -74,11 +74,9 @@ public class RpcUtils {
     public static String[] getClassNames() {
         if (MapUtils.isEmpty(interfaceMap)) {
             try {
-                Iterator<String> it = ClassFinder.findClasses(SPATHS, new InterfaceFilter("Service", "RestService")).iterator();
-                while (it.hasNext()) {
-                    String clazz = it.next();
+                ClassFinder.findClasses(SPATHS, new InterfaceFilter("Service", "RestService")).forEach(clazz->{
                     interfaceMap.put(clazz, null);
-                }
+                });
             } catch (IOException e) {
                 e.printStackTrace();
             }

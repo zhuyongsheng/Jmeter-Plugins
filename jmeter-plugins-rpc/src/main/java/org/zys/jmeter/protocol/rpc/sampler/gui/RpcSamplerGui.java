@@ -120,7 +120,7 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     }
 
     private JPanel createArgsPanel() {
-        argsPanel = new ArgumentsPanel(JMeterUtils.getResString("paramtable")); // $NON-NLS-1$
+        argsPanel = new ArgumentsPanel(true,JMeterUtils.getResString("paramtable")); // $NON-NLS-1$
         return argsPanel;
     }
 

@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import kafka.api.FetchRequestBuilder;
 import kafka.javaapi.consumer.SimpleConsumer;
 import org.apache.commons.codec.Charsets;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -12,7 +13,7 @@ import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zys.jmeter.protocol.kafka.config.KafkaEntity;
+import org.zys.jmeter.protocol.kafka.config.KafkaProperty;
 import org.zys.jmeter.protocol.kafka.utils.ProtostuffRuntimeUtil;
 
 import java.nio.ByteBuffer;
@@ -38,8 +39,8 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
 
     public SampleResult sample(Entry entry) {
         SampleResult res = new SampleResult();
-        StringBuffer sp = new StringBuffer("Fetch " + wanted + " in " + topic);
-        res.setSamplerData(sp.toString());
+        StringBuffer samplerDate = new StringBuffer("Fetch " + wanted + " in " + topic);
+        res.setSamplerData(samplerDate.toString());
         res.setSampleLabel(getName());
         res.sampleStart();
         try {
@@ -69,13 +70,13 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
     }
 
     private String run() throws InterruptedException {
-        KafkaEntity kafkaEntity = (KafkaEntity) getProperty(topic).getObjectValue();
-        Class clazz = kafkaEntity.getSerializeClazz();
-        List<SimpleConsumer> simpleConsumerlist = kafkaEntity.getSimpleConsumerList();
+        KafkaProperty kafkaProperty = (KafkaProperty) getProperty(topic).getObjectValue();
+        Class clazz = kafkaProperty.getSerializeClazz();
+        List<SimpleConsumer> simpleConsumerlist = kafkaProperty.getSimpleConsumerList();
         JMeterVariables variables = getThreadContext().getVariables();
         Object object = variables.getObject(topic);
         if (null == object) {
-            object = kafkaEntity.getOffsets().clone();
+            object = kafkaProperty.getOffsets().clone();
             variables.putObject(topic, object);
         }
         long[] offsets = (long[]) object;
@@ -86,7 +87,7 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
         simpleConsumerlist.forEach(simpleConsumer -> {
             int partition = Integer.parseInt(simpleConsumer.clientId());
             executor.execute((Runnable) () -> {
-                while (!isCaught.get() && System.currentTimeMillis() - beginTime < duration) {
+                while (BooleanUtils.isFalse(isCaught.get()) && System.currentTimeMillis() - beginTime < duration) {
                     try {
                         simpleConsumer.fetch(
                                 new FetchRequestBuilder().addFetch(topic, partition, offsets[partition], simpleConsumer.bufferSize()).build()
@@ -103,10 +104,10 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
                                     msg = GSON.toJson(ProtostuffRuntimeUtil.deserialize(bytes, clazz));
                                 }
                                 if (isMatch(msg, wanted)) {
-                                    isCaught.set(true);
                                     sb.append("{\"partition\":\"").append(partition).append("\",")
                                             .append("\"offset\":\"").append(String.valueOf(messageAndOffset.offset())).append("\",")
                                             .append("\"message\":").append(msg).append("}\n");
+                                    isCaught.set(true);
                                 }
                             }
                         });
