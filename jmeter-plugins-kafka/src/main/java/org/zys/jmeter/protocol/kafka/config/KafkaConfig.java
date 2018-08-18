@@ -25,7 +25,20 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
 
     @Override
     public void testStarted() {
-        setProperty(new ObjectProperty(topicName, new KafkaProperty(producerFlag, consumerFlag, serializer, clazz, brokers, topicName, partitionNum)));
+        KafkaProperty kafkaProperty = new KafkaProperty();
+        kafkaProperty.setTopic(topicName);
+        try {
+            kafkaProperty.setSerializeClazz("STRING".equals(serializer) ? null : Class.forName(clazz));
+        } catch (ClassNotFoundException e) {
+            log.info(e.toString());
+        }
+        if (producerFlag) {
+            kafkaProperty.initProducer(brokers);
+        }
+        if (consumerFlag) {
+            kafkaProperty.initConsumerAndOffsets(brokers, partitionNum);
+        }
+        setProperty(new ObjectProperty(topicName, kafkaProperty));
     }
 
     @Override
