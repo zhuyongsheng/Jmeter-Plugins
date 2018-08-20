@@ -44,23 +44,19 @@ public class KafkaProperty {
     }
 
     public void produce(String key, String message) {
-        KeyedMessage<byte[], byte[]> msg;
         message = message.trim().replace("\n", "").replace("\t", "");
-        if (null == serializeClazz) {
-            msg = new KeyedMessage(topic, key.getBytes(Charsets.UTF_8), message.getBytes(Charsets.UTF_8));
-        } else {
-            msg = new KeyedMessage(topic, key.getBytes(Charsets.UTF_8), ProtostuffRuntimeUtil.serialize(GSON.fromJson(message, serializeClazz)));
-        }
-        producer.send(msg);
+        producer.send(null == serializeClazz ? new KeyedMessage(topic, key.getBytes(Charsets.UTF_8), message.getBytes(Charsets.UTF_8))
+                : new KeyedMessage(topic, key.getBytes(Charsets.UTF_8), ProtostuffRuntimeUtil.serialize(GSON.fromJson(message, serializeClazz))));
     }
 
     /**
      * 从分区0开始，依次fetch消息，若得到的消息匹配预期则返回，若不匹配则跳到下一分区，直至超时
-     * @param wanted 预期消息
+     *
+     * @param wanted   预期消息
      * @param duration 超时时间，单位毫秒
      * @return 预期的消息或者"message not found."
      * @author zhuyongsheng
-     * @date   2018/8/18
+     * @date 2018/8/18
      */
     public String consume(String wanted, int duration) throws InterruptedException {
         long[] offsets = getLocalOffsets();
@@ -71,9 +67,9 @@ public class KafkaProperty {
                     new FetchRequestBuilder().addFetch(topic, partition, offsets[partition], BUFFER_SIZE).build()
             ).messageSet(topic, partition);
             for (MessageAndOffset messageAndOffset : messageAndOffsets) {
+                offsets[partition] = messageAndOffset.nextOffset();
                 String msg = convertMessageToString(messageAndOffset);
                 if (isMessageMatchWanted(msg, wanted)) {
-                    offsets[partition] = messageAndOffset.nextOffset();
                     return msg;
                 }
             }
@@ -87,9 +83,7 @@ public class KafkaProperty {
             producer.close();
         }
         if (null != simpleConsumerList) {
-            simpleConsumerList.forEach(simpleConsumer -> {
-                simpleConsumer.close();
-            });
+            simpleConsumerList.forEach(SimpleConsumer::close);
         }
     }
 
@@ -128,6 +122,7 @@ public class KafkaProperty {
 
     /**
      * 多线程时，每个线程必须独立维护自己的消费偏移量，此方法用于获取当前线程的kafka偏移量
+     *
      * @param
      * @return 当前线程的kafka偏移量数组
      * @author zhuyongsheng
