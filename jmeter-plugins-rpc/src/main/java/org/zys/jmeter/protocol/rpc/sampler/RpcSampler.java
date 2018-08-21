@@ -1,7 +1,5 @@
 package org.zys.jmeter.protocol.rpc.sampler;
 
-import com.alibaba.dubbo.config.ReferenceConfig;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
@@ -9,8 +7,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zys.jmeter.protocol.rpc.sampler.util.RpcUtils;
-
-import java.lang.reflect.Method;
 
 /**
  * Created by zhuyongsheng on 2018/3/24.
@@ -46,7 +42,7 @@ public class RpcSampler extends AbstractSampler {
         version = getPropertyAsString(VERSION).trim();
         group = getPropertyAsString(GROUP).trim();
         methodName = getPropertyAsString(METHOD);
-        arguments = ((Arguments) getProperty(ARGUMENTS).getObjectValue());
+        arguments = (Arguments) getProperty(ARGUMENTS).getObjectValue();
     }
 
     public SampleResult sample(Entry entry) {
@@ -56,10 +52,7 @@ public class RpcSampler extends AbstractSampler {
             init();
             res.setSamplerData(clsName + "." + methodName + "?\n" + arguments.toString());
             res.sampleStart();
-            ReferenceConfig ref = RpcUtils.getReference(protocol, host, port, clsName, version, group);
-            Method method = RpcUtils.getMethod(clsName, methodName);
-            Object[] args = RpcUtils.getArgs(method, arguments.getArgumentsAsMap().values().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
-            res.setResponseData(RpcUtils.invokeMethod(ref, method, args),"UTF-8");
+            res.setResponseData(RpcUtils.invoke(protocol, host, port, clsName, version, group, methodName, arguments.getArgumentsAsMap().values()), "UTF-8");
             res.setResponseCode("0");
             res.setSuccessful(true);
             res.setResponseMessage("OK");
@@ -74,5 +67,6 @@ public class RpcSampler extends AbstractSampler {
         }
         return res;
     }
+
 
 }

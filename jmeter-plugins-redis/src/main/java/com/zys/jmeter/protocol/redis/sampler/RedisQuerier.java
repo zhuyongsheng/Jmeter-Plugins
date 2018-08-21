@@ -15,7 +15,6 @@ import redis.clients.util.Pool;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
-import java.util.Set;
 
 /**
  * Created by zhuyongsheng on 2018/3/2.
@@ -58,9 +57,7 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
         byte[] bytes = null;
         try {
             bytes = jedis.get(key.getBytes());
-            ByteArrayInputStream bi = new ByteArrayInputStream(bytes);
-            ObjectInputStream oi;
-            oi = new ObjectInputStream(bi);
+            ObjectInputStream oi = new ObjectInputStream(new ByteArrayInputStream(bytes));
             return GSON.toJson(oi.readObject());
         } catch (Exception e) {
             if (bytes != null) {
@@ -72,14 +69,11 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
 
     public String read(Jedis jedis, String key) {
         StringBuilder sb = new StringBuilder();
-        Set<String> keys = jedis.keys(key);
-        if (keys.size() == 0) {
-            return "no key found.";
+        jedis.keys(key).forEach(k->{sb.append(k).append(" : ").append(get(jedis, k)).append("\n");});
+        if (sb.length() > 0){
+            return sb.deleteCharAt(sb.length() - 1).toString();
         }
-        for (String k : keys) {
-            sb.append(k).append(" : ").append(get(jedis, k)).append("\n");
-        }
-        return sb.deleteCharAt(sb.length() - 1).toString();
+        return "no key found.";
     }
 
     public String run() throws Exception {
@@ -114,7 +108,7 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
                 result = jedis.ttl(key).toString();
                 break;
             default:
-                throw new Exception("unknown operation.");
+                throw new Exception("unknown operation Exception.");
         }
         jedisPool.returnResource(jedis);
         return result;

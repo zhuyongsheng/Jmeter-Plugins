@@ -22,8 +22,7 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
 
     public SampleResult sample(Entry entry) {
         SampleResult res = new SampleResult();
-        StringBuffer samplerDate = new StringBuffer("Fetch " + wanted + " in " + topic);
-        res.setSamplerData(samplerDate.toString());
+        res.setSamplerData("Fetch " + wanted + " in " + topic);
         res.setSampleLabel(getName());
         res.sampleStart();
         try {
@@ -37,10 +36,9 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
             res.setResponseMessage(e.getMessage());
             res.setResponseCode("500");
             res.setSuccessful(false);
-        } finally {
-            res.sampleEnd();
-            return res;
         }
+        res.sampleEnd();
+        return res;
     }
 
     public int getDuration() {

@@ -120,19 +120,19 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     }
 
     private JPanel createArgsPanel() {
-        argsPanel = new ArgumentsPanel(true,JMeterUtils.getResString("paramtable")); // $NON-NLS-1$
+        argsPanel = new ArgumentsPanel(JMeterUtils.getResString("paramtable")); // $NON-NLS-1$
         return argsPanel;
     }
 
     private JPanel createInterfacePanel() {
         className = new JLabeledChoice(" 接口:  ", RpcUtils.getClassNames());
         methodName = new JLabeledChoice(" 方法:  ", ArrayUtils.EMPTY_STRING_ARRAY);
-        className.addChangeListener((ChangeListener) (ChangeEvent evt) -> {
+        className.addChangeListener((ChangeEvent evt) -> {
             if (evt.getSource() == className) {
                 methodName.setValues(RpcUtils.getMethodNames(className.getText()));
             }
         });
-        methodName.addChangeListener((ChangeListener) (ChangeEvent evt) -> {
+        methodName.addChangeListener((ChangeEvent evt) -> {
             if (evt.getSource() == methodName) {
                 setupArgs();
             }

@@ -40,9 +40,10 @@ public class KafkaProperty {
     private List<SimpleConsumer> simpleConsumerList;
     private long[] originalOffsets;
 
-    public KafkaProperty() {
+    KafkaProperty() {
     }
 
+    @SuppressWarnings("unchecked")
     public void produce(String key, String message) {
         message = message.trim().replace("\n", "").replace("\t", "");
         producer.send(null == serializeClazz ? new KeyedMessage(topic, key.getBytes(Charsets.UTF_8), message.getBytes(Charsets.UTF_8))
@@ -78,7 +79,7 @@ public class KafkaProperty {
         return "message not found.";
     }
 
-    public void destroy() {
+    void destroy() {
         if (null != producer) {
             producer.close();
         }
@@ -87,28 +88,30 @@ public class KafkaProperty {
         }
     }
 
-    public void initProducer(String brokers) {
+    void initProducer(String brokers) {
         Properties props = new Properties();
         props.put("metadata.broker.list", brokers);
         this.producer = new Producer(new ProducerConfig(props));
     }
 
-    public void setSerializeClazz(Class serializeClazz) {
+    void setSerializeClazz(Class serializeClazz) {
         this.serializeClazz = serializeClazz;
     }
 
-    public void setTopic(String topic) {
+    void setTopic(String topic) {
         this.topic = topic;
     }
 
-    public void initConsumerAndOffsets(String brokers, int partitionNum) {
+    void initConsumerAndOffsets(String brokers, int partitionNum) {
         simpleConsumerList = new ArrayList<>();
         originalOffsets = new long[partitionNum];
         for (int p = 0; p < partitionNum; p++) {
             Broker b = findLeader(brokers, topic, p);
-            SimpleConsumer s = new SimpleConsumer(b.host(), b.port(), TIME_OUT, BUFFER_SIZE, String.valueOf(p));
-            simpleConsumerList.add(s);
-            originalOffsets[p] = getLastOffset(s, topic, p);
+            if (null != b){
+                SimpleConsumer s = new SimpleConsumer(b.host(), b.port(), TIME_OUT, BUFFER_SIZE, String.valueOf(p));
+                simpleConsumerList.add(s);
+                originalOffsets[p] = getLastOffset(s, topic, p);
+            }
         }
     }
 
@@ -123,7 +126,6 @@ public class KafkaProperty {
     /**
      * 多线程时，每个线程必须独立维护自己的消费偏移量，此方法用于获取当前线程的kafka偏移量
      *
-     * @param
      * @return 当前线程的kafka偏移量数组
      * @author zhuyongsheng
      * @date 2018/8/18
@@ -160,7 +162,7 @@ public class KafkaProperty {
                 if (consumer != null) consumer.close();
             }
         }
-        return metaData.leader();
+        return metaData != null ? metaData.leader() : null;
     }
 
     private long getLastOffset(SimpleConsumer consumer, String topicName, int partition) {
