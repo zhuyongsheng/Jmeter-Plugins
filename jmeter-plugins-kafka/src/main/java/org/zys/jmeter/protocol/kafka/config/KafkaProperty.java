@@ -119,6 +119,7 @@ public class KafkaProperty {
         int p = partitionMetadata.partitionId();
         SimpleConsumer c = new SimpleConsumer(b.host(), b.port(), TIME_OUT, BUFFER_SIZE, String.valueOf(p));
         simpleConsumerList.add(c);
+        originalOffsets[p] = getLastOffset(c, p);
     }
 
     private String convertMessageToString(MessageAndOffset messageAndOffset) {
