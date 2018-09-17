@@ -147,7 +147,7 @@ public class KafkaProperty {
     }
 
     private List<PartitionMetadata> findPartitionsMetadata(String brokers, String topic) {
-        for (String seed : new ArrayList<>(Arrays.asList(brokers.split(",")))) {
+        for (String seed : brokers.split(",")) {
             SimpleConsumer consumer = null;
             try {
                 consumer = new SimpleConsumer(StringUtils.substringBefore(seed, ":"),
