@@ -6,7 +6,10 @@ import kafka.api.FetchRequestBuilder;
 import kafka.api.PartitionOffsetRequestInfo;
 import kafka.cluster.Broker;
 import kafka.common.TopicAndPartition;
-import kafka.javaapi.*;
+import kafka.javaapi.OffsetRequest;
+import kafka.javaapi.OffsetResponse;
+import kafka.javaapi.PartitionMetadata;
+import kafka.javaapi.TopicMetadataRequest;
 import kafka.javaapi.consumer.SimpleConsumer;
 import kafka.javaapi.message.MessageSet;
 import kafka.javaapi.producer.Producer;
@@ -102,17 +105,20 @@ public class KafkaProperty {
         this.topic = topic;
     }
 
-    void initConsumerAndOffsets(String brokers, int partitionNum) {
-        simpleConsumerList = new ArrayList<>();
-        originalOffsets = new long[partitionNum];
-        for (int p = 0; p < partitionNum; p++) {
-            Broker b = findLeader(brokers, topic, p);
-            if (null != b){
-                SimpleConsumer s = new SimpleConsumer(b.host(), b.port(), TIME_OUT, BUFFER_SIZE, String.valueOf(p));
-                simpleConsumerList.add(s);
-                originalOffsets[p] = getLastOffset(s, topic, p);
-            }
+    void initConsumerAndOffsets(String brokers) {
+        List<PartitionMetadata> partitionMetadataList = findPartitionsMetadata(brokers, topic);
+        if (null != partitionMetadataList){
+            simpleConsumerList = new ArrayList<>();
+            originalOffsets = new long[partitionMetadataList.size()];
+            partitionMetadataList.forEach(this::initConsumerAndOffset);
         }
+    }
+
+    private void initConsumerAndOffset (PartitionMetadata partitionMetadata){
+        Broker b = partitionMetadata.leader();
+        int p = partitionMetadata.partitionId();
+        SimpleConsumer c = new SimpleConsumer(b.host(), b.port(), TIME_OUT, BUFFER_SIZE, String.valueOf(p));
+        simpleConsumerList.add(c);
     }
 
     private String convertMessageToString(MessageAndOffset messageAndOffset) {
@@ -140,36 +146,28 @@ public class KafkaProperty {
         return (long[]) object;
     }
 
-    private Broker findLeader(String brokers, String topic, int a_partition) {
-        PartitionMetadata metaData = null;
-        loop:
+    private List<PartitionMetadata> findPartitionsMetadata(String brokers, String topic) {
         for (String seed : new ArrayList<>(Arrays.asList(brokers.split(",")))) {
             SimpleConsumer consumer = null;
             try {
                 consumer = new SimpleConsumer(StringUtils.substringBefore(seed, ":"),
-                        Integer.valueOf(StringUtils.substringAfter(seed, ":")), TIME_OUT, BUFFER_SIZE, "findLeader");
-                for (TopicMetadata item : consumer.send(new TopicMetadataRequest(Collections.singletonList(topic))).topicsMetadata()) {
-                    for (PartitionMetadata part : item.partitionsMetadata()) {
-                        if (part.partitionId() == a_partition) {
-                            metaData = part;
-                            break loop;
-                        }
-                    }
-                }
+                        Integer.valueOf(StringUtils.substringAfter(seed, ":")), TIME_OUT, BUFFER_SIZE, "findPartitionsMetadata");
+                //如果拿到PartitionMetadata则退出
+                return consumer.send(new TopicMetadataRequest(Collections.singletonList(topic))).topicsMetadata().get(0).partitionsMetadata();
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 if (consumer != null) consumer.close();
             }
         }
-        return metaData != null ? metaData.leader() : null;
+        return null;
     }
 
-    private long getLastOffset(SimpleConsumer consumer, String topicName, int partition) {
+    private long getLastOffset(SimpleConsumer consumer, int partition) {
         Map<TopicAndPartition, PartitionOffsetRequestInfo> requestInfo = new HashMap<>();
-        requestInfo.put(new TopicAndPartition(topicName, partition), new PartitionOffsetRequestInfo(LatestTime(), 1));
+        requestInfo.put(new TopicAndPartition(topic, partition), new PartitionOffsetRequestInfo(LatestTime(), 1));
         OffsetResponse response = consumer.getOffsetsBefore(new OffsetRequest(requestInfo, CurrentVersion(), consumer.clientId()));
-        long[] offsets = response.offsets(topicName, partition);
+        long[] offsets = response.offsets(topic, partition);
         if (offsets.length > 0) {
             return offsets[0];
         }

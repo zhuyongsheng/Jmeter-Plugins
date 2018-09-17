@@ -17,7 +17,6 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
 
     private String topicName;
     private String brokers;
-    private int partitionNum;
     private boolean producerFlag;
     private boolean consumerFlag;
     private String serializer;
@@ -36,7 +35,7 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
             kafkaProperty.initProducer(brokers);
         }
         if (consumerFlag) {
-            kafkaProperty.initConsumerAndOffsets(brokers, partitionNum);
+            kafkaProperty.initConsumerAndOffsets(brokers);
         }
         setProperty(new ObjectProperty(topicName, kafkaProperty));
     }
@@ -70,14 +69,6 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
 
     public void setBrokers(String brokers) {
         this.brokers = brokers;
-    }
-
-    public int getPartitionNum() {
-        return partitionNum;
-    }
-
-    public void setPartitionNum(int partitionNum) {
-        this.partitionNum = partitionNum;
     }
 
     public String getSerializer() {
