@@ -19,7 +19,7 @@ public class RpcSampler extends AbstractSampler {
     public static final String PROTOCOL = "protocol";
     public static final String HOST = "host";
     public static final String PORT = "port";
-    public static final String INTERFACE_CLASS = "interfaceCls";
+    public static final String CLASSNAME = "interfaceCls";
     public static final String METHOD = "method";
     public static final String VERSION = "version";
     public static final String GROUP = "group";
@@ -29,7 +29,7 @@ public class RpcSampler extends AbstractSampler {
         String protocol = getPropertyAsString(PROTOCOL).trim();
         String host = getPropertyAsString(HOST).trim();
         String port = getPropertyAsString(PORT).trim();
-        String clsName = getPropertyAsString(INTERFACE_CLASS);
+        String clsName = getPropertyAsString(CLASSNAME);
         String version = getPropertyAsString(VERSION).trim();
         String group = getPropertyAsString(GROUP).trim();
         String methodName = getPropertyAsString(METHOD);

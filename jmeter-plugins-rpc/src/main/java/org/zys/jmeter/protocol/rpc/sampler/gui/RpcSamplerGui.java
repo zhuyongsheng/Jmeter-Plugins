@@ -38,9 +38,8 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     private JLabeledChoice className;
     private JLabeledChoice methodName;
     private JTabbedPane tabbedPane;
-    private ArgumentsPanel argsPanel;
+    private ArgumentsPanel multiArgs;
     private JSyntaxTextArea singleArg;
-    private boolean isSingleArg = false;
 
     public RpcSamplerGui() {
         init();
@@ -70,16 +69,17 @@ public class RpcSamplerGui extends AbstractSamplerGui {
         testElement.setProperty(RpcSampler.PROTOCOL, protocol.getText());
         testElement.setProperty(RpcSampler.HOST, host.getText());
         testElement.setProperty(RpcSampler.PORT, port.getText());
-        testElement.setProperty(RpcSampler.INTERFACE_CLASS, className.getText());
+        testElement.setProperty(RpcSampler.CLASSNAME, className.getText());
         testElement.setProperty(RpcSampler.METHOD, methodName.getText());
         testElement.setProperty(RpcSampler.VERSION, version.getText());
         testElement.setProperty(RpcSampler.GROUP, group.getText());
-        if (isSingleArg) {
+        String paramTypeList = StringUtils.substringBetween(methodName.getText(), "(", ")");
+        if (StringUtils.isNotEmpty(paramTypeList) && StringUtils.containsNone(paramTypeList, ",")) {
             Arguments arguments = new Arguments();
-            arguments.addArgument(StringUtils.substringBetween(methodName.getText(), "(", ")"), singleArg.getText());
+            arguments.addArgument(paramTypeList, singleArg.getText());
             testElement.setProperty(new TestElementProperty(RpcSampler.ARGUMENTS, arguments));
         } else {
-            testElement.setProperty(new TestElementProperty(RpcSampler.ARGUMENTS, argsPanel.createTestElement()));
+            testElement.setProperty(new TestElementProperty(RpcSampler.ARGUMENTS, multiArgs.createTestElement()));
         }
     }
 
@@ -103,12 +103,13 @@ public class RpcSamplerGui extends AbstractSamplerGui {
         port.setText(element.getPropertyAsString(RpcSampler.PORT));
         version.setText(element.getPropertyAsString(RpcSampler.VERSION));
         group.setText(element.getPropertyAsString(RpcSampler.GROUP));
-        className.setText(element.getPropertyAsString(RpcSampler.INTERFACE_CLASS));
+        className.setText(element.getPropertyAsString(RpcSampler.CLASSNAME));
         methodName.setText(element.getPropertyAsString(RpcSampler.METHOD));
-        if (isSingleArg) {
-            singleArg.setInitialText(((Arguments) element.getProperty(RpcSampler.ARGUMENTS).getObjectValue()).getArgument(0).getValue());
+        Arguments arguments = (Arguments) element.getProperty(RpcSampler.ARGUMENTS).getObjectValue();
+        if (arguments.getArguments().size() == 1) {
+            singleArg.setInitialText(arguments.getArgument(0).getValue());
         } else {
-            argsPanel.configure((Arguments) element.getProperty(RpcSampler.ARGUMENTS).getObjectValue());
+            multiArgs.configure(arguments);
         }
     }
 
@@ -122,7 +123,7 @@ public class RpcSamplerGui extends AbstractSamplerGui {
         methodName.setSelectedIndex(-1);
         version.setText("");
         group.setText("");
-        argsPanel.clearGui();
+        multiArgs.clearGui();
         singleArg.setInitialText("");
     }
 
@@ -143,10 +144,9 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     }
 
     private JPanel createMultiArgsPanel() {
-        argsPanel = new ArgumentsPanel(true, JMeterUtils.getResString("paramtable"));
-        return argsPanel;
+        multiArgs = new ArgumentsPanel(true, JMeterUtils.getResString("paramtable"));
+        return multiArgs;
     }
-
 
     private JPanel createSingleArgPanel() {
         JLabel reqLabel = new JLabel(JMeterUtils.getResString("paramtable")); // $NON-NLS-1$
@@ -204,13 +204,11 @@ public class RpcSamplerGui extends AbstractSamplerGui {
         if (StringUtils.isNotEmpty(paramTypeList)) {
             String[] paramTypes = paramTypeList.split(",");
             if (1 == paramTypes.length) {
-                isSingleArg = true;
                 tabbedPane.setEnabledAt(0, false);
                 tabbedPane.setEnabledAt(1, true);
                 tabbedPane.setSelectedIndex(1);
-                argsPanel.clearGui();
+                multiArgs.clearGui();
             } else {
-                isSingleArg = false;
                 tabbedPane.setSelectedIndex(0);
                 tabbedPane.setEnabledAt(0, true);
                 tabbedPane.setEnabledAt(1, false);
@@ -219,15 +217,14 @@ public class RpcSamplerGui extends AbstractSamplerGui {
                 for (String paramType : paramTypes) {
                     arguments.addArgument(paramType, "");
                 }
-                argsPanel.configure(arguments);
+                multiArgs.configure(arguments);
             }
         } else {
-            isSingleArg = false;
             tabbedPane.setSelectedIndex(0);
             tabbedPane.setEnabledAt(0, false);
             tabbedPane.setEnabledAt(1, false);
             singleArg.setInitialText("");
-            argsPanel.clearGui();
+            multiArgs.clearGui();
         }
     }
 }
