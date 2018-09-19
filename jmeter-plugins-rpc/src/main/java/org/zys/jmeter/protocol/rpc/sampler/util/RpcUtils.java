@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
@@ -28,7 +27,7 @@ import java.util.Map;
 public class RpcUtils {
 
     private static final Logger log = LoggerFactory.getLogger(RpcUtils.class);
-    private static final Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setPrettyPrinting().create();
+    private static final Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setPrettyPrinting().serializeNulls().create();
     private static final ApplicationConfig DUBBOSAMPLER = new ApplicationConfig("dubboSampler");
     private static final int TIMEOUT = 5000;
 
@@ -38,11 +37,14 @@ public class RpcUtils {
             JMeterUtils.getJMeterHome() + "/lib/dubbo" //需将/lib/dubbo加入user.classpath配置中，以加载类
     };
 
+    private RpcUtils() {
+    }
+
     public static String invoke(String protocol, String host, String port, String clsName, String version, String group, String methodName, Collection<String> args) throws Exception {
-        ReferenceConfig ref = getReference(protocol, host, port, clsName, version, group);
+        Object remoteObject = getRemoteObject(protocol, host, port, clsName, version, group);
         Method method = getMethod(clsName, methodName);
         Object[] objects = getArgs(method, args.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
-        return GSON.toJson(method.invoke(ref.get(), objects));
+        return GSON.toJson(method.invoke(remoteObject, objects));
     }
 
     private static Method getMethod(String className, String methodName) {
@@ -50,27 +52,25 @@ public class RpcUtils {
     }
 
     public static String[] getMethodNames(String interfaceCls) {
-        if (StringUtils.isNotEmpty(interfaceCls)) {
-            if (null == interfaceMap.get(interfaceCls)) {
-                Map<String, Method> mMap = new HashMap<>();
-                try {
-                    for (Method m : Class.forName(interfaceCls).getDeclaredMethods()) {
-                        StringBuilder methodName = new StringBuilder(m.getName()).append('(');
-                        Class[] pts = m.getParameterTypes();
-                        if (null != pts && pts.length > 0) {
-                            for (Class pt : pts) {
-                                methodName.append(pt.getSimpleName()).append(',');
-                            }
-                            methodName.deleteCharAt(methodName.lastIndexOf(","));
+        if (null == interfaceMap.get(interfaceCls)) {
+            Map<String, Method> mMap = new HashMap<>();
+            try {
+                for (Method m : Class.forName(interfaceCls).getMethods()) {
+                    StringBuilder methodName = new StringBuilder(m.getName()).append('(');
+                    Class[] pts = m.getParameterTypes();
+                    if (null != pts && pts.length > 0) {
+                        for (Class pt : pts) {
+                            methodName.append(pt.getSimpleName()).append(',');
                         }
-                        methodName.append(')');
-                        mMap.put(methodName.toString(), m);
+                        methodName.deleteCharAt(methodName.lastIndexOf(","));
                     }
-                } catch (ClassNotFoundException e) {
-                    log.error("class {} not found!", interfaceCls);
+                    methodName.append(')');
+                    mMap.put(methodName.toString(), m);
                 }
-                interfaceMap.put(interfaceCls, mMap);
+            } catch (ClassNotFoundException e) {
+                log.error("class {} not found!", interfaceCls);
             }
+            interfaceMap.put(interfaceCls, mMap);
         }
         return interfaceMap.get(interfaceCls).keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
     }
@@ -88,7 +88,7 @@ public class RpcUtils {
     }
 
     private static Object[] getArgs(Method method, String[] args) {
-        Class[] types = method.getParameterTypes();
+        Class<?>[] types = method.getParameterTypes();
         Object[] objects = new Object[types.length];
         for (int i = 0; i < types.length; i++) {
             objects[i] = GSON.fromJson(args[i], types[i]);
@@ -104,7 +104,7 @@ public class RpcUtils {
      * @return ReferenceConfig
      * @author zhuyongsheng
      */
-    private static ReferenceConfig getReference(String protocol, String host, String port, String clsName, String version, String group) throws Exception {
+    private static Object getRemoteObject(String protocol, String host, String port, String clsName, String version, String group) throws Exception {
         String key = host + "_" + clsName + "_" + version + "_" + group;
         JMeterVariables variables = JMeterContextService.getContext().getVariables();
         Object object = variables.getObject(key);
@@ -116,16 +116,14 @@ public class RpcUtils {
             ref.setGroup(group);
             ref.setTimeout(TIMEOUT);
             if (protocol.equals("dubbo")) {
-                //直接指定服务地址
-                ref.setUrl(protocol + "://" + host + ":" + port + "/" + clsName);
+                ref.setUrl(protocol + "://" + host + ":" + port + "/" + clsName);//直接指定服务地址
             } else {
-                //通过注册中心访问
-                ref.setRegistry(new RegistryConfig(protocol + "://" + host + ":" + port));
+                ref.setRegistry(new RegistryConfig(protocol + "://" + host + ":" + port));//通过注册中心访问
             }
-            variables.putObject(key, ref);
-            return ref;
+            variables.putObject(key, ref.get());
+            return ref.get();
         }
-        return (ReferenceConfig) object;
+        return object;
     }
 
     private static class InterfaceFilter implements ClassFilter {
