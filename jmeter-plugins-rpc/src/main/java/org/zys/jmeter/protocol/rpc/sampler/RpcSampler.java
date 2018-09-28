@@ -16,14 +16,14 @@ public class RpcSampler extends AbstractSampler {
 
     private static final Logger log = LoggerFactory.getLogger(RpcSampler.class);
 
-    public static final String PROTOCOL = "protocol";
-    public static final String HOST = "host";
-    public static final String PORT = "port";
-    public static final String CLASSNAME = "interfaceCls";
-    public static final String METHOD = "method";
-    public static final String VERSION = "version";
-    public static final String GROUP = "group";
-    public static final String ARGUMENTS = "arguments";
+    public static final String PROTOCOL = "协议：";
+    public static final String HOST = "服务器名称或IP：";
+    public static final String PORT = "端口：";
+    public static final String CLASSNAME = "接口：";
+    public static final String METHOD = "方法：";
+    public static final String VERSION = "版本：";
+    public static final String GROUP = "群组：";
+    public static final String ARGUMENTS = "同请求一起发送参数：";
 
     public SampleResult sample(Entry entry) {
         String protocol = getPropertyAsString(PROTOCOL).trim();

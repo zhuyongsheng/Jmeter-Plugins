@@ -144,12 +144,12 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     }
 
     private JPanel createMultiArgsPanel() {
-        multiArgs = new ArgumentsPanel(true, JMeterUtils.getResString("paramtable"));
+        multiArgs = new ArgumentsPanel(true, RpcSampler.ARGUMENTS);
         return multiArgs;
     }
 
     private JPanel createSingleArgPanel() {
-        JLabel reqLabel = new JLabel(JMeterUtils.getResString("paramtable")); // $NON-NLS-1$
+        JLabel reqLabel = new JLabel(RpcSampler.ARGUMENTS); // $NON-NLS-1$
         JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         labelPanel.add(reqLabel);
         singleArg = JSyntaxTextArea.getInstance(15, 80);
@@ -163,8 +163,8 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     }
 
     private JPanel createInterfacePanel() {
-        className = new JLabeledChoice(" 接口:  ", RpcUtils.getClassNames());
-        methodName = new JLabeledChoice(" 方法:  ", ArrayUtils.EMPTY_STRING_ARRAY);
+        className = new JLabeledChoice(RpcSampler.CLASSNAME, RpcUtils.getClassNames());
+        methodName = new JLabeledChoice(RpcSampler.METHOD, ArrayUtils.EMPTY_STRING_ARRAY);
         className.addChangeListener((ChangeEvent evt) -> {
             if (evt.getSource() == className) {
                 methodName.setValues(RpcUtils.getMethodNames(className.getText()));
@@ -175,8 +175,8 @@ public class RpcSamplerGui extends AbstractSamplerGui {
                 setupArgs();
             }
         });
-        version = new JLabeledTextField(" 版本：", 6);
-        group = new JLabeledTextField(" 群组：", 6);
+        version = new JLabeledTextField(RpcSampler.VERSION, 6);
+        group = new JLabeledTextField(RpcSampler.GROUP, 6);
 
         JPanel webServerPanel = new HorizontalPanel();
         webServerPanel.add(className);
@@ -187,9 +187,9 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     }
 
     private JPanel createDubboServerPanel() {
-        protocol = new JLabeledTextField(JMeterUtils.getResString("protocol"), 4); // $NON-NLS-1$
-        host = new JLabeledTextField(JMeterUtils.getResString("web_server_domain"), 40); // $NON-NLS-1$
-        port = new JLabeledTextField(JMeterUtils.getResString("web_server_port"), 7); // $NON-NLS-1$
+        protocol = new JLabeledTextField(RpcSampler.PROTOCOL, 4); // $NON-NLS-1$
+        host = new JLabeledTextField(RpcSampler.HOST, 40); // $NON-NLS-1$
+        port = new JLabeledTextField(RpcSampler.PORT, 7); // $NON-NLS-1$
 
         JPanel webServerPanel = new HorizontalPanel();
         webServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "服务信息"));
