@@ -53,7 +53,7 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
     }
 
 
-    public String get(Jedis jedis, String key) {
+    private String get(Jedis jedis, String key) {
         byte[] bytes = null;
         try {
             bytes = jedis.get(key.getBytes());
@@ -67,16 +67,17 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
         return null;
     }
 
-    public String read(Jedis jedis, String key) {
+    private String read(Jedis jedis, String key) {
         StringBuilder sb = new StringBuilder();
-        jedis.keys(key).forEach(k->{sb.append(k).append(" : ").append(get(jedis, k)).append("\n");});
+        jedis.keys(key).forEach(k-> sb.append(k).append(" : ").append(get(jedis, k)).append("\n"));
         if (sb.length() > 0){
             return sb.deleteCharAt(sb.length() - 1).toString();
         }
         return "no key found.";
     }
 
-    public String run() throws Exception {
+    @SuppressWarnings("unchecked")
+    private String run() throws Exception {
         if (StringUtils.isEmpty(key)){
             return "key must not be empty.";
         }
@@ -99,7 +100,7 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
                     result = "value must not be empty.";
                     break;
                 }
-                result = jedis.set(key, value).toString();
+                result = jedis.set(key, value);
                 break;
             case DELETE:
                 result = jedis.del(key).toString();
