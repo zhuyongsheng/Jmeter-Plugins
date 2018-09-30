@@ -1,6 +1,6 @@
 package org.zys.jmeter.protocol.rpc.sampler.util;
 
-import com.alibaba.dubbo.config.ApplicationConfig;
+import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.google.gson.Gson;
@@ -17,9 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by zhuyongsheng on 2018/6/1.
@@ -28,8 +26,24 @@ public class RpcUtils {
 
     private static final Logger log = LoggerFactory.getLogger(RpcUtils.class);
     private static final Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setPrettyPrinting().serializeNulls().create();
-    private static final ApplicationConfig DUBBOSAMPLER = new ApplicationConfig("dubboSampler");
     private static final int TIMEOUT = 5000;
+    private static final Set DIRECT_SERVICE_PROTOCOL = new HashSet<String>() {{
+        add("dubbo");
+        add("rmi");
+        add("hessian");
+        add("http");
+        add("webservice");
+        add("thrift");
+        add("memcached");
+        add("redis");
+        add("rest");
+    }};
+    private static final Set REGISTER_PROTOCOL = new HashSet<String>() {{
+        add("zookeeper");
+        add("multicast");
+        add("redis");
+        add("simple");
+    }};
 
     private static final Map<String, Map<String, Method>> interfaceMap = new HashMap<>();
 
@@ -40,7 +54,7 @@ public class RpcUtils {
     private RpcUtils() {
     }
 
-    public static String invoke(String protocol, String host, String port, String clsName, String version, String group, String methodName, Collection<String> args) throws Exception {
+    public static String invoke(String protocol, String host, int port, String clsName, String version, String group, String methodName, Collection<String> args) throws Exception {
         Object remoteObject = getRemoteObject(protocol, host, port, clsName, version, group);
         Method method = getMethod(clsName, methodName);
         Object[] objects = getArgs(method, args.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
@@ -51,28 +65,31 @@ public class RpcUtils {
         return interfaceMap.get(className).get(methodName);
     }
 
-    public static String[] getMethodNames(String interfaceCls) {
-        if (null == interfaceMap.get(interfaceCls)) {
+    public static String[] getMethodNames(String clsName) {
+        if (null == interfaceMap.get(clsName)) {
             Map<String, Method> mMap = new HashMap<>();
             try {
-                for (Method m : Class.forName(interfaceCls).getMethods()) {
-                    StringBuilder methodName = new StringBuilder(m.getName()).append('(');
-                    Class[] pts = m.getParameterTypes();
-                    if (null != pts && pts.length > 0) {
-                        for (Class pt : pts) {
-                            methodName.append(pt.getSimpleName()).append(',');
-                        }
-                        methodName.deleteCharAt(methodName.lastIndexOf(","));
-                    }
-                    methodName.append(')');
-                    mMap.put(methodName.toString(), m);
+                for (Method m : Class.forName(clsName).getMethods()) {
+                    mMap.put(getMethodName(m), m);
                 }
             } catch (ClassNotFoundException e) {
-                log.error("class {} not found!", interfaceCls);
+                log.error("class {} not found!", clsName);
             }
-            interfaceMap.put(interfaceCls, mMap);
+            interfaceMap.put(clsName, mMap);
         }
-        return interfaceMap.get(interfaceCls).keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+        return interfaceMap.get(clsName).keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+    }
+
+    private static String getMethodName(Method method) {
+        StringBuilder methodName = new StringBuilder(method.getName()).append('(');
+        Class[] pts = method.getParameterTypes();
+        for (int i = 0; i < pts.length; i++) {
+            methodName.append(pts[i].getSimpleName());
+            if (i < pts.length - 1) {
+                methodName.append(',');
+            }
+        }
+        return methodName.append(')').toString();
     }
 
     public static String[] getClassNames() {
@@ -104,21 +121,26 @@ public class RpcUtils {
      * @return ReferenceConfig
      * @author zhuyongsheng
      */
-    private static Object getRemoteObject(String protocol, String host, String port, String clsName, String version, String group) throws Exception {
+    private static Object getRemoteObject(String protocol, String host, int port, String clsName, String version, String group) throws Exception {
         String key = host + "_" + clsName + "_" + version + "_" + group;
         JMeterVariables variables = JMeterContextService.getContext().getVariables();
         Object object = variables.getObject(key);
         if (null == object) {
             ReferenceConfig ref = new ReferenceConfig();
-            ref.setApplication(DUBBOSAMPLER);
             ref.setInterface(clsName);
             ref.setVersion(version);
             ref.setGroup(group);
             ref.setTimeout(TIMEOUT);
-            if (protocol.equals("dubbo")) {
-                ref.setUrl(protocol + "://" + host + ":" + port + "/" + clsName);//直接指定服务地址
+            if (REGISTER_PROTOCOL.contains(protocol)) {
+                RegistryConfig registryConfig = new RegistryConfig();
+                registryConfig.setProtocol(protocol);
+                registryConfig.setAddress(host);
+                registryConfig.setPort(port);
+                ref.setRegistry(registryConfig);
+            } else if (DIRECT_SERVICE_PROTOCOL.contains(protocol)) {
+                ref.setUrl(new URL(protocol, host, port, clsName).toIdentityString());//直接指定服务地址
             } else {
-                ref.setRegistry(new RegistryConfig(protocol + "://" + host + ":" + port));//通过注册中心访问
+                throw new Exception("unknown protocol Exception.");
             }
             variables.putObject(key, ref.get());
             return ref.get();

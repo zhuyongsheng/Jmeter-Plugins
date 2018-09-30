@@ -29,6 +29,7 @@ import java.awt.*;
 public class RpcSamplerGui extends AbstractSamplerGui {
 
     private static final Logger log = LoggerFactory.getLogger(RpcSamplerGui.class);
+    private static final String SAMPLER_TITLE = "DUBBO请求";
 
     private JLabeledTextField protocol;
     private JLabeledTextField host;
@@ -51,7 +52,7 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     }
 
     public String getStaticLabel() {
-        return "DUBBO请求";
+        return SAMPLER_TITLE;
     }
 
 
@@ -96,7 +97,6 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     }
 
     public void configure(TestElement element) {
-
         super.configure(element);
         protocol.setText(element.getPropertyAsString(RpcSampler.PROTOCOL));
         host.setText(element.getPropertyAsString(RpcSampler.HOST));
@@ -137,7 +137,7 @@ public class RpcSamplerGui extends AbstractSamplerGui {
 
     private JPanel createRequestPanel() {
         JPanel requestPanel = new VerticalPanel();
-        requestPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Dubbo请求"));
+        requestPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), SAMPLER_TITLE));
         requestPanel.add(createInterfacePanel(), BorderLayout.NORTH);
         requestPanel.add(createTabbedArgsPanel(), BorderLayout.CENTER);
         return requestPanel;

@@ -28,7 +28,7 @@ public class RpcSampler extends AbstractSampler {
     public SampleResult sample(Entry entry) {
         String protocol = getPropertyAsString(PROTOCOL).trim();
         String host = getPropertyAsString(HOST).trim();
-        String port = getPropertyAsString(PORT).trim();
+        int port = getPropertyAsInt(PORT);
         String clsName = getPropertyAsString(CLASSNAME);
         String version = getPropertyAsString(VERSION).trim();
         String group = getPropertyAsString(GROUP).trim();
