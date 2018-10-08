@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
@@ -51,6 +52,7 @@ public class RpcUtils {
     private static final String[] SPATHS = new String[]{
             JMeterUtils.getJMeterHome() + "/lib/dubbo" //需将/lib/dubbo加入user.classpath配置中，以加载类
     };
+    private static final String[] EMPTY_METHOD = new String[]{StringUtils.EMPTY};
 
     private RpcUtils() {
     }
@@ -67,6 +69,9 @@ public class RpcUtils {
     }
 
     public static String[] getMethodNames(String clsName) {
+        if (clsName.equals(StringUtils.EMPTY)){
+            return EMPTY_METHOD;
+        }
         if (null == interfaceMap.get(clsName)) {
             Map<String, Method> mMap = new HashMap<>();
             try {
@@ -96,6 +101,7 @@ public class RpcUtils {
     public static String[] getClassNames() {
         if (MapUtils.isEmpty(interfaceMap)) {
             try {
+                interfaceMap.put(StringUtils.EMPTY, null);
                 ClassFinder.findClasses(SPATHS, new InterfaceFilter())
                         .forEach(clazz -> interfaceMap.put(clazz, null));
             } catch (IOException e) {
