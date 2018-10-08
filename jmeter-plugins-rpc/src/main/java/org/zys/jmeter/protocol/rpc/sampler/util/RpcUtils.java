@@ -1,6 +1,7 @@
 package org.zys.jmeter.protocol.rpc.sampler.util;
 
 import com.alibaba.dubbo.common.URL;
+import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.google.gson.Gson;
@@ -26,7 +27,7 @@ public class RpcUtils {
 
     private static final Logger log = LoggerFactory.getLogger(RpcUtils.class);
     private static final Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setPrettyPrinting().serializeNulls().create();
-    private static final int TIMEOUT = 5000;
+    private static final ApplicationConfig DUBBO_SAMPLER = new ApplicationConfig("dubboSampler");
     private static final Set DIRECT_SERVICE_PROTOCOL = new HashSet<String>() {{
         add("dubbo");
         add("rmi");
@@ -95,7 +96,7 @@ public class RpcUtils {
     public static String[] getClassNames() {
         if (MapUtils.isEmpty(interfaceMap)) {
             try {
-                ClassFinder.findClasses(SPATHS, new InterfaceFilter("Service", "RestService"))
+                ClassFinder.findClasses(SPATHS, new InterfaceFilter())
                         .forEach(clazz -> interfaceMap.put(clazz, null));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -114,11 +115,11 @@ public class RpcUtils {
     }
 
     /**
-     * Jmeter插件设计时，对于中间件（如redis，Hbase..）一般采用JMeterProperty，
+     * JMeter插件设计时，对于中间件（如redis，HBase..）一般采用JMeterProperty，
      * 因为中间件对于一套SUT来说，信息是确定的，是全局的，并且一般只用来做信息验证，不需要区分线程；
      * 对于SUT对外接口（如RPC）则需要采用JMeterVariables，以在多线程时，能够更好的模拟多个用户。
      *
-     * @return ReferenceConfig
+     * @return Reference
      * @author zhuyongsheng
      */
     private static Object getRemoteObject(String protocol, String host, int port, String clsName, String version, String group) throws Exception {
@@ -127,10 +128,10 @@ public class RpcUtils {
         Object object = variables.getObject(key);
         if (null == object) {
             ReferenceConfig ref = new ReferenceConfig();
+            ref.setApplication(DUBBO_SAMPLER);
             ref.setInterface(clsName);
             ref.setVersion(version);
             ref.setGroup(group);
-            ref.setTimeout(TIMEOUT);
             if (REGISTER_PROTOCOL.contains(protocol)) {
                 RegistryConfig registryConfig = new RegistryConfig();
                 registryConfig.setProtocol(protocol);
@@ -138,7 +139,7 @@ public class RpcUtils {
                 registryConfig.setPort(port);
                 ref.setRegistry(registryConfig);
             } else if (DIRECT_SERVICE_PROTOCOL.contains(protocol)) {
-                ref.setUrl(new URL(protocol, host, port, clsName).toIdentityString());//直接指定服务地址
+                ref.setUrl(new URL(protocol, host, port).toIdentityString());//直接指定服务地址
             } else {
                 throw new Exception("unknown protocol Exception.");
             }
@@ -149,24 +150,14 @@ public class RpcUtils {
     }
 
     private static class InterfaceFilter implements ClassFilter {
-        private final String contains; // class name should contain this string
-        private final String notContains; // class name should not contain this string
         private final ClassLoader contextClassLoader
                 = Thread.currentThread().getContextClassLoader();
 
-        InterfaceFilter(String contains, String notContains) {
-            this.contains = contains;
-            this.notContains = notContains;
+        InterfaceFilter() {
         }
 
         @Override
         public boolean accept(String className) {
-            if (contains != null && !className.contains(contains)) {
-                return false; // It does not contain a required string
-            }
-            if (notContains != null && className.contains(notContains)) {
-                return false; // It contains a banned string
-            }
             try {
                 return Class.forName(className, false, contextClassLoader).isInterface();
             } catch (ClassNotFoundException e) {
