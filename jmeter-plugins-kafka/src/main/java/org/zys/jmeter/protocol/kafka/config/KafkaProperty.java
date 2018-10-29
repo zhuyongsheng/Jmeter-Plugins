@@ -107,14 +107,14 @@ public class KafkaProperty {
 
     void initConsumerAndOffsets(String brokers) {
         List<PartitionMetadata> partitionMetadataList = findPartitionsMetadata(brokers, topic);
-        if (null != partitionMetadataList){
+        if (null != partitionMetadataList) {
             simpleConsumerList = new ArrayList<>();
             originalOffsets = new long[partitionMetadataList.size()];
             partitionMetadataList.forEach(this::initConsumerAndOffset);
         }
     }
 
-    private void initConsumerAndOffset (PartitionMetadata partitionMetadata){
+    private void initConsumerAndOffset(PartitionMetadata partitionMetadata) {
         Broker b = partitionMetadata.leader();
         int p = partitionMetadata.partitionId();
         SimpleConsumer c = new SimpleConsumer(b.host(), b.port(), TIME_OUT, BUFFER_SIZE, String.valueOf(p));
@@ -126,7 +126,7 @@ public class KafkaProperty {
         ByteBuffer payload = messageAndOffset.message().payload();
         byte[] bytes = new byte[payload.limit()];
         payload.get(bytes);
-        return null == serializeClazz ? new String(bytes, Charsets.UTF_8)
+        return null == serializeClazz ? StringUtils.toEncodedString(bytes, Charsets.UTF_8)
                 : GSON.toJson(ProtostuffRuntimeUtil.deserialize(bytes, serializeClazz));
     }
 
@@ -165,25 +165,21 @@ public class KafkaProperty {
     }
 
     private long getLastOffset(SimpleConsumer consumer, int partition) {
-        Map<TopicAndPartition, PartitionOffsetRequestInfo> requestInfo = new HashMap<>();
-        requestInfo.put(new TopicAndPartition(topic, partition), new PartitionOffsetRequestInfo(LatestTime(), 1));
+        Map<TopicAndPartition, PartitionOffsetRequestInfo> requestInfo = new HashMap<TopicAndPartition, PartitionOffsetRequestInfo>() {{
+            put(new TopicAndPartition(topic, partition), new PartitionOffsetRequestInfo(LatestTime(), 1));
+        }};
         OffsetResponse response = consumer.getOffsetsBefore(new OffsetRequest(requestInfo, CurrentVersion(), consumer.clientId()));
         long[] offsets = response.offsets(topic, partition);
-        if (offsets.length > 0) {
-            return offsets[0];
-        }
-        return 0;
+        return offsets.length > 0 ? offsets[0] : 0;
     }
 
     private Boolean isMessageMatchWanted(String msg, String wanted) {
-        String[] wants = wanted.split(",");
-        for (String w : wants) {
+        for (String w : wanted.split(",")) {
             if (!msg.contains(w)) {
                 return false;
             }
         }
         return true;
     }
-
 
 }
