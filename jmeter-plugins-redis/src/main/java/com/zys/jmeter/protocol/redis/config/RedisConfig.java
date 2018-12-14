@@ -63,6 +63,8 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
         testEnded();
     }
 
+
+    @SuppressWarnings("unchecked")
     public void testEnded() {
         try {
             ((Pool<Jedis>)getProperty(redisName).getObjectValue()).destroy();

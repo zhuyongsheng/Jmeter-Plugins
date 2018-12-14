@@ -15,7 +15,6 @@ import redis.clients.util.Pool;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
-import java.util.Set;
 
 /**
  * Created by zhuyongsheng on 2018/3/2.
@@ -54,13 +53,11 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
     }
 
 
-    public String get(Jedis jedis, String key) {
+    private String get(Jedis jedis, String key) {
         byte[] bytes = null;
         try {
             bytes = jedis.get(key.getBytes());
-            ByteArrayInputStream bi = new ByteArrayInputStream(bytes);
-            ObjectInputStream oi;
-            oi = new ObjectInputStream(bi);
+            ObjectInputStream oi = new ObjectInputStream(new ByteArrayInputStream(bytes));
             return GSON.toJson(oi.readObject());
         } catch (Exception e) {
             if (bytes != null) {
@@ -70,19 +67,17 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
         return null;
     }
 
-    public String read(Jedis jedis, String key) {
+    private String read(Jedis jedis, String key) {
         StringBuilder sb = new StringBuilder();
-        Set<String> keys = jedis.keys(key);
-        if (keys.size() == 0) {
-            return "no key found.";
+        jedis.keys(key).forEach(k-> sb.append(k).append(" : ").append(get(jedis, k)).append("\n"));
+        if (sb.length() > 0){
+            return sb.deleteCharAt(sb.length() - 1).toString();
         }
-        for (String k : keys) {
-            sb.append(k).append(" : ").append(get(jedis, k)).append("\n");
-        }
-        return sb.deleteCharAt(sb.length() - 1).toString();
+        return "no key found.";
     }
 
-    public String run() throws Exception {
+    @SuppressWarnings("unchecked")
+    private String run() throws Exception {
         if (StringUtils.isEmpty(key)){
             return "key must not be empty.";
         }
@@ -105,7 +100,7 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
                     result = "value must not be empty.";
                     break;
                 }
-                result = jedis.set(key, value).toString();
+                result = jedis.set(key, value);
                 break;
             case DELETE:
                 result = jedis.del(key).toString();
@@ -114,7 +109,7 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
                 result = jedis.ttl(key).toString();
                 break;
             default:
-                throw new Exception("unknown operation.");
+                throw new Exception("unknown operation Exception.");
         }
         jedisPool.returnResource(jedis);
         return result;

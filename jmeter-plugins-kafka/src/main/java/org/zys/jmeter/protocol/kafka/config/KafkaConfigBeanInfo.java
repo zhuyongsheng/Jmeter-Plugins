@@ -12,16 +12,13 @@ public class KafkaConfigBeanInfo extends BeanInfoSupport {
 
     {
         super(KafkaConfig.class);
-        createPropertyGroup("Kafka信息", new String[] { "topicName", "brokers", "partitionNum", "serializer", "clazz", "producerFlag", "consumerFlag"});
+        createPropertyGroup("Kafka信息", new String[] { "topicName", "brokers", "serializer", "clazz", "producerFlag", "consumerFlag"});
         PropertyDescriptor p = property("topicName");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
         p = property("brokers");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
-        p = property("partitionNum");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, 4);
         p = property("serializer");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "STRING");

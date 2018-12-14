@@ -16,8 +16,8 @@ public class SshConfig extends ConfigTestElement implements TestBean, TestStateL
 
     private static final Logger log = LoggerFactory.getLogger(SshConfig.class);
 
-    private static JSch JSCH = new JSch();
-    private static int TIMEOUT = 6000;
+    private static final JSch JSCH = new JSch();
+    private static final int TIMEOUT = 6000;
 
     private String hostName;
     private int    port;

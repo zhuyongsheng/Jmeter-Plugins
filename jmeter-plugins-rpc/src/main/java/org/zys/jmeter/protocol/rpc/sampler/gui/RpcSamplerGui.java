@@ -5,6 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.gui.util.HorizontalPanel;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
@@ -19,7 +21,6 @@ import org.zys.jmeter.protocol.rpc.sampler.util.RpcUtils;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 /**
@@ -28,6 +29,7 @@ import java.awt.*;
 public class RpcSamplerGui extends AbstractSamplerGui {
 
     private static final Logger log = LoggerFactory.getLogger(RpcSamplerGui.class);
+    private static final String SAMPLER_TITLE = "DUBBO请求";
 
     private JLabeledTextField protocol;
     private JLabeledTextField host;
@@ -36,7 +38,9 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     private JLabeledTextField group;
     private JLabeledChoice className;
     private JLabeledChoice methodName;
-    private ArgumentsPanel argsPanel;
+    private JTabbedPane tabbedPane;
+    private ArgumentsPanel multiArgs;
+    private JSyntaxTextArea singleArg;
 
     public RpcSamplerGui() {
         init();
@@ -48,7 +52,7 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     }
 
     public String getStaticLabel() {
-        return "DUBBO请求";
+        return SAMPLER_TITLE;
     }
 
 
@@ -66,11 +70,18 @@ public class RpcSamplerGui extends AbstractSamplerGui {
         testElement.setProperty(RpcSampler.PROTOCOL, protocol.getText());
         testElement.setProperty(RpcSampler.HOST, host.getText());
         testElement.setProperty(RpcSampler.PORT, port.getText());
-        testElement.setProperty(RpcSampler.INTERFACE_CLASS, className.getText());
+        testElement.setProperty(RpcSampler.CLASSNAME, className.getText());
         testElement.setProperty(RpcSampler.METHOD, methodName.getText());
         testElement.setProperty(RpcSampler.VERSION, version.getText());
         testElement.setProperty(RpcSampler.GROUP, group.getText());
-        testElement.setProperty(new TestElementProperty(RpcSampler.ARGUMENTS, argsPanel.createTestElement()));
+        String paramTypeList = StringUtils.substringBetween(methodName.getText(), "(", ")");
+        if (StringUtils.isNotEmpty(paramTypeList) && StringUtils.containsNone(paramTypeList, ",")) {
+            Arguments arguments = new Arguments();
+            arguments.addArgument(paramTypeList, singleArg.getText());
+            testElement.setProperty(new TestElementProperty(RpcSampler.ARGUMENTS, arguments));
+        } else {
+            testElement.setProperty(new TestElementProperty(RpcSampler.ARGUMENTS, multiArgs.createTestElement()));
+        }
     }
 
     private void init() {
@@ -80,22 +91,26 @@ public class RpcSamplerGui extends AbstractSamplerGui {
         box.add(makeTitlePanel());
         box.add(createDubboServerPanel());
         add(box, BorderLayout.NORTH);
-        JPanel panel = creatRequestPanel();
+        JPanel panel = createRequestPanel();
         add(panel, BorderLayout.CENTER);
         add(Box.createVerticalStrut(panel.getPreferredSize().height), BorderLayout.WEST);
     }
 
     public void configure(TestElement element) {
-
         super.configure(element);
         protocol.setText(element.getPropertyAsString(RpcSampler.PROTOCOL));
         host.setText(element.getPropertyAsString(RpcSampler.HOST));
         port.setText(element.getPropertyAsString(RpcSampler.PORT));
         version.setText(element.getPropertyAsString(RpcSampler.VERSION));
         group.setText(element.getPropertyAsString(RpcSampler.GROUP));
-        className.setText(element.getPropertyAsString(RpcSampler.INTERFACE_CLASS));
+        className.setText(element.getPropertyAsString(RpcSampler.CLASSNAME));
         methodName.setText(element.getPropertyAsString(RpcSampler.METHOD));
-        argsPanel.configure((Arguments) element.getProperty(RpcSampler.ARGUMENTS).getObjectValue());
+        Arguments arguments = (Arguments) element.getProperty(RpcSampler.ARGUMENTS).getObjectValue();
+        if (arguments.getArguments().size() == 1) {
+            singleArg.setInitialText(arguments.getArgument(0).getValue());
+        } else {
+            multiArgs.configure(arguments);
+        }
     }
 
     public void clearGui() {
@@ -108,37 +123,60 @@ public class RpcSamplerGui extends AbstractSamplerGui {
         methodName.setSelectedIndex(-1);
         version.setText("");
         group.setText("");
-        argsPanel.clearGui();
+        multiArgs.clearGui();
+        singleArg.setInitialText("");
     }
 
-    private JPanel creatRequestPanel() {
+
+    private JTabbedPane createTabbedArgsPanel() {
+        tabbedPane = new JTabbedPane();
+        tabbedPane.addTab(JMeterUtils.getResString("post_as_parameters"), createMultiArgsPanel());
+        tabbedPane.addTab(JMeterUtils.getResString("post_body"), createSingleArgPanel());
+        return tabbedPane;
+    }
+
+    private JPanel createRequestPanel() {
         JPanel requestPanel = new VerticalPanel();
-        requestPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Dubbo请求"));
+        requestPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), SAMPLER_TITLE));
         requestPanel.add(createInterfacePanel(), BorderLayout.NORTH);
-        requestPanel.add(createArgsPanel(), BorderLayout.CENTER);
+        requestPanel.add(createTabbedArgsPanel(), BorderLayout.CENTER);
         return requestPanel;
     }
 
-    private JPanel createArgsPanel() {
-        argsPanel = new ArgumentsPanel(true,JMeterUtils.getResString("paramtable")); // $NON-NLS-1$
-        return argsPanel;
+    private JPanel createMultiArgsPanel() {
+        multiArgs = new ArgumentsPanel(true, RpcSampler.ARGUMENTS);
+        return multiArgs;
+    }
+
+    private JPanel createSingleArgPanel() {
+        JLabel reqLabel = new JLabel(RpcSampler.ARGUMENTS); // $NON-NLS-1$
+        JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        labelPanel.add(reqLabel);
+        singleArg = JSyntaxTextArea.getInstance(15, 80);
+        singleArg.setLanguage("java"); //$NON-NLS-1$
+        reqLabel.setLabelFor(singleArg);
+
+        JPanel reqDataPanel = new JPanel(new BorderLayout(5, 0));
+        reqDataPanel.add(labelPanel, BorderLayout.NORTH);
+        reqDataPanel.add(JTextScrollPane.getInstance(singleArg), BorderLayout.CENTER);
+        return reqDataPanel;
     }
 
     private JPanel createInterfacePanel() {
-        className = new JLabeledChoice(" 接口:  ", RpcUtils.getClassNames());
-        methodName = new JLabeledChoice(" 方法:  ", ArrayUtils.EMPTY_STRING_ARRAY);
-        className.addChangeListener((ChangeListener) (ChangeEvent evt) -> {
+        className = new JLabeledChoice(RpcSampler.CLASSNAME, RpcUtils.getClassNames());
+        methodName = new JLabeledChoice(RpcSampler.METHOD, ArrayUtils.EMPTY_STRING_ARRAY);
+        className.addChangeListener((ChangeEvent evt) -> {
             if (evt.getSource() == className) {
                 methodName.setValues(RpcUtils.getMethodNames(className.getText()));
             }
         });
-        methodName.addChangeListener((ChangeListener) (ChangeEvent evt) -> {
+        methodName.addChangeListener((ChangeEvent evt) -> {
             if (evt.getSource() == methodName) {
                 setupArgs();
             }
         });
-        version = new JLabeledTextField(" 版本：", 6);
-        group = new JLabeledTextField(" 群组：", 6);
+        version = new JLabeledTextField(RpcSampler.VERSION, 6);
+        group = new JLabeledTextField(RpcSampler.GROUP, 6);
 
         JPanel webServerPanel = new HorizontalPanel();
         webServerPanel.add(className);
@@ -149,9 +187,9 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     }
 
     private JPanel createDubboServerPanel() {
-        protocol = new JLabeledTextField(JMeterUtils.getResString("protocol"), 4); // $NON-NLS-1$
-        host = new JLabeledTextField(JMeterUtils.getResString("web_server_domain"), 40); // $NON-NLS-1$
-        port = new JLabeledTextField(JMeterUtils.getResString("web_server_port"), 7); // $NON-NLS-1$
+        protocol = new JLabeledTextField(RpcSampler.PROTOCOL, 4); // $NON-NLS-1$
+        host = new JLabeledTextField(RpcSampler.HOST, 40); // $NON-NLS-1$
+        port = new JLabeledTextField(RpcSampler.PORT, 7); // $NON-NLS-1$
 
         JPanel webServerPanel = new HorizontalPanel();
         webServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "服务信息"));
@@ -162,12 +200,31 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     }
 
     private void setupArgs() {
-        Arguments arguments = new Arguments();
-        for (String paramType : StringUtils.substringBetween(methodName.getText(), "(", ")").split(",")) {
-            if (StringUtils.isNotEmpty(paramType)) {
-                arguments.addArgument(paramType, "");
+        String paramTypeList = StringUtils.substringBetween(methodName.getText(), "(", ")");
+        if (StringUtils.isNotEmpty(paramTypeList)) {
+            String[] paramTypes = paramTypeList.split(",");
+            if (1 == paramTypes.length) {
+                tabbedPane.setEnabledAt(0, false);
+                tabbedPane.setEnabledAt(1, true);
+                tabbedPane.setSelectedIndex(1);
+                multiArgs.clearGui();
+            } else {
+                tabbedPane.setSelectedIndex(0);
+                tabbedPane.setEnabledAt(0, true);
+                tabbedPane.setEnabledAt(1, false);
+                singleArg.setInitialText("");
+                Arguments arguments = new Arguments();
+                for (String paramType : paramTypes) {
+                    arguments.addArgument(paramType, "");
+                }
+                multiArgs.configure(arguments);
             }
+        } else {
+            tabbedPane.setSelectedIndex(0);
+            tabbedPane.setEnabledAt(0, false);
+            tabbedPane.setEnabledAt(1, false);
+            singleArg.setInitialText("");
+            multiArgs.clearGui();
         }
-        argsPanel.configure(arguments);
     }
 }

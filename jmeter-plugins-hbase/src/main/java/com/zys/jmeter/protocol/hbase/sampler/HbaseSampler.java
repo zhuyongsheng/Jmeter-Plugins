@@ -39,12 +39,12 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
 
     public SampleResult sample(Entry entry) {
         SampleResult res = new SampleResult();
-        StringBuffer sb = new StringBuffer(OPRS.values()[opr]+ "'" + tableName + "','" + rowKey + "'");
+        StringBuilder sb = new StringBuilder(OPRS.values()[opr].toString()).append("'").append(tableName).append("','").append(rowKey).append("'");
         if (StringUtils.isNotEmpty(family)) {
-            sb.append(",'" + family).append(StringUtils.isEmpty(column) ? "'" : ":" + column + "'");
+            sb.append(",'").append(family).append(StringUtils.isEmpty(column) ? "'" : ":" + column + "'");
         }
         if (StringUtils.isNotEmpty(value)) {
-            sb.append(" with value of " + value);
+            sb.append(" with value of ").append(value);
         }
         res.setSamplerData(sb.toString());
         res.setSampleLabel(getName());
@@ -58,12 +58,11 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
             res.setResponseData(e.getMessage(), "UTF-8");
             res.setResponseCode("500");
             res.setSuccessful(false);
-        } finally {
-            res.sampleEnd();
-            return res;
         }
+        res.sampleEnd();
+        return res;
     }
-    public String run() throws Exception {
+    private String run() throws Exception {
         String result;
         Connection connection = (Connection) getProperty(hbase).getObjectValue();
         switch (OPRS.values()[opr]){

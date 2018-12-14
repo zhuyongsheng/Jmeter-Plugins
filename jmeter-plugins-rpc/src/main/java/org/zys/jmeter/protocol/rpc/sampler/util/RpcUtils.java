@@ -1,5 +1,6 @@
 package org.zys.jmeter.protocol.rpc.sampler.util;
 
+import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
@@ -26,57 +27,83 @@ import java.util.*;
 public class RpcUtils {
 
     private static final Logger log = LoggerFactory.getLogger(RpcUtils.class);
-
-    private static final Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setPrettyPrinting().create();
-    private static final ApplicationConfig DUBBOSAMPLER = new ApplicationConfig("dubboSampler");
-    private static final int TIMEOUT = 5000;
+    private static final Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setPrettyPrinting().serializeNulls().create();
+    private static final ApplicationConfig DUBBO_SAMPLER = new ApplicationConfig("dubboSampler");
+    private static final Set DIRECT_SERVICE_PROTOCOL = new HashSet<String>() {{
+        add("dubbo");
+        add("rmi");
+        add("hessian");
+        add("http");
+        add("webservice");
+        add("thrift");
+        add("memcached");
+        add("redis");
+        add("rest");
+    }};
+    private static final Set REGISTER_PROTOCOL = new HashSet<String>() {{
+        add("zookeeper");
+        add("multicast");
+        add("redis");
+        add("simple");
+    }};
 
     private static final Map<String, Map<String, Method>> interfaceMap = new HashMap<>();
 
     private static final String[] SPATHS = new String[]{
-            JMeterUtils.getJMeterHome() + "/lib/dubbo"             //需将/lib/dubbo加入user.classpath配置中，以加载类
+            JMeterUtils.getJMeterHome() + "/lib/dubbo" //需将/lib/dubbo加入user.classpath配置中，以加载类
     };
+    private static final String[] EMPTY_METHOD = new String[]{StringUtils.EMPTY};
 
-    public static String invokeMethod(ReferenceConfig ref, Method method, Object[] args) throws Exception {
-        return GSON.toJson(method.invoke(ref.get(), args));
+    private RpcUtils() {
     }
 
-    public static Method getMethod(String className, String methodName) {
+    public static String invoke(String protocol, String host, int port, String clsName, String version, String group, String methodName, Collection<String> args) throws Exception {
+        Object remoteObject = getRemoteObject(protocol, host, port, clsName, version, group);
+        Method method = getMethod(clsName, methodName);
+        Object[] objects = getArgs(method, args.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+        return GSON.toJson(method.invoke(remoteObject, objects));
+    }
+
+    private static Method getMethod(String className, String methodName) {
         return interfaceMap.get(className).get(methodName);
     }
 
-    public static String[] getMethodNames(String interfaceCls) {
-        if (StringUtils.isNotEmpty(interfaceCls)) {
-            if (null == interfaceMap.get(interfaceCls)) {
-                Map<String, Method> mMap = new HashMap<>();
-                try {
-                    for (Method m : Class.forName(interfaceCls).getDeclaredMethods()) {
-                        StringBuffer methodName = new StringBuffer(m.getName()).append('(');
-                        Class[] pts = m.getParameterTypes();
-                        if (null != pts && pts.length > 0) {
-                            for (Class pt : pts) {
-                                methodName.append(pt.getSimpleName()).append(',');
-                            }
-                            methodName.deleteCharAt(methodName.lastIndexOf(","));
-                        }
-                        methodName.append(')');
-                        mMap.put(methodName.toString(), m);
-                    }
-                } catch (ClassNotFoundException e) {
-                    log.error("class {} not found!", interfaceCls);
+    public static String[] getMethodNames(String clsName) {
+        if (clsName.equals(StringUtils.EMPTY)){
+            return EMPTY_METHOD;
+        }
+        if (null == interfaceMap.get(clsName)) {
+            Map<String, Method> mMap = new HashMap<>();
+            try {
+                for (Method m : Class.forName(clsName).getMethods()) {
+                    mMap.put(getMethodName(m), m);
                 }
-                interfaceMap.put(interfaceCls, mMap);
+            } catch (ClassNotFoundException e) {
+                log.error("class {} not found!", clsName);
+            }
+            interfaceMap.put(clsName, mMap);
+        }
+        return interfaceMap.get(clsName).keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+    }
+
+    private static String getMethodName(Method method) {
+        StringBuilder methodName = new StringBuilder(method.getName()).append('(');
+        Class[] pts = method.getParameterTypes();
+        for (int i = 0; i < pts.length; i++) {
+            methodName.append(pts[i].getSimpleName());
+            if (i < pts.length - 1) {
+                methodName.append(',');
             }
         }
-        return interfaceMap.get(interfaceCls).keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+        return methodName.append(')').toString();
     }
 
     public static String[] getClassNames() {
         if (MapUtils.isEmpty(interfaceMap)) {
             try {
-                ClassFinder.findClasses(SPATHS, new InterfaceFilter("Service", "RestService")).forEach(clazz->{
-                    interfaceMap.put(clazz, null);
-                });
+                interfaceMap.put(StringUtils.EMPTY, null);
+                ClassFinder.findClasses(SPATHS, new InterfaceFilter())
+                        .forEach(clazz -> interfaceMap.put(clazz, null));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -84,64 +111,59 @@ public class RpcUtils {
         return interfaceMap.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
     }
 
-    public static Object[] getArgs(Method method, String[] args) {
-        Class[] types = method.getParameterTypes();
-        List<Object> argList = new ArrayList<>();
+    private static Object[] getArgs(Method method, String[] args) {
+        Class<?>[] types = method.getParameterTypes();
+        Object[] objects = new Object[types.length];
         for (int i = 0; i < types.length; i++) {
-            argList.add(GSON.fromJson(args[i], types[i]));
+            objects[i] = GSON.fromJson(args[i], types[i]);
         }
-        return argList.toArray(ArrayUtils.EMPTY_OBJECT_ARRAY);
+        return objects;
     }
 
-    /*Jmeter插件设计时，对于中间件（如redis，Hbase..）一般采用JMeterProperty，
-    因为中间件对于一套SUT来说，信息是确定的，是全局的，并且一般只用来做信息验证，不需要区分线程；
-    对于SUT对外接口（如RPC）则需要采用JMeterVariables，以在多线程时，能够更好的模拟多个用户。*/
-    public static ReferenceConfig getReference(String protocol, String host, String port, String clsName, String version, String group) throws Exception {
-        StringBuffer key = new StringBuffer(host).append("_").append(clsName).append("_").append(version).append("_").append(group);
+    /**
+     * JMeter插件设计时，对于中间件（如redis，HBase..）一般采用JMeterProperty，
+     * 因为中间件对于一套SUT来说，信息是确定的，是全局的，并且一般只用来做信息验证，不需要区分线程；
+     * 对于SUT对外接口（如RPC）则需要采用JMeterVariables，以在多线程时，能够更好的模拟多个用户。
+     *
+     * @return Reference
+     * @author zhuyongsheng
+     */
+    private static Object getRemoteObject(String protocol, String host, int port, String clsName, String version, String group) throws Exception {
+        String key = host + "_" + clsName + "_" + version + "_" + group;
         JMeterVariables variables = JMeterContextService.getContext().getVariables();
-        Object object = variables.getObject(key.toString());
+        Object object = variables.getObject(key);
         if (null == object) {
             ReferenceConfig ref = new ReferenceConfig();
-            ref.setApplication(DUBBOSAMPLER);
+            ref.setApplication(DUBBO_SAMPLER);
             ref.setInterface(clsName);
             ref.setVersion(version);
             ref.setGroup(group);
-            ref.setTimeout(TIMEOUT);
-            switch (protocol) {
-                case "dubbo":
-                    ref.setUrl(new StringBuffer(protocol).append("://").append(host).append(":").append(port).append("/").append(clsName).toString());
-                    break;
-                case "zookeeper":
-                    ref.setRegistry(new RegistryConfig(new StringBuffer(protocol).append("://").append(host).append(":").append(port).toString()));
-                    break;
-                default:
-                    throw new Exception("unsupported protocol.");
+            if (REGISTER_PROTOCOL.contains(protocol)) {
+                RegistryConfig registryConfig = new RegistryConfig();
+                registryConfig.setProtocol(protocol);
+                registryConfig.setAddress(host);
+                registryConfig.setPort(port);
+                ref.setRegistry(registryConfig);
+            } else if (DIRECT_SERVICE_PROTOCOL.contains(protocol)) {
+                ref.setUrl(new URL(protocol, host, port).toIdentityString());//直接指定服务地址
+            } else {
+                throw new Exception("unknown protocol Exception.");
             }
-            variables.putObject(key.toString(), ref);
-            return ref;
+            variables.putObject(key, ref.get());
+            return ref.get();
         }
-        return (ReferenceConfig) object;
+        return object;
     }
 
     private static class InterfaceFilter implements ClassFilter {
-        private final String contains; // class name should contain this string
-        private final String notContains; // class name should not contain this string
         private final ClassLoader contextClassLoader
                 = Thread.currentThread().getContextClassLoader();
 
-        InterfaceFilter(String contains, String notContains) {
-            this.contains = contains;
-            this.notContains = notContains;
+        InterfaceFilter() {
         }
 
         @Override
         public boolean accept(String className) {
-            if (contains != null && !className.contains(contains)) {
-                return false; // It does not contain a required string
-            }
-            if (notContains != null && className.contains(notContains)) {
-                return false; // It contains a banned string
-            }
             try {
                 return Class.forName(className, false, contextClassLoader).isInterface();
             } catch (ClassNotFoundException e) {

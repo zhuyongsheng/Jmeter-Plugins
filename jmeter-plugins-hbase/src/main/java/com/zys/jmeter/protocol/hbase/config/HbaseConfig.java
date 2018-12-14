@@ -22,6 +22,7 @@ public class HbaseConfig extends ConfigTestElement implements TestBean, TestStat
 
     private String hbaseName;
     private String zkAddr;
+
     @Override
     public void testStarted() {
         initConnection();
@@ -35,7 +36,7 @@ public class HbaseConfig extends ConfigTestElement implements TestBean, TestStat
     @Override
     public void testEnded() {
         try {
-            ((Connection)getProperty(hbaseName).getObjectValue()).close();
+            ((Connection) getProperty(hbaseName).getObjectValue()).close();
             removeProperty(hbaseName);
         } catch (IOException e) {
             e.printStackTrace();
@@ -47,13 +48,19 @@ public class HbaseConfig extends ConfigTestElement implements TestBean, TestStat
         testEnded();
     }
 
+    /**
+     * 初始化Hbase连接，在windows环境下，如果没有配置hadoop环境变量，
+     * org.apache.hadoop.util.shell类会打印找不到winutils.exe文件的ERROR日志，实际并不会影响Hbase的使用，
+     * 可在jmeter/bin目录下log4j2.xml文件中配置关闭org.apache.hadoop.util包的日志：
+     * <logger name="org.apache.hadoop.util" level="off"/>
+     *
+     * @author zhuyongsheng
+     * @date 2018/8/21
+     */
     private void initConnection() {
         Configuration conf = HBaseConfiguration.create();
         conf.set("hbase.zookeeper.quorum", zkAddr);
         try {
-            /*在windows环境下，org.apache.hadoop.util.shell类会打印找不到winutils.exe文件（如果没有）的ERROR日志，
-            可在jmeter/bin目录下log4j2.xml文件中配置关闭org.apache.hadoop.util包的日志：
-            <logger name="org.apache.hadoop.util" level="off"/>*/
             setProperty(new ObjectProperty(hbaseName, ConnectionFactory.createConnection(conf)));
         } catch (IOException e) {
             e.printStackTrace();
