@@ -40,8 +40,9 @@ public class KafkaProperty {
     private String topic;
     private Class serializeClazz;
     private Producer producer;
-    private List<SimpleConsumer> simpleConsumerList;
+    private SimpleConsumer[] simpleConsumers;
     private long[] originalOffsets;
+    private int partitionNum;
 
     KafkaProperty() {
     }
@@ -67,7 +68,7 @@ public class KafkaProperty {
         long beginTime = System.currentTimeMillis();
         int partition = 0;
         while (System.currentTimeMillis() - beginTime < duration) {
-            MessageSet messageAndOffsets = simpleConsumerList.get(partition).fetch(
+            MessageSet messageAndOffsets = simpleConsumers[partition].fetch(
                     new FetchRequestBuilder().addFetch(topic, partition, offsets[partition], BUFFER_SIZE).build()
             ).messageSet(topic, partition);
             for (MessageAndOffset messageAndOffset : messageAndOffsets) {
@@ -77,7 +78,7 @@ public class KafkaProperty {
                     return msg;
                 }
             }
-            partition = ++partition % simpleConsumerList.size();//如果没有消费到对应的消息，跳转到下一个分区
+            partition = ++partition % partitionNum;//如果没有消费到对应的消息，跳转到下一个分区
         }
         return "message not found.";
     }
@@ -86,8 +87,10 @@ public class KafkaProperty {
         if (null != producer) {
             producer.close();
         }
-        if (null != simpleConsumerList) {
-            simpleConsumerList.forEach(SimpleConsumer::close);
+        if (null != simpleConsumers) {
+            for (SimpleConsumer simpleConsumer : simpleConsumers){
+                simpleConsumer.close();
+            }
         }
     }
 
@@ -108,8 +111,9 @@ public class KafkaProperty {
     void initConsumerAndOffsets(String brokers) {
         List<PartitionMetadata> partitionMetadataList = findPartitionsMetadata(brokers, topic);
         if (null != partitionMetadataList) {
-            simpleConsumerList = new ArrayList<>();
-            originalOffsets = new long[partitionMetadataList.size()];
+            partitionNum = partitionMetadataList.size();
+            simpleConsumers = new SimpleConsumer[partitionNum];
+            originalOffsets = new long[partitionNum];
             partitionMetadataList.forEach(this::initConsumerAndOffset);
         }
     }
@@ -117,9 +121,8 @@ public class KafkaProperty {
     private void initConsumerAndOffset(PartitionMetadata partitionMetadata) {
         Broker b = partitionMetadata.leader();
         int p = partitionMetadata.partitionId();
-        SimpleConsumer c = new SimpleConsumer(b.host(), b.port(), TIME_OUT, BUFFER_SIZE, String.valueOf(p));
-        simpleConsumerList.add(c);
-        originalOffsets[p] = getLastOffset(c, p);
+        simpleConsumers[p] = new SimpleConsumer(b.host(), b.port(), TIME_OUT, BUFFER_SIZE, String.valueOf(p));
+        originalOffsets[p] = getLastOffset(p);
     }
 
     private String convertMessageToString(MessageAndOffset messageAndOffset) {
@@ -164,11 +167,11 @@ public class KafkaProperty {
         return null;
     }
 
-    private long getLastOffset(SimpleConsumer consumer, int partition) {
+    private long getLastOffset(int partition) {
         Map<TopicAndPartition, PartitionOffsetRequestInfo> requestInfo = new HashMap<TopicAndPartition, PartitionOffsetRequestInfo>() {{
             put(new TopicAndPartition(topic, partition), new PartitionOffsetRequestInfo(LatestTime(), 1));
         }};
-        OffsetResponse response = consumer.getOffsetsBefore(new OffsetRequest(requestInfo, CurrentVersion(), consumer.clientId()));
+        OffsetResponse response = simpleConsumers[partition].getOffsetsBefore(new OffsetRequest(requestInfo, CurrentVersion(), String.valueOf(partition)));
         long[] offsets = response.offsets(topic, partition);
         return offsets.length > 0 ? offsets[0] : 0;
     }
