@@ -98,8 +98,8 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
                     result = jedis.setnx(key, value).toString();
                     jedis.close();
                 } else if (jedisClient instanceof JedisCluster) {
-                    result = ((JedisCluster)jedisClient).setnx(key, value).toString();
-                }else {
+                    result = ((JedisCluster) jedisClient).setnx(key, value).toString();
+                } else {
                     result = "unsupported mode.";
                 }
                 break;
@@ -113,15 +113,15 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
                     result = read(jedis, key);
                     jedis.close();
                 } else if (jedisClient instanceof JedisCluster) {
-                    if (key.contains("*")){
+                    if (key.contains("*")) {
                         throw new Exception("Redis Cluster does not support 'keys'.");
-                    }else {
-                        result = ((JedisCluster)jedisClient).get(key);
-                        if (StringUtils.isEmpty(result)){
+                    } else {
+                        result = ((JedisCluster) jedisClient).get(key);
+                        if (StringUtils.isEmpty(result)) {
                             result = "no key found.";
                         }
                     }
-                }else {
+                } else {
                     result = "unsupported mode.";
                 }
                 break;
@@ -135,8 +135,8 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
                     result = jedis.set(key, value);
                     jedis.close();
                 } else if (jedisClient instanceof JedisCluster) {
-                    result =((JedisCluster)jedisClient).set(key, value);
-                }else {
+                    result = ((JedisCluster) jedisClient).set(key, value);
+                } else {
                     result = "unsupported mode.";
                 }
                 break;
@@ -150,8 +150,8 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
                     result = jedis.del(key).toString();
                     jedis.close();
                 } else if (jedisClient instanceof JedisCluster) {
-                    result = ((JedisCluster)jedisClient).del(key).toString();
-                }else {
+                    result = ((JedisCluster) jedisClient).del(key).toString();
+                } else {
                     result = "unsupported mode.";
                 }
                 break;
@@ -165,8 +165,8 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
                     result = jedis.ttl(key).toString();
                     jedis.close();
                 } else if (jedisClient instanceof JedisCluster) {
-                    result = ((JedisCluster)jedisClient).ttl(key).toString();
-                }else {
+                    result = ((JedisCluster) jedisClient).ttl(key).toString();
+                } else {
                     result = "unsupported mode.";
                 }
                 break;
