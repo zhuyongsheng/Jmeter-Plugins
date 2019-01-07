@@ -11,6 +11,9 @@ import org.apache.jmeter.testbeans.TestBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisCluster;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisSentinelPool;
 import redis.clients.util.Pool;
 
 import java.io.ByteArrayInputStream;
@@ -23,7 +26,7 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
 
     private static final Logger log = LoggerFactory.getLogger(RedisQuerier.class);
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+    private static final Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
     private String redis;
     private int opr;
@@ -42,6 +45,7 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
             res.setSuccessful(true);
 
         } catch (Exception e) {
+            e.printStackTrace();
             res.setResponseMessage(e.toString());
             res.setResponseData(e.getMessage(), "UTF-8");
             res.setResponseCode("500");
@@ -69,8 +73,8 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
 
     private String read(Jedis jedis, String key) {
         StringBuilder sb = new StringBuilder();
-        jedis.keys(key).forEach(k-> sb.append(k).append(" : ").append(get(jedis, k)).append("\n"));
-        if (sb.length() > 0){
+        jedis.keys(key).forEach(k -> sb.append(k).append(" : ").append(get(jedis, k)).append("\n"));
+        if (sb.length() > 0) {
             return sb.deleteCharAt(sb.length() - 1).toString();
         }
         return "no key found.";
@@ -78,40 +82,97 @@ public class RedisQuerier extends AbstractSampler implements TestBean {
 
     @SuppressWarnings("unchecked")
     private String run() throws Exception {
-        if (StringUtils.isEmpty(key)){
+        if (StringUtils.isEmpty(key)) {
             return "key must not be empty.";
         }
-        Pool<Jedis> jedisPool = (Pool<Jedis>) getProperty(redis).getObjectValue();
-        Jedis jedis = jedisPool.getResource();
+        Object jedisClient = getProperty(redis).getObjectValue();
         String result;
-        switch (OPRS.values()[opr]){
-            case CREATE :
-                if (StringUtils.isEmpty(value)){
-                    result = "value must not be empty.";
-                    break;
+        switch (OPRS.values()[opr]) {
+            case CREATE:
+                if (jedisClient instanceof JedisSentinelPool) {
+                    Jedis jedis = ((JedisSentinelPool) jedisClient).getResource();
+                    result = jedis.setnx(key, value).toString();
+                    jedis.close();
+                } else if (jedisClient instanceof JedisPool) {
+                    Jedis jedis = ((JedisPool) jedisClient).getResource();
+                    result = jedis.setnx(key, value).toString();
+                    jedis.close();
+                } else if (jedisClient instanceof JedisCluster) {
+                    result = ((JedisCluster)jedisClient).setnx(key, value).toString();
+                }else {
+                    result = "unsupported mode.";
                 }
-                result = jedis.setnx(key, value).toString();
                 break;
             case READ:
-                result = read(jedis, key);
+                if (jedisClient instanceof JedisSentinelPool) {
+                    Jedis jedis = ((JedisSentinelPool) jedisClient).getResource();
+                    result = read(jedis, key);
+                    jedis.close();
+                } else if (jedisClient instanceof JedisPool) {
+                    Jedis jedis = ((JedisPool) jedisClient).getResource();
+                    result = read(jedis, key);
+                    jedis.close();
+                } else if (jedisClient instanceof JedisCluster) {
+                    if (key.contains("*")){
+                        throw new Exception("Redis Cluster does not support 'keys'.");
+                    }else {
+                        result = ((JedisCluster)jedisClient).get(key);
+                        if (StringUtils.isEmpty(result)){
+                            result = "no key found.";
+                        }
+                    }
+                }else {
+                    result = "unsupported mode.";
+                }
                 break;
             case UPDATE:
-                if (StringUtils.isEmpty(value)){
-                    result = "value must not be empty.";
-                    break;
+                if (jedisClient instanceof JedisSentinelPool) {
+                    Jedis jedis = ((JedisSentinelPool) jedisClient).getResource();
+                    result = jedis.set(key, value);
+                    jedis.close();
+                } else if (jedisClient instanceof JedisPool) {
+                    Jedis jedis = ((JedisPool) jedisClient).getResource();
+                    result = jedis.set(key, value);
+                    jedis.close();
+                } else if (jedisClient instanceof JedisCluster) {
+                    result =((JedisCluster)jedisClient).set(key, value);
+                }else {
+                    result = "unsupported mode.";
                 }
-                result = jedis.set(key, value);
                 break;
             case DELETE:
-                result = jedis.del(key).toString();
+                if (jedisClient instanceof JedisSentinelPool) {
+                    Jedis jedis = ((JedisSentinelPool) jedisClient).getResource();
+                    result = jedis.del(key).toString();
+                    jedis.close();
+                } else if (jedisClient instanceof JedisPool) {
+                    Jedis jedis = ((JedisPool) jedisClient).getResource();
+                    result = jedis.del(key).toString();
+                    jedis.close();
+                } else if (jedisClient instanceof JedisCluster) {
+                    result = ((JedisCluster)jedisClient).del(key).toString();
+                }else {
+                    result = "unsupported mode.";
+                }
                 break;
             case TTL:
-                result = jedis.ttl(key).toString();
+                if (jedisClient instanceof JedisSentinelPool) {
+                    Jedis jedis = ((JedisSentinelPool) jedisClient).getResource();
+                    result = jedis.ttl(key).toString();
+                    jedis.close();
+                } else if (jedisClient instanceof JedisPool) {
+                    Jedis jedis = ((JedisPool) jedisClient).getResource();
+                    result = jedis.ttl(key).toString();
+                    jedis.close();
+                } else if (jedisClient instanceof JedisCluster) {
+                    result = ((JedisCluster)jedisClient).ttl(key).toString();
+                }else {
+                    result = "unsupported mode.";
+                }
                 break;
             default:
                 throw new Exception("unknown operation Exception.");
         }
-        jedisPool.returnResource(jedis);
         return result;
     }
 

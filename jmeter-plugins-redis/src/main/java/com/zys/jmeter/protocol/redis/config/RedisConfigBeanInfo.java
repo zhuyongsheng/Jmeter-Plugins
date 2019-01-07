@@ -14,7 +14,7 @@ public class RedisConfigBeanInfo extends BeanInfoSupport {
 
     {
         super(RedisConfig.class);
-        createPropertyGroup("Redis信息", new String[] { "redisName", "sentinel", "address", "master", "password"});
+        createPropertyGroup("Redis信息", new String[] { "redisName", "mode", "address", "master", "password"});
         PropertyDescriptor p = property("redisName");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
@@ -24,9 +24,9 @@ public class RedisConfigBeanInfo extends BeanInfoSupport {
         p = property("password", TypeEditor.PasswordEditor);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
-        p = property("sentinel", RedisConfig.SENTINEL.class);
+        p = property("mode", RedisConfig.MODE.class);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, RedisConfig.SENTINEL.YES);
+        p.setValue(DEFAULT, RedisConfig.MODE.SENTINEL);
         p = property("master");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
