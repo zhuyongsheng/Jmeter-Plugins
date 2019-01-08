@@ -26,7 +26,7 @@ public class RedisConfigBeanInfo extends BeanInfoSupport {
         p.setValue(DEFAULT, "");
         p = property("mode", RedisConfig.MODE.class);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, RedisConfig.MODE.SENTINEL);
+        p.setValue(DEFAULT, RedisConfig.MODE.SENTINEL.ordinal());
         p = property("master");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");

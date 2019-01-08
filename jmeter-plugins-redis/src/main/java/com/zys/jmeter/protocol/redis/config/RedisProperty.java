@@ -55,7 +55,7 @@ public class RedisProperty {
         }
         if (StringUtils.isEmpty(password)) {
             this.jedisCluster = new JedisCluster(nodes);
-        }else {
+        } else {
             this.jedisCluster = new JedisCluster(nodes, TIMEOUT, SO_TIMEOUT, MAX_ATTEMPTS, password, new GenericObjectPoolConfig());
         }
     }
@@ -164,17 +164,24 @@ public class RedisProperty {
     }
 
     private String get(Jedis jedis, String key) {
-        byte[] bytes = null;
+        byte[] bytes = jedis.get(key.getBytes());
+        ByteArrayInputStream bi = new ByteArrayInputStream(bytes);
+        ObjectInputStream oi = null;
         try {
-            bytes = jedis.get(key.getBytes());
-            ObjectInputStream oi = new ObjectInputStream(new ByteArrayInputStream(bytes));
+            oi = new ObjectInputStream(bi);
             return GSON.toJson(oi.readObject());
         } catch (Exception e) {
-            if (bytes != null) {
-                return new String(bytes, Charsets.UTF_8);
+            return new String(bytes, Charsets.UTF_8);
+        } finally {
+            try {
+                if (oi != null) {
+                    oi.close();
+                }
+                bi.close();
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }
-        return null;
     }
 
     private String read(Jedis jedis, String key) {
