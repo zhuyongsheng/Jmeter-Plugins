@@ -9,6 +9,7 @@ import redis.clients.jedis.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,19 +32,32 @@ public class RedisProperty {
     private JedisSentinelPool jedisSentinelPool;
 
     public RedisProperty(String address, String password) {
-        this.jedisPool = new JedisPool(CONFIG, StringUtils.substringBefore(address, ":"), Integer.parseInt(StringUtils.substringAfter(address, ":")), TIMEOUT, password);
+        if (StringUtils.isEmpty(password)) {
+            this.jedisPool = new JedisPool(address);
+        } else {
+            HostAndPort hostAndPort = HostAndPort.parseString(address);
+            this.jedisPool = new JedisPool(CONFIG, hostAndPort.getHost(), hostAndPort.getPort(), TIMEOUT, password);
+        }
     }
 
-    public RedisProperty(String masterName, Set<String> sentinels, String password) {
-        this.jedisSentinelPool = new JedisSentinelPool(masterName, sentinels, CONFIG, TIMEOUT, password);
+    public RedisProperty(String masterName, String[] sentinels, String password) {
+        if (StringUtils.isEmpty(password)) {
+            this.jedisSentinelPool = new JedisSentinelPool(masterName, new HashSet<>(Arrays.asList(sentinels)));
+        } else {
+            this.jedisSentinelPool = new JedisSentinelPool(masterName, new HashSet<>(Arrays.asList(sentinels)), CONFIG, TIMEOUT, password);
+        }
     }
 
     public RedisProperty(String[] addrs, String password) {
         Set<HostAndPort> nodes = new HashSet<>();
         for (String addr : addrs) {
-            nodes.add(new HostAndPort(StringUtils.substringBefore(addr, ":"), Integer.parseInt(StringUtils.substringAfter(addr, ":"))));
+            nodes.add(HostAndPort.parseString(addr));
         }
-        this.jedisCluster = new JedisCluster(nodes, TIMEOUT, SO_TIMEOUT, MAX_ATTEMPTS, password, new GenericObjectPoolConfig());
+        if (StringUtils.isEmpty(password)) {
+            this.jedisCluster = new JedisCluster(nodes);
+        }else {
+            this.jedisCluster = new JedisCluster(nodes, TIMEOUT, SO_TIMEOUT, MAX_ATTEMPTS, password, new GenericObjectPoolConfig());
+        }
     }
 
     public String create(String key, String value) {

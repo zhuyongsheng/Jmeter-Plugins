@@ -2,18 +2,12 @@ package com.zys.jmeter.protocol.redis.config;
 
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.ObjectProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import redis.clients.jedis.*;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 
 /**
@@ -29,27 +23,6 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
     private String password;
     private int mode;
 
-    private static final JedisPoolConfig CONFIG = new JedisPoolConfig();
-
-    private static final int TIMEOUT = 60000;
-
-    private JedisPool initJedisPool() {
-        return new JedisPool(CONFIG, StringUtils.substringBefore(address, ":"), Integer.parseInt(StringUtils.substringAfter(address, ":")), TIMEOUT, password);
-    }
-
-    private JedisSentinelPool initJedisSentinelPool() {
-        return new JedisSentinelPool(master, new HashSet<>(Arrays.asList(address.split(","))), CONFIG, TIMEOUT, password);
-    }
-
-    private JedisCluster initJedisCluster() {
-        String[] addrs = address.split(",");
-        Set<HostAndPort> nodes = new HashSet<>();
-        for (String addr : addrs) {
-            nodes.add(new HostAndPort(StringUtils.substringBefore(addr, ":"), Integer.parseInt(StringUtils.substringAfter(addr, ":"))));
-        }
-        return new JedisCluster(nodes, 2000, 2000, 3, password, new GenericObjectPoolConfig());
-    }
-
     public void testStarted(String s) {
         testStarted();
     }
@@ -60,13 +33,13 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
         } else {
             switch (MODE.values()[mode]) {
                 case DIRECTION:
-                    setProperty(new ObjectProperty(redisName, initJedisPool()));
+                    setProperty(new ObjectProperty(redisName, new RedisProperty(address, password)));
                     break;
                 case SENTINEL:
-                    setProperty(new ObjectProperty(redisName, initJedisSentinelPool()));
+                    setProperty(new ObjectProperty(redisName, new RedisProperty(master, address.split(","), password)));
                     break;
                 case CLUSTER:
-                    setProperty(new ObjectProperty(redisName, initJedisCluster()));
+                    setProperty(new ObjectProperty(redisName, new RedisProperty(address.split(","), password)));
                     break;
                 default:
                     throw new IllegalArgumentException("mode must not be empty.");
@@ -81,19 +54,8 @@ public class RedisConfig extends ConfigTestElement implements TestBean, TestStat
 
     public void testEnded() {
         try {
-            switch (MODE.values()[mode]) {
-                case DIRECTION:
-                    ((JedisPool) getProperty(redisName).getObjectValue()).destroy();
-                    break;
-                case SENTINEL:
-                    ((JedisSentinelPool) getProperty(redisName).getObjectValue()).destroy();
-                    break;
-                case CLUSTER:
-                    ((JedisCluster) getProperty(redisName).getObjectValue()).close();
-                    break;
-                default:
-                    throw new IllegalArgumentException("mode must not be empty.");
-            }
+            ((RedisProperty) getProperty(redisName).getObjectValue()).destroy();
+            removeProperty(redisName);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,5 +1,8 @@
 package org.zys.jmeter.protocol.kafka.config;
 
+import com.dyuproject.protostuff.LinkedBuffer;
+import com.dyuproject.protostuff.ProtostuffIOUtil;
+import com.dyuproject.protostuff.Schema;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import kafka.api.FetchRequestBuilder;
@@ -20,11 +23,12 @@ import org.apache.commons.codec.Charsets;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.zys.jmeter.protocol.kafka.utils.ProtostuffRuntimeUtil;
+//import org.zys.jmeter.protocol.kafka.utils.ProtostuffRuntimeUtil;
 
 import java.nio.ByteBuffer;
 import java.util.*;
 
+import static com.dyuproject.protostuff.runtime.RuntimeSchema.getSchema;
 import static kafka.api.OffsetRequest.CurrentVersion;
 import static kafka.api.OffsetRequest.LatestTime;
 
@@ -183,6 +187,29 @@ public class KafkaProperty {
             }
         }
         return true;
+    }
+
+    private static class ProtostuffRuntimeUtil{
+
+        private static final int linkedBufferSize = 512;
+
+        private static <T> byte[] serialize(T t) {
+            Schema schema = getSchema(t.getClass());
+            return ProtostuffIOUtil.toByteArray(t, schema, LinkedBuffer.allocate(linkedBufferSize));
+        }
+
+        private static Object deserialize(byte[] bytes, Class clazz) {
+
+            Object obj = null;
+            try {
+                obj = clazz.newInstance();
+                Schema schema = getSchema(obj.getClass());
+                ProtostuffIOUtil.mergeFrom(bytes, obj, schema);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return obj;
+        }
     }
 
 }
