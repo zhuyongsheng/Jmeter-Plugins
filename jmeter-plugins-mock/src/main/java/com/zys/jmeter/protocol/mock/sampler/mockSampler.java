@@ -65,7 +65,7 @@ public class mockSampler extends AbstractSampler implements TestBean {
 
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         String requestHeaderLine;
-        StringBuffer requestHeaders = new StringBuffer();
+        StringBuilder requestHeaders = new StringBuilder();
         int postParaLength = 0;
         while ((requestHeaderLine = in.readLine()) != null && !requestHeaderLine.isEmpty()) {
             requestHeaders.append(requestHeaderLine).append("\n");
@@ -95,7 +95,7 @@ public class mockSampler extends AbstractSampler implements TestBean {
 
 
     private String getPostParas(BufferedReader bd, int length) {
-        StringBuffer paras = new StringBuffer();
+        StringBuilder paras = new StringBuilder();
         for (int i = 0; i < length; i++) {
             try {
                 paras.append((char) bd.read());
