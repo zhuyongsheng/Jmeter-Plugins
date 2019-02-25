@@ -4,26 +4,14 @@ package com.zys.jmeter.protocol.hbase.sampler;
  * Created by zhuyongsheng on 2018/1/3.
  */
 
-import com.zys.jmeter.protocol.hbase.util.HbaseUtils;
+import com.zys.jmeter.protocol.hbase.config.HbaseProperty;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.hadoop.hbase.Cell;
-import org.apache.hadoop.hbase.CellUtil;
-import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.*;
-import org.apache.hadoop.hbase.exceptions.DeserializationException;
-import org.apache.hadoop.hbase.filter.FuzzyRowFilter;
-import org.apache.hadoop.hbase.util.Bytes;
-import org.apache.hadoop.hbase.util.Pair;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class HbaseSampler extends AbstractSampler implements TestBean {
     private static final Logger log = LoggerFactory.getLogger(HbaseSampler.class);
@@ -62,21 +50,22 @@ public class HbaseSampler extends AbstractSampler implements TestBean {
         res.sampleEnd();
         return res;
     }
+
     private String run() throws Exception {
         String result;
-        Connection connection = (Connection) getProperty(hbase).getObjectValue();
-        switch (OPRS.values()[opr]){
+        HbaseProperty hbaseClient = (HbaseProperty) getProperty(hbase).getObjectValue();
+        switch (OPRS.values()[opr]) {
             case PUT:
-                result = HbaseUtils.put(connection, tableName, rowKey, family, column, value);
+                result = hbaseClient.put(tableName, rowKey, family, column, value);
                 break;
             case READ:
-                result = HbaseUtils.read(connection, tableName, rowKey, family, column);
+                result = hbaseClient.read(tableName, rowKey, family, column);
                 break;
             case DELETE:
-                result = HbaseUtils.delete(connection, tableName, rowKey, family, column);
+                result = hbaseClient.delete(tableName, rowKey, family, column);
                 break;
             default:
-                throw new Exception("unknown operation.");
+                result = "unknown operation.";
         }
         return result;
     }

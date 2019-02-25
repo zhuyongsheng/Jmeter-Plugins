@@ -16,37 +16,14 @@ public class SshConfig extends ConfigTestElement implements TestBean, TestStateL
 
     private static final Logger log = LoggerFactory.getLogger(SshConfig.class);
 
-    private static final JSch JSCH = new JSch();
-    private static final int TIMEOUT = 6000;
-
     private String hostName;
-    private int    port;
+    private int port;
     private String user;
     private String password;
 
-    private void initSession(){
-        try {
-            Session session = JSCH.getSession(user, hostName, port); // 根据用户名，主机ip，端口获取一个Session对象
-            session.setPassword(password); // 设置密码
-            session.setConfig("StrictHostKeyChecking", "no"); // 为Session对象设置properties
-            session.setTimeout(TIMEOUT); // 设置timeout时间
-            session.connect();
-            setProperty(new ObjectProperty(hostName, session));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void closeSession(){
-        try{
-            ((Session)getProperty(hostName).getObjectValue()).disconnect();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
     @Override
     public void testStarted() {
-        initSession();
+        setProperty(new ObjectProperty(hostName, new SshProperty(user, hostName, port, password)));
     }
 
     @Override
@@ -56,7 +33,7 @@ public class SshConfig extends ConfigTestElement implements TestBean, TestStateL
 
     @Override
     public void testEnded() {
-        closeSession();
+        ((SshProperty) getProperty(hostName).getObjectValue()).close();
     }
 
     @Override

@@ -48,6 +48,7 @@ public class KafkaConfig extends ConfigTestElement implements TestBean, TestStat
     @Override
     public void testEnded() {
         ((KafkaProperty) getProperty(topicName).getObjectValue()).destroy();
+        removeProperty(topicName);
     }
 
     @Override
