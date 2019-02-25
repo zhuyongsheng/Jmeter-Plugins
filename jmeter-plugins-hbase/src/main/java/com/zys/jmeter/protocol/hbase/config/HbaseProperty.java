@@ -33,6 +33,7 @@ public class HbaseProperty {
      */
     public HbaseProperty(String zkAddr) throws IOException {
         Configuration conf = HBaseConfiguration.create();
+        conf.set("hbase.zookeeper.quorum", zkAddr);
         this.connection = ConnectionFactory.createConnection(conf);
     }
 
