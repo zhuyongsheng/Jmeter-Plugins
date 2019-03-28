@@ -17,19 +17,26 @@
             <version>0.8.2.1</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.kafka</groupId>
+            <groupId>com.dyuproject.protostuff</groupId>
             <artifactId>protostuff-core</artifactId>
-            <version>1.0.5</version>
+            <version>1.1.3</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>protostuff-api</artifactId>
-            <version>1.0.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.kafka</groupId>
+            <groupId>com.dyuproject.protostuff</groupId>
             <artifactId>protostuff-runtime</artifactId>
-            <version>1.0.5</version>
+            <version>1.1.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dyuproject.protostuff</groupId>
+            <artifactId>protostuff-api</artifactId>
+            <version>1.1.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dyuproject.protostuff</groupId>
+            <artifactId>protostuff-core</artifactId>
+            <version>1.1.3</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
     <build>
