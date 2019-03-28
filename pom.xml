@@ -15,13 +15,9 @@
         <module>jmeter-plugins-rpc</module>
         <module>jmeter-plugins-hbase</module>
         <module>jmeter-plugins-mock</module>
+        <module>jmeter-plugins-thrift</module>
     </modules>
     <dependencies>
-        <dependency>
-            <groupId>Cpda</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.6.6</version>
-        </dependency>
         <dependency>
             <groupId>org.apache.jmeter</groupId>
             <artifactId>ApacheJMeter_core</artifactId>
