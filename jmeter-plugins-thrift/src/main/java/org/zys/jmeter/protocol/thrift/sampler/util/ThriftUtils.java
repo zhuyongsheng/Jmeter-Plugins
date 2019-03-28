@@ -20,7 +20,9 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by zhuyongsheng on 2018/6/1.
@@ -29,6 +31,8 @@ public class ThriftUtils {
 
     private static final Logger log = LoggerFactory.getLogger(ThriftUtils.class);
     private static final Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setPrettyPrinting().serializeNulls().create();
+    private static final String IFACE = "$Iface";
+    private static final String CLIENT = "$Client";
 
 
     private static final Map<String, Map<String, Method>> serviceMap = new HashMap<>();
@@ -59,7 +63,7 @@ public class ThriftUtils {
         if (null == serviceMap.get(clsName)) {
             Map<String, Method> mMap = new HashMap<>();
             try {
-                for (Method m : Class.forName(clsName + "$Iface").getDeclaredMethods()) {
+                for (Method m : Class.forName(clsName + IFACE).getDeclaredMethods()) {
                     mMap.put(getMethodName(m), m);
                 }
             } catch (ClassNotFoundException e) {
@@ -87,7 +91,7 @@ public class ThriftUtils {
             try {
                 serviceMap.put(StringUtils.EMPTY, null);
                 ClassFinder.findClasses(SPATHS, new ThriftServiceFilter())
-                        .forEach(clazz -> serviceMap.put(clazz, null));
+                        .forEach(clazz -> serviceMap.put(clazz.replace(IFACE, ""), null));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -113,7 +117,7 @@ public class ThriftUtils {
             //协议要和服务端一致
             TProtocol protocol = new TBinaryProtocol(tTransport);
             tTransport.open();
-            Class clientClass = Class.forName(clsName + "$Client");
+            Class clientClass = Class.forName(clsName + CLIENT);
             Constructor<?> cons = clientClass.getConstructor(TProtocol.class);
             Object client = cons.newInstance(protocol);
             variables.putObject(key, client);
@@ -129,7 +133,7 @@ public class ThriftUtils {
 
         @Override
         public boolean accept(String className) {
-            return className.contains("Service") && !className.contains("$");
+            return className.contains(IFACE);
         }
     }
 }
