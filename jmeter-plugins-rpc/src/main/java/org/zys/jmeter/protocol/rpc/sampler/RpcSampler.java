@@ -23,6 +23,7 @@ public class RpcSampler extends AbstractSampler {
     public static final String METHOD = "方法：";
     public static final String VERSION = "版本：";
     public static final String GROUP = "群组：";
+    public static final String CLUSTER = "集群：";
     public static final String ARGUMENTS = "同请求一起发送参数：";
 
     public SampleResult sample(Entry entry) {
@@ -32,6 +33,7 @@ public class RpcSampler extends AbstractSampler {
         String clsName = getPropertyAsString(CLASSNAME);
         String version = getPropertyAsString(VERSION).trim();
         String group = getPropertyAsString(GROUP).trim();
+        String cluster = getPropertyAsString(CLUSTER).trim();
         String methodName = getPropertyAsString(METHOD);
         Arguments arguments = (Arguments) getProperty(ARGUMENTS).getObjectValue();
         SampleResult res = new SampleResult();
@@ -39,7 +41,7 @@ public class RpcSampler extends AbstractSampler {
         res.setSamplerData(clsName + "." + methodName + "?\n" + arguments.toString());
         res.sampleStart();
         try {
-            res.setResponseData(RpcUtils.invoke(protocol, host, port, clsName, version, group, methodName, arguments.getArgumentsAsMap().values()), "UTF-8");
+            res.setResponseData(RpcUtils.invoke(protocol, host, port, clsName, version, group, cluster, methodName, arguments.getArgumentsAsMap().values()), "UTF-8");
             res.setResponseCode("0");
             res.setSuccessful(true);
             res.setResponseMessage("OK");

@@ -36,6 +36,7 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     private JLabeledTextField port;
     private JLabeledTextField version;
     private JLabeledTextField group;
+    private JLabeledTextField cluster;
     private JLabeledChoice className;
     private JLabeledChoice methodName;
     private JTabbedPane tabbedPane;
@@ -74,6 +75,7 @@ public class RpcSamplerGui extends AbstractSamplerGui {
         testElement.setProperty(RpcSampler.METHOD, methodName.getText());
         testElement.setProperty(RpcSampler.VERSION, version.getText());
         testElement.setProperty(RpcSampler.GROUP, group.getText());
+        testElement.setProperty(RpcSampler.CLUSTER, cluster.getText());
         String paramTypeList = StringUtils.substringBetween(methodName.getText(), "(", ")");
         if (StringUtils.isNotEmpty(paramTypeList) && StringUtils.containsNone(paramTypeList, ",")) {
             Arguments arguments = new Arguments();
@@ -103,6 +105,7 @@ public class RpcSamplerGui extends AbstractSamplerGui {
         port.setText(element.getPropertyAsString(RpcSampler.PORT));
         version.setText(element.getPropertyAsString(RpcSampler.VERSION));
         group.setText(element.getPropertyAsString(RpcSampler.GROUP));
+        cluster.setText(element.getPropertyAsString(RpcSampler.CLUSTER));
         className.setText(element.getPropertyAsString(RpcSampler.CLASSNAME));
         methodName.setText(element.getPropertyAsString(RpcSampler.METHOD));
         Arguments arguments = (Arguments) element.getProperty(RpcSampler.ARGUMENTS).getObjectValue();
@@ -123,6 +126,7 @@ public class RpcSamplerGui extends AbstractSamplerGui {
         methodName.setSelectedIndex(-1);
         version.setText("");
         group.setText("");
+        cluster.setText("");
         multiArgs.clearGui();
         singleArg.setInitialText("");
     }
@@ -144,7 +148,7 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     }
 
     private JPanel createMultiArgsPanel() {
-        multiArgs = new ArgumentsPanel(true, RpcSampler.ARGUMENTS);
+        multiArgs = new ArgumentsPanel(RpcSampler.ARGUMENTS);
         return multiArgs;
     }
 
@@ -177,10 +181,12 @@ public class RpcSamplerGui extends AbstractSamplerGui {
         });
         version = new JLabeledTextField(RpcSampler.VERSION, 6);
         group = new JLabeledTextField(RpcSampler.GROUP, 6);
+        cluster = new JLabeledTextField(RpcSampler.CLUSTER, 6);
 
         JPanel webServerPanel = new HorizontalPanel();
         webServerPanel.add(className);
         webServerPanel.add(methodName);
+        webServerPanel.add(cluster);
         webServerPanel.add(version);
         webServerPanel.add(group);
         return webServerPanel;
