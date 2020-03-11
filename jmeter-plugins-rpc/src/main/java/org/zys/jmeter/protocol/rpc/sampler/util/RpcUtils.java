@@ -6,6 +6,7 @@ import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.internal.LinkedTreeMap;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -53,12 +54,13 @@ public class RpcUtils {
             JMeterUtils.getJMeterHome() + "/lib/dubbo" //需将/lib/dubbo加入user.classpath配置中，以加载类
     };
     private static final String[] EMPTY_METHOD = new String[]{StringUtils.EMPTY};
+    private static String[] CLASS_NAMES;
 
     private RpcUtils() {
     }
 
-    public static String invoke(String protocol, String host, int port, String clsName, String version, String group, String methodName, Collection<String> args) throws Exception {
-        Object remoteObject = getRemoteObject(protocol, host, port, clsName, version, group);
+    public static String invoke(String protocol, String host, int port, String clsName, String version, String group, String cluster, String methodName, Collection<String> args) throws Exception {
+        Object remoteObject = getRemoteObject(protocol, host, port, clsName, version, group, cluster);
         Method method = getMethod(clsName, methodName);
         Object[] objects = getArgs(method, args.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
         return GSON.toJson(method.invoke(remoteObject, objects));
@@ -69,7 +71,7 @@ public class RpcUtils {
     }
 
     public static String[] getMethodNames(String clsName) {
-        if (clsName.equals(StringUtils.EMPTY)){
+        if (clsName.equals(StringUtils.EMPTY)) {
             return EMPTY_METHOD;
         }
         if (null == interfaceMap.get(clsName)) {
@@ -107,15 +109,30 @@ public class RpcUtils {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            CLASS_NAMES = interfaceMap.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+            Arrays.sort(CLASS_NAMES);
         }
-        return interfaceMap.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+        return CLASS_NAMES;
     }
 
     private static Object[] getArgs(Method method, String[] args) {
-        Class<?>[] types = method.getParameterTypes();
+        Class[] types = method.getParameterTypes();
         Object[] objects = new Object[types.length];
         for (int i = 0; i < types.length; i++) {
             objects[i] = GSON.fromJson(args[i], types[i]);
+            //增加对泛型的处理
+            if (types[i] == Object.class) {
+                Object className = ((LinkedTreeMap) objects[i]).get("class");
+                if (className == null) {
+                    continue;
+                }
+                try {
+                    Class type = Class.forName((String) className);
+                    objects[i] = GSON.fromJson(args[i], type);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return objects;
     }
@@ -128,8 +145,8 @@ public class RpcUtils {
      * @return Reference
      * @author zhuyongsheng
      */
-    private static Object getRemoteObject(String protocol, String host, int port, String clsName, String version, String group) throws Exception {
-        String key = host + "_" + clsName + "_" + version + "_" + group;
+    private static Object getRemoteObject(String protocol, String host, int port, String clsName, String version, String group, String cluster) throws Exception {
+        String key = host + "_" + clsName + "_" + version + "_" + group + "_" + cluster;
         JMeterVariables variables = JMeterContextService.getContext().getVariables();
         Object object = variables.getObject(key);
         if (null == object) {
@@ -138,6 +155,7 @@ public class RpcUtils {
             ref.setInterface(clsName);
             ref.setVersion(version);
             ref.setGroup(group);
+            ref.setCluster(cluster);
             if (REGISTER_PROTOCOL.contains(protocol)) {
                 RegistryConfig registryConfig = new RegistryConfig();
                 registryConfig.setProtocol(protocol);

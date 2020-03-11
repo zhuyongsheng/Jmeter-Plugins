@@ -220,8 +220,8 @@ public class RpcSamplerGui extends AbstractSamplerGui {
                 tabbedPane.setEnabledAt(1, false);
                 singleArg.setInitialText("");
                 Arguments arguments = new Arguments();
-                for (String paramType : paramTypes) {
-                    arguments.addArgument(paramType, "");
+                for (int i = 1; i <= paramTypes.length; i++) {
+                    arguments.addArgument("var" + i + "(" + paramTypes[i] + ")", "");
                 }
                 multiArgs.configure(arguments);
             }
