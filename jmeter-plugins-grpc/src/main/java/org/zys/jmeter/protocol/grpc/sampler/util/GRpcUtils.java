@@ -57,6 +57,9 @@ public class GRpcUtils {
     }
 
     private static Method getMethod(String className, String methodName) {
+        if (null == serviceMap.get(className)) {
+            getMethodNames(className);
+        }
         return serviceMap.get(className).get(methodName);
     }
 
@@ -70,7 +73,7 @@ public class GRpcUtils {
                 for (Class c : Class.forName(clsName).getDeclaredClasses()) {
                     if (c.getName().endsWith(BLOCKING_STUB_SUFFIX)) {
                         for (Method m : c.getDeclaredMethods()) {
-                            if (m.getName() == BUILD_METHOD) {
+                            if (m.getName().equals(BUILD_METHOD)) {
                                 continue;
                             }
                             mMap.put(getMethodName(m), m);

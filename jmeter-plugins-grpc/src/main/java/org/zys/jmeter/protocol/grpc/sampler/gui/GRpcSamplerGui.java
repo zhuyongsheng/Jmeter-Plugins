@@ -182,15 +182,12 @@ public class GRpcSamplerGui extends AbstractSamplerGui {
     private JPanel createGrpcServerPanel() {
         host = new JLabeledTextField(GRpcSampler.HOST, 20); // $NON-NLS-1$
         port = new JLabeledTextField(GRpcSampler.PORT, 4); // $NON-NLS-1$
-//        JLabel secureLabel = new JLabel(GRpcSampler.SECURE);
         secure = new JCheckBox(GRpcSampler.SECURE);
-//        secureLabel.setLabelFor(secure);
         closeChannel = new JCheckBox(GRpcSampler.CLOSE_CHANNEL);
         JPanel webServerPanel = new HorizontalPanel();
         webServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "服务信息"));
         webServerPanel.add(host);
         webServerPanel.add(port);
-//        webServerPanel.add(secureLabel);
         webServerPanel.add(secure);
         webServerPanel.add(createInterfacePanel());
         webServerPanel.add(closeChannel);
