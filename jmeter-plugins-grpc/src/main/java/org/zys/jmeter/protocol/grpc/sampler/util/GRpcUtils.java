@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class GRpcUtils {
 
@@ -161,9 +162,15 @@ public class GRpcUtils {
             return;
         }
         ((ManagedChannel) object).shutdown();
-        variables.remove(addressKey);
-        String stubKey = getStubKey(host, port, clsName);
-        variables.remove(stubKey);
+        try {
+            ((ManagedChannel) object).awaitTermination(1, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            variables.remove(addressKey);
+            String stubKey = getStubKey(host, port, clsName);
+            variables.remove(stubKey);
+        }
     }
 
     private static Object getClient(String host, int port, boolean secure, String clsName) throws Exception {

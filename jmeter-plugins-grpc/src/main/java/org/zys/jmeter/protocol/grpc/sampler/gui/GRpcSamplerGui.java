@@ -90,6 +90,7 @@ public class GRpcSamplerGui extends AbstractSamplerGui {
         Box box = Box.createVerticalBox();
         box.add(makeTitlePanel());
         box.add(createGrpcServerPanel());
+        box.add(createInterfacePanel());
         add(box, BorderLayout.NORTH);
         JPanel panel = createRequestPanel();
         add(panel, BorderLayout.CENTER);
@@ -173,9 +174,12 @@ public class GRpcSamplerGui extends AbstractSamplerGui {
             }
         });
 
+        closeChannel = new JCheckBox(GRpcSampler.CLOSE_CHANNEL);
         JPanel webServerPanel = new HorizontalPanel();
+        webServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "gRPC请求"));
         webServerPanel.add(className, BorderLayout.WEST);
         webServerPanel.add(methodName, BorderLayout.CENTER);
+        webServerPanel.add(closeChannel,BorderLayout.EAST);
         return webServerPanel;
     }
 
@@ -183,14 +187,13 @@ public class GRpcSamplerGui extends AbstractSamplerGui {
         host = new JLabeledTextField(GRpcSampler.HOST, 20); // $NON-NLS-1$
         port = new JLabeledTextField(GRpcSampler.PORT, 4); // $NON-NLS-1$
         secure = new JCheckBox(GRpcSampler.SECURE);
-        closeChannel = new JCheckBox(GRpcSampler.CLOSE_CHANNEL);
         JPanel webServerPanel = new HorizontalPanel();
-        webServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "服务信息"));
+        webServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "服务器"));
         webServerPanel.add(host);
         webServerPanel.add(port);
         webServerPanel.add(secure);
-        webServerPanel.add(createInterfacePanel());
-        webServerPanel.add(closeChannel);
+//        webServerPanel.add(createInterfacePanel());
+//        webServerPanel.add(closeChannel);
         return webServerPanel;
     }
 
