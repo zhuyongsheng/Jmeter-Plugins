@@ -1,4 +1,4 @@
-package org.zys.jmeter.protocol.rpc.sampler.util;
+package org.zys.jmeter.protocol.dubbo.sampler.util;
 
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.config.ApplicationConfig;
@@ -25,9 +25,9 @@ import java.util.*;
 /**
  * Created by zhuyongsheng on 2018/6/1.
  */
-public class RpcUtils {
+public class DubboUtils {
 
-    private static final Logger log = LoggerFactory.getLogger(RpcUtils.class);
+    private static final Logger log = LoggerFactory.getLogger(DubboUtils.class);
     private static final Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setPrettyPrinting().serializeNulls().create();
     private static final ApplicationConfig DUBBO_SAMPLER = new ApplicationConfig("dubboSampler");
     private static final Set DIRECT_SERVICE_PROTOCOL = new HashSet<String>() {{
@@ -56,7 +56,7 @@ public class RpcUtils {
     private static final String[] EMPTY_METHOD = new String[]{StringUtils.EMPTY};
     private static String[] CLASS_NAMES;
 
-    private RpcUtils() {
+    private DubboUtils() {
     }
 
     public static String invoke(String protocol, String host, int port, String clsName, String version, String group, String cluster, String methodName, Collection<String> args) throws Exception {

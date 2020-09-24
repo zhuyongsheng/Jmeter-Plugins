@@ -1,4 +1,4 @@
-package org.zys.jmeter.protocol.rpc.sampler;
+package org.zys.jmeter.protocol.dubbo.sampler;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -6,15 +6,15 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zys.jmeter.protocol.rpc.sampler.util.RpcUtils;
+import org.zys.jmeter.protocol.dubbo.sampler.util.DubboUtils;
 
 /**
  * Created by zhuyongsheng on 2018/3/24.
  */
 
-public class RpcSampler extends AbstractSampler {
+public class DubboSampler extends AbstractSampler {
 
-    private static final Logger log = LoggerFactory.getLogger(RpcSampler.class);
+    private static final Logger log = LoggerFactory.getLogger(DubboSampler.class);
 
     public static final String PROTOCOL = "协议：";
     public static final String HOST = "服务器名称或IP：";
@@ -41,7 +41,7 @@ public class RpcSampler extends AbstractSampler {
         res.setSamplerData(clsName + "." + methodName + "?\n" + arguments.toString());
         res.sampleStart();
         try {
-            res.setResponseData(RpcUtils.invoke(protocol, host, port, clsName, version, group, cluster, methodName, arguments.getArgumentsAsMap().values()), "UTF-8");
+            res.setResponseData(DubboUtils.invoke(protocol, host, port, clsName, version, group, cluster, methodName, arguments.getArgumentsAsMap().values()), "UTF-8");
             res.setResponseCode("0");
             res.setSuccessful(true);
             res.setResponseMessage("OK");

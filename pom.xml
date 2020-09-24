@@ -12,10 +12,11 @@
         <module>jmeter-plugins-redis</module>
         <module>jmeter-plugins-kafka</module>
         <module>jmeter-plugins-ssh</module>
-        <module>jmeter-plugins-rpc</module>
+        <module>jmeter-plugins-dubbo</module>
         <module>jmeter-plugins-hbase</module>
         <module>jmeter-plugins-mock</module>
         <module>jmeter-plugins-thrift</module>
+        <module>jmeter-plugins-grpc</module>
     </modules>
     <dependencies>
         <dependency>

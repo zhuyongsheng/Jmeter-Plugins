@@ -1,4 +1,4 @@
-package org.zys.jmeter.protocol.rpc.sampler.gui;
+package org.zys.jmeter.protocol.dubbo.sampler.gui;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -16,8 +16,8 @@ import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zys.jmeter.protocol.rpc.sampler.RpcSampler;
-import org.zys.jmeter.protocol.rpc.sampler.util.RpcUtils;
+import org.zys.jmeter.protocol.dubbo.sampler.DubboSampler;
+import org.zys.jmeter.protocol.dubbo.sampler.util.DubboUtils;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -26,9 +26,9 @@ import java.awt.*;
 /**
  * Created by zhuyongsheng on 2018/3/26.
  */
-public class RpcSamplerGui extends AbstractSamplerGui {
+public class DubboSamplerGui extends AbstractSamplerGui {
 
-    private static final Logger log = LoggerFactory.getLogger(RpcSamplerGui.class);
+    private static final Logger log = LoggerFactory.getLogger(DubboSamplerGui.class);
     private static final String SAMPLER_TITLE = "DUBBO请求";
 
     private JLabeledTextField protocol;
@@ -43,7 +43,7 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     private ArgumentsPanel multiArgs;
     private JSyntaxTextArea singleArg;
 
-    public RpcSamplerGui() {
+    public DubboSamplerGui() {
         init();
     }
 
@@ -59,7 +59,7 @@ public class RpcSamplerGui extends AbstractSamplerGui {
 
     @Override
     public TestElement createTestElement() {
-        RpcSampler sampler = new RpcSampler();
+        DubboSampler sampler = new DubboSampler();
         modifyTestElement(sampler);
         return sampler;
     }
@@ -68,21 +68,21 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     public void modifyTestElement(TestElement testElement) {
         testElement.clear();
         configureTestElement(testElement);
-        testElement.setProperty(RpcSampler.PROTOCOL, protocol.getText());
-        testElement.setProperty(RpcSampler.HOST, host.getText());
-        testElement.setProperty(RpcSampler.PORT, port.getText());
-        testElement.setProperty(RpcSampler.CLASSNAME, className.getText());
-        testElement.setProperty(RpcSampler.METHOD, methodName.getText());
-        testElement.setProperty(RpcSampler.VERSION, version.getText());
-        testElement.setProperty(RpcSampler.GROUP, group.getText());
-        testElement.setProperty(RpcSampler.CLUSTER, cluster.getText());
+        testElement.setProperty(DubboSampler.PROTOCOL, protocol.getText());
+        testElement.setProperty(DubboSampler.HOST, host.getText());
+        testElement.setProperty(DubboSampler.PORT, port.getText());
+        testElement.setProperty(DubboSampler.CLASSNAME, className.getText());
+        testElement.setProperty(DubboSampler.METHOD, methodName.getText());
+        testElement.setProperty(DubboSampler.VERSION, version.getText());
+        testElement.setProperty(DubboSampler.GROUP, group.getText());
+        testElement.setProperty(DubboSampler.CLUSTER, cluster.getText());
         String paramTypeList = StringUtils.substringBetween(methodName.getText(), "(", ")");
         if (StringUtils.isNotEmpty(paramTypeList) && StringUtils.containsNone(paramTypeList, ",")) {
             Arguments arguments = new Arguments();
             arguments.addArgument(paramTypeList, singleArg.getText());
-            testElement.setProperty(new TestElementProperty(RpcSampler.ARGUMENTS, arguments));
+            testElement.setProperty(new TestElementProperty(DubboSampler.ARGUMENTS, arguments));
         } else {
-            testElement.setProperty(new TestElementProperty(RpcSampler.ARGUMENTS, multiArgs.createTestElement()));
+            testElement.setProperty(new TestElementProperty(DubboSampler.ARGUMENTS, multiArgs.createTestElement()));
         }
     }
 
@@ -100,15 +100,15 @@ public class RpcSamplerGui extends AbstractSamplerGui {
 
     public void configure(TestElement element) {
         super.configure(element);
-        protocol.setText(element.getPropertyAsString(RpcSampler.PROTOCOL));
-        host.setText(element.getPropertyAsString(RpcSampler.HOST));
-        port.setText(element.getPropertyAsString(RpcSampler.PORT));
-        version.setText(element.getPropertyAsString(RpcSampler.VERSION));
-        group.setText(element.getPropertyAsString(RpcSampler.GROUP));
-        cluster.setText(element.getPropertyAsString(RpcSampler.CLUSTER));
-        className.setText(element.getPropertyAsString(RpcSampler.CLASSNAME));
-        methodName.setText(element.getPropertyAsString(RpcSampler.METHOD));
-        Arguments arguments = (Arguments) element.getProperty(RpcSampler.ARGUMENTS).getObjectValue();
+        protocol.setText(element.getPropertyAsString(DubboSampler.PROTOCOL));
+        host.setText(element.getPropertyAsString(DubboSampler.HOST));
+        port.setText(element.getPropertyAsString(DubboSampler.PORT));
+        version.setText(element.getPropertyAsString(DubboSampler.VERSION));
+        group.setText(element.getPropertyAsString(DubboSampler.GROUP));
+        cluster.setText(element.getPropertyAsString(DubboSampler.CLUSTER));
+        className.setText(element.getPropertyAsString(DubboSampler.CLASSNAME));
+        methodName.setText(element.getPropertyAsString(DubboSampler.METHOD));
+        Arguments arguments = (Arguments) element.getProperty(DubboSampler.ARGUMENTS).getObjectValue();
         if (arguments.getArguments().size() == 1) {
             singleArg.setInitialText(arguments.getArgument(0).getValue());
         } else {
@@ -148,12 +148,12 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     }
 
     private JPanel createMultiArgsPanel() {
-        multiArgs = new ArgumentsPanel(RpcSampler.ARGUMENTS);
+        multiArgs = new ArgumentsPanel(DubboSampler.ARGUMENTS);
         return multiArgs;
     }
 
     private JPanel createSingleArgPanel() {
-        JLabel reqLabel = new JLabel(RpcSampler.ARGUMENTS); // $NON-NLS-1$
+        JLabel reqLabel = new JLabel(DubboSampler.ARGUMENTS); // $NON-NLS-1$
         JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         labelPanel.add(reqLabel);
         singleArg = JSyntaxTextArea.getInstance(15, 80);
@@ -167,11 +167,11 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     }
 
     private JPanel createInterfacePanel() {
-        className = new JLabeledChoice(RpcSampler.CLASSNAME, RpcUtils.getClassNames());
-        methodName = new JLabeledChoice(RpcSampler.METHOD, ArrayUtils.EMPTY_STRING_ARRAY);
+        className = new JLabeledChoice(DubboSampler.CLASSNAME, DubboUtils.getClassNames());
+        methodName = new JLabeledChoice(DubboSampler.METHOD, ArrayUtils.EMPTY_STRING_ARRAY);
         className.addChangeListener((ChangeEvent evt) -> {
             if (evt.getSource() == className) {
-                methodName.setValues(RpcUtils.getMethodNames(className.getText()));
+                methodName.setValues(DubboUtils.getMethodNames(className.getText()));
             }
         });
         methodName.addChangeListener((ChangeEvent evt) -> {
@@ -179,9 +179,9 @@ public class RpcSamplerGui extends AbstractSamplerGui {
                 setupArgs();
             }
         });
-        version = new JLabeledTextField(RpcSampler.VERSION, 6);
-        group = new JLabeledTextField(RpcSampler.GROUP, 6);
-        cluster = new JLabeledTextField(RpcSampler.CLUSTER, 6);
+        version = new JLabeledTextField(DubboSampler.VERSION, 6);
+        group = new JLabeledTextField(DubboSampler.GROUP, 6);
+        cluster = new JLabeledTextField(DubboSampler.CLUSTER, 6);
 
         JPanel webServerPanel = new HorizontalPanel();
         webServerPanel.add(className);
@@ -193,9 +193,9 @@ public class RpcSamplerGui extends AbstractSamplerGui {
     }
 
     private JPanel createDubboServerPanel() {
-        protocol = new JLabeledTextField(RpcSampler.PROTOCOL, 4); // $NON-NLS-1$
-        host = new JLabeledTextField(RpcSampler.HOST, 40); // $NON-NLS-1$
-        port = new JLabeledTextField(RpcSampler.PORT, 7); // $NON-NLS-1$
+        protocol = new JLabeledTextField(DubboSampler.PROTOCOL, 4); // $NON-NLS-1$
+        host = new JLabeledTextField(DubboSampler.HOST, 40); // $NON-NLS-1$
+        port = new JLabeledTextField(DubboSampler.PORT, 7); // $NON-NLS-1$
 
         JPanel webServerPanel = new HorizontalPanel();
         webServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "服务信息"));
