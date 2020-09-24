@@ -25,18 +25,9 @@ public class KafkaConsumer extends AbstractSampler implements TestBean {
         res.setSamplerData("Fetch " + wanted + " in " + topic);
         res.setSampleLabel(getName());
         res.sampleStart();
-        try {
-
-            res.setResponseData(((KafkaProperty) getProperty(topic).getObjectValue()).consume(wanted, duration), "UTF-8");
-            res.setResponseCode("0");
-            res.setSuccessful(true);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            res.setResponseMessage(e.getMessage());
-            res.setResponseCode("500");
-            res.setSuccessful(false);
-        }
+        res.setResponseData(((KafkaProperty) getProperty(topic).getObjectValue()).consume(wanted, duration), "UTF-8");
+        res.setResponseCode("0");
+        res.setSuccessful(true);
         res.sampleEnd();
         return res;
     }

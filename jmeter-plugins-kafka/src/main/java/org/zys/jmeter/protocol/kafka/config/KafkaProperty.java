@@ -67,7 +67,7 @@ public class KafkaProperty {
      * @author zhuyongsheng
      * @date 2018/8/18
      */
-    public String consume(String wanted, int duration) throws InterruptedException {
+    public String consume(String wanted, int duration) {
         long[] offsets = getLocalOffsets();
         long beginTime = System.currentTimeMillis();
         int partition = 0;
